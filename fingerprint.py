@@ -55,7 +55,7 @@ class FingerPrint:
                 # going through appending
                 for tup in appending:
                     time_new = time - tup[1]
-                    mostCommon.append(tup[0], time_new)
+                    mostCommon.append([tup[0], time_new])
             except:
                 print(index)
                 print(len(peaks))
