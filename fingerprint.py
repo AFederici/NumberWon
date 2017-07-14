@@ -2,17 +2,16 @@ import numpy as np
 import librosa
 import microphone
 from collections import Counter
+from scipy.ndimage.filters import maximum_filter
+from scipy.ndimage.morphology import generate_binary_structure, iterate_structure
 
+class FingerPrint():
 
-class FingerPrint:
-
-    def find_peaks(samples):
+    def find_peaks(self, S, freqs):
         ys, xs = np.histogram(S.flatten(), bins=len(freqs)//2, normed=True)
         dx = xs[-1] - xs[-2]
         cdf = np.cumsum(ys)*dx  # this gives you the cumulative distribution of amplitudes
         cutoff = xs[np.searchsorted(cdf, 0.77)]
-        plt.figure(2)
-        plt.plot(cdf)
         foreground = S >= cutoff
 
         struct = generate_binary_structure(2, 1)
@@ -22,7 +21,7 @@ class FingerPrint:
         S = np.argwhere(S)
         return S
 
-    def fingerprinting(peaks_insert, dictionary, song_id):
+    def fingerprinting(self, peaks_insert, dictionary, song_id):
 
         for index, freq_time in enumerate(peaks_insert):
             try:
@@ -37,7 +36,7 @@ class FingerPrint:
                 break
         return dictionary
 
-    def compare(database, peaks_sample):
+    def compare(self, database, peaks_sample):
         # going to take
 
         # Counter(elem[0] for elem in list1)

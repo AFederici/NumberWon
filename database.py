@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Database():
     def __init__(self, file = None):
         """ initializes an object of the Database class.
@@ -68,15 +67,10 @@ class Database():
                 ----------
                 key : the key of the obj that should be edited """
         new_val = input('What should the new value be?')
-<<<<<<< HEAD
-        self.dict[key] = new_val
 
-=======
-        self.dict[key] = (new_value)
-        print (self.dict)
+        self.dict[key] = new_val
         #fix this to be more generalized
 
->>>>>>> 33c4c13249d5fd2b4e4a15c57b1650d667e0d7a8
     def add_song(self, _id, title = None, artist = None):
         """ checks if a song exists in the database and then adds it to the database.
                 Parameters

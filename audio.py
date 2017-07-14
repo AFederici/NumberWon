@@ -4,7 +4,7 @@ from pathlib import Path
 import microphone
 import matplotlib.mlab as mlab
 
-class Audio:
+class Audio():
     """The Audio Class"""
 
     def read_files(self, *song):
