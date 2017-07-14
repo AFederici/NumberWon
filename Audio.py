@@ -55,7 +55,7 @@ class Audio:
                 Returns
                 -------
                 sampled_input: Numpy array """
-        byte_encoded_signal, sampling_rate = record_audio(time)
+        byte_encoded_signal, sampling_rate = microphone.record_audio(time)
         sampled_input = np.array([])
         for i in range(len(byte_encoded_signal)):
             byte_string = np.fromstring(byte_encoded_signal[i], dtype=np.int16)
