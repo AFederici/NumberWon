@@ -31,15 +31,11 @@ class FingerPrint:
         peaks = np.argwhere(peaks)
         return peaks
 
-    def fingerprinting(self, peaks_insert, dictionary, song_id):
+    def fingerprinting(self, peaks_insert, database, song_id):
         for index, freq_time in enumerate(peaks_insert):
             try:
                 time, freq = freq_time
                 dict_test = peaks_insert[index:index + 20]
-                # peaks_insert[index] = f_1
-                for index2, freq_time2 in dict_test:
-                    dictionary[(peaks_insert[index], peaks_insert[index2], freq_time2 - freq_time)].append(
-                        (song_id, freq_time))
                 for value in dict_test:
                     time2, freq2 = value
                     database.add_freq_time((freq, freq2, time2-time), (song_id, time))
@@ -47,7 +43,7 @@ class FingerPrint:
                 # print(index)
                 # print(len(peaks_insert))
                 break
-        return database
+        return 
 
     def compare(self, database, peaks_sample):
         # going to take
@@ -59,6 +55,7 @@ class FingerPrint:
 
         mostCommon = []
         for index, freq_time in enumerate(peaks_sample):
+            # print(np.shape(freq_time))
             time, freq = freq_time
             try:
                 time2, freq2 = peaks_sample[index + 1]
@@ -81,4 +78,4 @@ class FingerPrint:
                 #         print(most) #for debugging
                 #         first = most[0] #for debugging
                 #         return first[0]
-        return Counter.most_common(1)[0]
+        return Counter(mostCommon).most_common(1)[0][0][0]
