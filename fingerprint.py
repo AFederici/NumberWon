@@ -34,16 +34,20 @@ class FingerPrint:
     def fingerprinting(self, peaks_insert, dictionary, song_id):
         for index, freq_time in enumerate(peaks_insert):
             try:
+                time, freq = freq_time
                 dict_test = peaks_insert[index:index + 20]
                 # peaks_insert[index] = f_1
                 for index2, freq_time2 in dict_test:
                     dictionary[(peaks_insert[index], peaks_insert[index2], freq_time2 - freq_time)].append(
                         (song_id, freq_time))
+                for value in dict_test:
+                    time2, freq2 = value
+                    database.add_freq_time((freq, freq2, time2-time), (song_id, time))
             except:
-                print(index)
-                print(len(peaks_insert))
+                # print(index)
+                # print(len(peaks_insert))
                 break
-        return dictionary
+        return database
 
     def compare(self, database, peaks_sample):
         # going to take
@@ -58,15 +62,17 @@ class FingerPrint:
             time, freq = freq_time
             try:
                 time2, freq2 = peaks_sample[index + 1]
-                appending = database[(
-                freq, freq2, time2 - time)]  # list of song_id's and times that correspond to frequencies and delta t
+                appending = database.get_byTuple((freq, freq2, time2 - time)) # list of song_id's and times that correspond to frequencies and delta t
                 # going through appending
-                for tup in appending:
-                    time_new = time - tup[1]
-                    mostCommon.append((tup[0], np.round(time_new, 2)))
+                if appending is None:
+                    pass
+                else:
+                    for tup in appending:
+                        time_new = time - tup[1]
+                        mostCommon.append((tup[0], np.round(time_new, 2)))
             except:
-                print(index)
-                print(len(peaks))
+                # print(index)
+                # print(len(peaks))
                 break
                 # t*-t1, t*-t2, offset should be the same
                 # t1 and t2 are times in the database
