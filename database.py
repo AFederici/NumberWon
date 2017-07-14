@@ -43,7 +43,7 @@ class Database():
         
     def edit_values(self, key):
         new_val = input('What should the new value be?')
-        self.dict[key] = (new_song, new_value)
+        self.dict[key] = (new_value)
         print (self.dict)
         #fix this to be more generalized
     
