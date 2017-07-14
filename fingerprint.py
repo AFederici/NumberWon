@@ -8,6 +8,15 @@ from scipy.ndimage.morphology import generate_binary_structure, iterate_structur
 class FingerPrint():
 
     def find_peaks(self, S, freqs):
+        """ Listens with mic and returns sampled np array of input
+                Parameters
+                ----------
+                S : list of samples
+                freqs : frequencies of the samples
+
+                Returns
+                -------
+                peaks: np array of peaks"""
         ys, xs = np.histogram(S.flatten(), bins=len(freqs)//2, normed=True)
         dx = xs[-1] - xs[-2]
         cdf = np.cumsum(ys)*dx  # this gives you the cumulative distribution of amplitudes
@@ -17,12 +26,11 @@ class FingerPrint():
         struct = generate_binary_structure(2, 1)
         neighborhood = iterate_structure(struct, 20)
         local = S == maximum_filter(S, footprint=neighborhood)
-        S = local & foreground
-        S = np.argwhere(S)
-        return S
+        peaks = local & foreground
+        peaks = np.argwhere(peaks)
+        return peaks
 
     def fingerprinting(self, peaks_insert, dictionary, song_id):
-
         for index, freq_time in enumerate(peaks_insert):
             try:
                 dict_test = peaks_insert[index:index + 20]
