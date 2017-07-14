@@ -9,7 +9,7 @@ class FingerPrint:
     def find_peaks(samples):
         ys, xs = np.histogram(S.flatten(), bins=len(freqs)//2, normed=True)
         dx = xs[-1] - xs[-2]
-        cdf = np.cumsum(ys).*dx  # this gives you the cumulative distribution of amplitudes
+        cdf = np.cumsum(ys)*dx  # this gives you the cumulative distribution of amplitudes
         cutoff = xs[np.searchsorted(cdf, 0.77)]
         plt.figure(2)
         plt.plot(cdf)
