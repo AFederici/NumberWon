@@ -1,6 +1,6 @@
 import numpy as np
 
-class Database():
+class Database:
     def __init__(self, file = None):
         """ initializes an object of the Database class.
                 Parameters

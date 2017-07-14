@@ -5,7 +5,8 @@ from collections import Counter
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure, iterate_structure
 
-class FingerPrint():
+
+class FingerPrint:
 
     def find_peaks(self, S, freqs):
         """ Listens with mic and returns sampled np array of input
