@@ -1,6 +1,7 @@
 import numpy as np
 import librosa
 from pathlib import Path
+import microphone
 
 class Audio:
     """The Audio Class"""
@@ -44,13 +45,16 @@ class Audio:
         samples, fs = librosa.load(filename, sr=sampling_rate, mono=True)
         return samples
 
-    def mic_input(self):
+    def mic_input(self, time):
         """ Listens with mic and returns sampled np array of input
+                Parameters
+                ----------
+                time : time in seconds to record
 
                 Returns
                 -------
                 sampled_input: Numpy array """
-        byte_encoded_signal, sampling_rate = record_audio(3)
+        byte_encoded_signal, sampling_rate = record_audio(time)
         sampled_input = np.array([])
         for i in range(len(byte_encoded_signal)):
             byte_string = np.fromstring(byte_encoded_signal[i], dtype=np.int16)
