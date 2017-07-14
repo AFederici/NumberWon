@@ -4,7 +4,6 @@ from pathlib import Path
 import microphone
 import matplotlib.mlab as mlab
 
-
 class Audio:
     """The Audio Class"""
 
@@ -18,7 +17,7 @@ class Audio:
 
                 Returns
                 -------
-                song_names: Numpy array of str, each a path to a song """
+                song_array: 2d Numpy array of str, each a path to a song """
 
         song_names = np.array([])
         for i in range(len(song)):
@@ -56,7 +55,6 @@ class Audio:
                 Returns
                 -------
                 sampled_input: Numpy array """
-
         byte_encoded_signal, sampling_rate = record_audio(time)
         sampled_input = np.array([])
         for i in range(len(byte_encoded_signal)):
@@ -67,16 +65,16 @@ class Audio:
     def load_spectrogram(self, samples, fs):
         """ creates a spectrogram based on the samples and sampling rate WITHOUT the image
 
-                Parameters
-                ----------
-                samples : np array of samples
-                fs : int of sampling rate
+                    Parameters
+                    ----------
+                    samples : np array of samples
+                    fs : int of sampling rate
 
-                Returns
-                -------
-                S: 2D array of |c_k| values. Axis-0 (row) is the frequency, axis-1 (col) is the time.
-                freqs: an array of frequency values, which allows you to correspond the axis-0 bins to actual frequencies
-                times: an array of timevalues, which allows you to correspond the axis-1 bins to actual times """
+                    Returns
+                    -------
+                    S: 2D array of |c_k| values. Axis-0 (row) is the frequency, axis-1 (col) is the time.
+                    freqs: an array of frequency values, which allows you to correspond the axis-0 bins to actual frequencies
+                    times: an array of timevalues, which allows you to correspond the axis-1 bins to actual times """
 
         S, freqs, times = mlab.specgram(samples, NFFT=4096, Fs=fs, window=mlab.window_hanning, noverlap=(4096 // 2))
         return S, freqs, times
