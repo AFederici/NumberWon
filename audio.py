@@ -62,7 +62,7 @@ class Audio:
             sampled_input = np.hstack((sampled_input, byte_string))
         return sampled_input
 
-    def load_spectrogram(self, samples, fs):
+    def load_spectrogram(self, samples, fs=44100):
         """ creates a spectrogram based on the samples and sampling rate WITHOUT the image
 
                     Parameters
