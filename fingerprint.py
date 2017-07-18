@@ -18,7 +18,7 @@ class FingerPrint:
                 Returns
                 -------
                 peaks: np array of peaks"""
-        ys, xs = np.histogram(S.flatten(), bins=len(freqs)//2, normed=True)
+        ys, xs = np.histogram(S.flatten(), bins=S.size//2, normed=True)
         dx = xs[-1] - xs[-2]
         cdf = np.cumsum(ys)*dx  # this gives you the cumulative distribution of amplitudes
         cutoff = xs[np.searchsorted(cdf, 0.77)]
@@ -38,12 +38,12 @@ class FingerPrint:
                 dict_test = peaks_insert[index:index + 20]
                 for value in dict_test:
                     time2, freq2 = value
-                    database.add_freq_time((freq, freq2, time2-time), (song_id, time))
+                    database.add_freq_time((freq, freq2, np.round(time2 - time,decimals=2)), (song_id, time))
             except:
                 # print(index)
                 # print(len(peaks_insert))
                 break
-        return 
+        return
 
     def compare(self, database, peaks_sample):
         # going to take
@@ -59,7 +59,8 @@ class FingerPrint:
             time, freq = freq_time
             try:
                 time2, freq2 = peaks_sample[index + 1]
-                appending = database.get_byTuple((freq, freq2, time2 - time)) # list of song_id's and times that correspond to frequencies and delta t
+                appending = database.get_byTuple((freq, freq2, np.round(time2 - time,decimals=2)))
+                # list of song_id's and times that correspond to frequencies and delta t
                 # going through appending
                 if appending is None:
                     pass
@@ -78,4 +79,8 @@ class FingerPrint:
                 #         print(most) #for debugging
                 #         first = most[0] #for debugging
                 #         return first[0]
-        return Counter(mostCommon).most_common(1)[0][0][0]
+        # print (Counter(mostCommon).most_common(10),mostCommon)
+        try:
+            return Counter(mostCommon).most_common(1)[0][0][0]
+        except:
+            return None

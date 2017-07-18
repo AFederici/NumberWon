@@ -78,4 +78,4 @@ class Audio:
                     times: an array of timevalues, which allows you to correspond the axis-1 bins to actual times """
 
         S, freqs, times = mlab.specgram(samples, NFFT=4096, Fs=fs, window=mlab.window_hanning, noverlap=(4096 // 2))
-        return S, freqs, times
+        return S, freqs
