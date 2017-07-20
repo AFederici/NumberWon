@@ -11,7 +11,7 @@ def difference(descript, database):
     # descript = a (128,) shape descriptor
     dict_least = dict()
     for key, val in database.items():
-        dict_least[key] = np.sum(descript-val)**2
+        dict_least[key] = np.sqrt((descript-val)**2)
     name_best = min(dict_least, key = d.get)
     if dict_least[key] > 0.5:
         return "No match found"
