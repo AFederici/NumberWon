@@ -21,6 +21,10 @@ class Database():
         else:
             self.dict = {}
 
+    def items(self):
+        return self.dict
+    def get(self, key):
+        return self.dict[key]
     def def_variation(self, var):
         """ defines the variation, whether it be a song or a footprint.
                 Parameters
