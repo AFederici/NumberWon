@@ -1,9 +1,10 @@
 #methods
-def file_read(file_id):
-    img_array = io.imread(r + file_id)
+def file_read(self, file_id):
+    img_array = io.imread(file_id)
     if (img_array.shape[2] == 4):
         img_array = img_array[:, :, :3]
     return img_array
+
 
 
 def difference(descript, database):
