@@ -20,18 +20,18 @@ class Database():
             self.dict = np.load(file).item()
         else:
             self.dict = {}
-        
+
     def def_variation(self, var):
         """ defines the variation, whether it be a song or a footprint.
                 Parameters
                 ----------
                 var : (default None) a str named SONG or FP. (as .npy)"""
         self.variation = var
-        
+
     def style(self):
         """ returns the variation style of the dictionary object """
         return 'Dict style is', self.variation
-    
+
     def __repr__(self):
         """ The repr command; returns finger print followed by the song title and then artist """
         lines = ['Dictionary contains values of:', self.variation]
@@ -39,7 +39,7 @@ class Database():
             lines.append('{}:{}'.format(key, value))
         return '\n'.join(lines)
         # delete this depending on what format the fp is in (possible hash), user might not care to see it
-        
+
     def save_obj(self, file_name = 'dictionary.npy' ):
         """ saves the dictionary object
                 Parameters
@@ -57,7 +57,7 @@ class Database():
         self.save_obj(old_file_name)
         self.__init__(new_file)
         return 'successfully loaded'
-        
+
     def size(self):
         """ returns number of songs stored in the dictionary """
         return len(self.dict)
@@ -68,15 +68,15 @@ class Database():
                 ----------
                 key : the key of the obj that should be edited """
         new_val = input('What should the new value be?')
-<<<<<<< HEAD
         self.dict[key] = new_val
 
-=======
         self.dict[key] = (new_value)
         print (self.dict)
         #fix this to be more generalized
-    
->>>>>>> 33c4c13249d5fd2b4e4a15c57b1650d667e0d7a8
+
+    def edit_duplicates(self, key, second_value):
+        self.dict[key].append(second_value)
+
     def add_song(self, _id, title = None, artist = None):
         """ checks if a song exists in the database and then adds it to the database.
                 Parameters
@@ -88,14 +88,14 @@ class Database():
             print('already in the dict')
         else:
             self.dict[_id] = (title, artist)
-            
+
     def del_w_id(self, _id):
         """ deletes a song from the database based on its id
                 Parameters
                 ----------
                 _id :  the song id to be deleted """
         del self.dict[_id]
-            
+
     def del_w_title_and_artist(self, title, artist):
         """ deletes a song from the database based on its title and artist
                 Parameters
@@ -103,7 +103,7 @@ class Database():
                 title :  the song id to be deleted
                 artist :  the song id to be deleted """
         del self.dict[self.get_id_by_song_and_artist(title, artist)]
-        
+
     def get_song_by_id(self, _id):
         """ search song by id
                 Parameters
@@ -115,7 +115,7 @@ class Database():
             print('un-recognized song!')
         # still editing this method
         # can make it more user friendly by taking the input from the user and having the method call itself
-        
+
     def get_id_by_song_and_artist(self, title, artist):
         """ search song id by title and artist
                 Parameters
@@ -130,15 +130,26 @@ class Database():
                 ----------
                 tuple_of_freq_time :  tuple of frequencies for the song
                 tuple_of_id_time :  tuple of times for the song """
-        self.dict[tuple_of_freq_time] = tuple_of_id_time
-    
+        if tuple_of_freq_time in self.dict:
+            self.edit_duplicates(tuple_of_freq_time, tuple_of_id_time)
+        else:
+            list_value = []
+            list_value.append(tuple_of_id_time)
+            self.dict[tuple_of_freq_time] = list_value
+
     def del_w_freq(self, tuple_of_freq_time):
         """ delete song based on frequency
                 Parameters
                 ----------
                 tuple_of_freq_time :  tuple of frequencies for the song """
         del self.dict[tuple_of_freq_time]
-        
+
+    def get_byTuple(self, tupe):
+        if tupe in self.dict:
+            return self.dict[tupe]
+        else:
+            return None
+
     def get_list_of_ids(self):
         """ returns a list of song ids produced from all of the tuples of frequencies and time """
         l = []
