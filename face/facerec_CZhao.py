@@ -7,8 +7,10 @@ def file_read(file_id):
 
 
 def difference(list_descriptors, database):
+    dict_least = dict()
     for descript in list_descriptors:
         # descript = a (128,) shape descriptor
         for key, val in database.items(): """change this for dict items"""
+            dict_least.add
 
 

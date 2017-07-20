@@ -25,6 +25,8 @@ class Database():
         return self.dict
     def get(self, key):
         return self.dict[key]
+    def update(self, key, val):
+        self.dict[key] = np.average(self.dict[key] + val)
     def def_variation(self, var):
         """ defines the variation, whether it be a song or a footprint.
                 Parameters
