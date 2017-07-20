@@ -6,11 +6,17 @@ def file_read(file_id):
     return img_array
 
 
-def difference(list_descriptors, database):
+def difference(descript, database):
+    names = []
+    # descript = a (128,) shape descriptor
     dict_least = dict()
-    for descript in list_descriptors:
-        # descript = a (128,) shape descriptor
-        for key, val in database.items(): """change this for dict items"""
-            dict_least.add
+    for key, val in database.items():
+        dict_least[key] = np.sum(descript-val)**2
+    name_best = min(dict_least, key = d.get)
+    if dict_least[key] > 0.5:
+        return "No match found"
+    else:
+        return name_best
+
 
 
