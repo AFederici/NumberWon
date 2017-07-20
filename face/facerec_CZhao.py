@@ -8,7 +8,6 @@ def file_read(self, file_id):
 
 
 def difference(descript, database):
-    names = []
     # descript = a (128,) shape descriptor
     dict_least = dict()
     for key, val in database.items():
