@@ -1,24 +1,17 @@
-# MyGrad
+# numberwon
 
-A pure-python autograd/tensor library (CogWorks 2017)
+A package with Song Fingerprinting and Facial Recognition and clustering capabilities (CogWorks 2017)
 
-`mygrad` was created as a prototype for the CogWorks 2017 summer program, in the [Beaver Works Summer Institute at MIT](https://beaverworks.ll.mit.edu/CMS/bw/bwsi). It was developed by [Ryan Soklaski](https://github.com/LLrsokl), the lead instructor of CogWorks 2017, and by [Nick Stanisha]((https://github.com/nstanisha)). 
+`number` was created as the backbone for an autonomous cognitive assistant at the [Beaver Works Summer Institute at MIT](https://beaverworks.ll.mit.edu/CMS/bw/bwsi). It was developed by [AJ Federici](https://github.com/AFederici), [Michael Huang](https://github.com/myh1000), [Megan Kaye](https://github.com/mkaye5), and by [Christine Zhao](https://github.com/czhao028)). 
 
 ## Installation Instructions
-Clone MyGrad, navigate to the resulting directory, and run
+Clone numberwon, navigate to the resulting directory, and run
 
 ```shell
 python setup.py develop
 ```
 
-If you want to run unit tests, install `pytest` and `hypothesis`:
-
+In the numberwon directory, you can install the database class, the Face_Recognition class and the FingerPrint class:
 ```shell
-conda install pytest
-pip install hypothesis
-```
-
-And, in the MyGrad directory, run:
-```shell
-pytest tests
+import Database, import Face_Recognition, import FingerPrint
 ```
