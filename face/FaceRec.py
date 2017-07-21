@@ -1,5 +1,3 @@
-% matplotlib
-notebook
 from camera import take_picture
 import matplotlib.pyplot as plt
 from dlib_models import download_model, download_predictor, load_dlib_models
