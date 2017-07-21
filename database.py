@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Database():
     def __init__(self, file = None):
         """ initializes an object of the Database class.
@@ -8,7 +7,6 @@ class Database():
                 ----------
                 file : (default None) an old database object. (as .npy) If a file is specified, the data from that file is
                         transferred over
-
                 Variables
                 -------
                 variation: Classification if the variation is a song or the footprint. variation describes what type of
@@ -23,12 +21,16 @@ class Database():
 
     def items(self):
         return self.dict
+    
     def get(self, key):
         return self.dict[key]
-    def averageImage_val_input(self, key, val):
-        self.dict[key] = np.average(self.dict[key] + val)
+    
+    def update_user_image(self, key, val):
+        self.dict[key] = (self.dict[key] + val)/2
+        
     def update(self, key, val):
         self.dict[key] = val
+        
     def def_variation(self, var):
         """ defines the variation, whether it be a song or a footprint.
                 Parameters
