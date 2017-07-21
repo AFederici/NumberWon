@@ -1,0 +1,7 @@
+setup.py
+numberwon/__init__.py
+numberwon/database.py
+numberwon.egg-info/PKG-INFO
+numberwon.egg-info/SOURCES.txt
+numberwon.egg-info/dependency_links.txt
+numberwon.egg-info/top_level.txt
