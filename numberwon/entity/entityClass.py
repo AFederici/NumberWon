@@ -6,6 +6,7 @@ class entityDatabase:
     def __init__(self, pickle_path):
         self.ent_dict = defaultdict(list)
         pickle = pickle.load(open(pickle_path), "rb")
+        #pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
         self.entize(pickle)
     def get_by_id(self, id):
         return self.ent_dict[id]
