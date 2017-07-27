@@ -367,3 +367,28 @@ class MySearchEngine():
 
         # sort results and return top k
         return scores[0:k]
+    
+    def sentence(self, id, length = 1):
+        #length represents how many sentence to be read off
+        output = ""
+        beginning = self.raw_text[id][:500]
+        for ch in beginning:
+            if ch is not '.':
+                ouput += ch
+                previous_char = ch
+            elif ch is '.' and previous_char.isupper():
+                continue
+            else:
+                break
+        return output
+    def whats_new(self, key_word):
+        #load in a filled search engine before calling
+        #user interface stuff to maybe implement
+        #while(unhappy):
+        #result_number = i
+        top_doc = self.query(key_word)[0][0]
+        sentence = self.sentence(top_doc)
+            #print(sentence)
+            #ans = input("was that an okay sentence?")
+            #if ans == 'y' or ans == 'yes':
+            #    unhappy = False
