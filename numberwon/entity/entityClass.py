@@ -5,9 +5,9 @@ class entityDatabase:
     from nltk.tokenize import word_tokenize
     def __init__(self, pickle_path):
         self.ent_dict = defaultdict(list)
-        pickle = pickle.load(open(pickle_path), "rb")
+        p = pickle.load(open(pickle_path), "rb")
         #pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
-        self.entize(pickle)
+        self.entize(p)
     def get_by_id(self, id):
         return self.ent_dict[id]
     def entize(self, pickle):
