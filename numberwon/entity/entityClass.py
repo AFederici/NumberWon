@@ -31,3 +31,31 @@ class entityDatabase:
         topdoc = engine.query(qword)[0][0]
         raw = engine.raw_text[topdoc] #whole doc
         return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group() #first sentence
+    def top_entity_associated_with_item(item, documents, weighted=True, rangee=5):
+        #search for item.
+            #for i in feed. if i == feed:
+        #create a list of words that are close to word in proximity
+        #score based on proximity to word.
+        word_freq = Counter()
+        for i in documents:
+            old_spli = word_tokenize(i)
+            spli = []
+            for i in old_spli:
+                if i not in string.punctuation:
+                    spli.append(i.lower())
+            for x in range(len(spli)):
+                if spli[x] == item:
+                    for z in range(rangee):
+                        if not (x - z < 0):
+                            if spli[x-z] != spli[x]:
+                                if weighted:
+                                    word_freq[spli[x-z]] += 1/abs((x -(x-z)))
+                                else:
+                                    word_freq[spli[x-z]] += 1
+                        if not (x + z > (len(spli) - 1)):
+                            if spli[x+z] != spli[x]:
+                                if weighted:
+                                    word_freq[spli[x+z]] += 1/abs((x -(x+z)))
+                                else:
+                                    word_freq[spli[x+z]] += 1
+        return word_freq.most_common()
