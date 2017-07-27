@@ -4,7 +4,7 @@ class entityDatabase:
     import nltk, pickle
     from nltk.tokenize import word_tokenize
     import MySearchEngine as engine
-    
+
     def __init__(self, pickle_path):
         self.ent_dict = defaultdict(list)
         p = pickle.load(open(pickle_path), "rb")
@@ -23,10 +23,11 @@ class entityDatabase:
                     z = list(zip(*[ne for ne in ents]))[0]
                     z = (" ".join(z),)
                     self.ent_dict[key].append(z)
-def searchNentity(qword):
-    topdoc = engine.query(qword)[0][0]
-    return top_entity_associated_with_item(qword,engine.raw_text[topdoc])
-def docsearch(qword):
-    topdoc = engine.query(qword)[0][0]
-    raw = engine.raw_text[topdoc] #whole doc
-    return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group() #first sentence
+    def searchNentity(qword):
+        topdoc = engine.query(qword)[0][0]
+        return top_entity_associated_with_item(qword,engine.raw_text[topdoc]) #Megan's method
+
+    def docsearch(qword):
+        topdoc = engine.query(qword)[0][0]
+        raw = engine.raw_text[topdoc] #whole doc
+        return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group() #first sentence
