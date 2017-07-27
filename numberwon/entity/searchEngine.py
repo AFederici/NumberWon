@@ -173,19 +173,19 @@ class MySearchEngine():
         """
         # note: term needs to be lowercased so can match output of tokenizer
         # look up term in inverted index
-        term.replace(" ", "")
-        term.lower()
-        if '+' in term or 'and' in term:
-            if 'and' in term:
-                term.replace('and', '+')
-            words = term.split('+')
-            return self.get_matches_AND(words)
-        if '-' in term or 'not' in term:
-            if 'not' in term:
-                term.replace('not', '-')
-            words = term.split('-')
-            return set.intersection(self.get_matches_NOT(words[1]), self.inverted_index[words[0]])
-        return self.inverted_index[term]
+        #term.replace(" ", "")
+        #term.lower()
+        #if '+' in term or 'and' in term:
+        #    if 'and' in term:
+        #        term.replace('and', '+')
+        #    words = term.split('+')
+        #    return self.get_matches_AND(words)
+        #if '-' in term or 'not' in term:
+        #    if 'not' in term:
+        #        term.replace('not', '-')
+        #    words = term.split('-')
+        #    return set.intersection(self.get_matches_NOT(words[1]), self.inverted_index[words[0]])
+        return self.inverted_index[term.lower()]
 
     def get_matches_OR(self, terms):
         """ Returns set of documents that contain at least one of the specified terms.
