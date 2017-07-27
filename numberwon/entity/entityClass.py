@@ -3,8 +3,9 @@ class entityDatabase:
     from collections import Counter, defaultdict
     import nltk, pickle
     from nltk.tokenize import word_tokenize
-    def __init__(self, pickle):
+    def __init__(self, pickle_path):
         self.ent_dict = defaultdict(list)
+        pickle = pickle.load(open(pickle_path), "rb")
         self.entize(pickle)
     def get_by_id(self, id):
         return self.ent_dict[id]
