@@ -3,6 +3,8 @@ class entityDatabase:
     from collections import Counter, defaultdict
     import nltk, pickle
     from nltk.tokenize import word_tokenize
+    import MySearchEngine as engine
+    
     def __init__(self, pickle_path):
         self.ent_dict = defaultdict(list)
         p = pickle.load(open(pickle_path), "rb")
@@ -21,7 +23,6 @@ class entityDatabase:
                     z = list(zip(*[ne for ne in ents]))[0]
                     z = (" ".join(z),)
                     self.ent_dict[key].append(z)
-
 def searchNentity(qword):
     topdoc = engine.query(qword)[0][0]
     return top_entity_associated_with_item(qword,engine.raw_text[topdoc])
