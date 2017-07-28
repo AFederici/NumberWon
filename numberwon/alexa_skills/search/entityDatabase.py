@@ -45,13 +45,13 @@ class entityDatabase:
         return dictionary
 
     def searchNentity(self, qword):
-        if self.engine.query(qword) is not None:
+        if self.engine.query(qword) != []:
             topdoc = self.engine.query(qword)[0][0]
             return self.top_entity_pos(qword,self.engine.raw_text[topdoc]) #Megan's method
         return None
 
     def docsearch(self, qword):
-        if self.engine.query(qword) is not None:
+        if self.engine.query(qword) != []:
             topdoc = self.engine.query(qword)[0][0]
             raw = self.engine.raw_text[topdoc] #whole doc
             return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group().replace('\n\nFILE PHOTO', "") #first sentence
