@@ -1,20 +1,26 @@
+from collections import Counter, defaultdict
+from nltk.tokenize import word_tokenize
+import pickle
+import string
+import nltk
+import re
+from nltk.tokenize import word_tokenize
+from searchEngine import MySearchEngine
+
 class entityDatabase:
-
-    from collections import Counter, defaultdict
-    import nltk, pickle
-    from nltk.tokenize import word_tokenize
-    import MySearchEngine as engine
-
     def __init__(self, pickle_path):
-        p = pickle.load(open(pickle_path), "rb")
-        # pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
+        pfile = open(pickle_path, mode='rb')
+        p = pickle.load(pfile)
+        #pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
+        self.engine = MySearchEngine(file=pickle_path,version='d')
         self.ent_dict = defaultdict(list)
         self.ent_dict = self.entize(p, self.ent_dict)
         self.ent_dict2 = defaultdict(list)
-        self.ent_dict2 = entize2(p, self.ent_dict2)
+        self.ent_dict2 = self.entize2(p, self.ent_dict2)
 
     def get_by_id(self, id):
         return self.ent_dict[id]
+    
     def entize(self, pickle, dictionary):
         #creates a dictionary where link = key, and value = list of entities
         for key, val in pickle.items():
@@ -27,8 +33,9 @@ class entityDatabase:
                     z = list(zip(*[ne for ne in ents]))[0]
                     z = " ".join(z)
                     dictionary[key].append(z)
+        return dictionary
 
-     def entize2(self, pickle, dictionary):
+    def entize2(self, pickle, dictionary):
         counter = 0
         for key, val in pickle.items():
             tokens = nltk.word_tokenize(val)
@@ -41,40 +48,45 @@ class entityDatabase:
                     z = (" ".join(z), counter)
                     dictionary[key].append(z)
                 counter += len(ents)
+        return dictionary
+          
+    def searchNentity(self, qword):
+        topdoc = self.engine.query(qword)[0][0]
+        return self.top_entity_associated_with_item(qword,self.engine.raw_text[topdoc]) #Megan's method
 
-    def searchNentity(qword):
-        topdoc = engine.query(qword)[0][0]
-        return top_entity_associated_with_item(qword,engine.raw_text[topdoc]) #Megan's method
-    def docsearch(qword):
-        topdoc = engine.query(qword)[0][0]
-        raw = engine.raw_text[topdoc] #whole doc
+    def docsearch(self, qword):
+        topdoc = self.engine.query(qword)[0][0]
+        raw = self.engine.raw_text[topdoc] #whole doc
         return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group() #first sentence
-    def top_entity_associated_with_item(item, documents, weighted=True, rangee=5):
+    
+    def get_title_and_first_sentence(self, qword):
+        return self.engine.whats_new(qword)
+    
+    def top_entity_pos(self, item, most_c=10):
         #search for item.
             #for i in feed. if i == feed:
         #create a list of words that are close to word in proximity
         #score based on proximity to word.
+        #documents is already a list
         word_freq = Counter()
-        for i in documents:
-            old_spli = word_tokenize(i)
-            spli = []
-            for i in old_spli:
-                if i not in string.punctuation:
-                    spli.append(i.lower())
-            for x in range(len(spli)):
-                if spli[x] == item:
-                    for z in range(rangee):
-                        if not (x - z < 0):
-                            if spli[x-z] != spli[x]:
-                                if weighted:
-                                    word_freq[spli[x-z]] += 1/abs((x -(x-z)))
-                                else:
-                                    word_freq[spli[x-z]] += 1
-                        if not (x + z > (len(spli) - 1)):
-                            if spli[x+z] != spli[x]:
-                                if weighted:
-                                    word_freq[spli[x+z]] += 1/abs((x -(x+z)))
-                                else:
-                                    word_freq[spli[x+z]] += 1
-        return word_freq.most_common()
-
+        for i in self.ent_dict2:
+            #print(self.ent_dict2[i])
+            for x in self.ent_dict2[i]:
+                if x[0] == item:
+                    for z in self.ent_dict2[i]:
+                        if x[0] != z[0]:
+                            #print((abs(x[1]-z[1])))
+                            word_freq[z[0]] += 1/(abs((x[1]-z[1])))
+        return word_freq
+        
+    def top_entity_dict(self, item, most_c=10):
+        #documents is already a list
+        #turn each list into a counter, add all counters together. 
+        mega_counter = Counter()
+        for i in self.ent_dict:
+            #get list of counters etc
+            if item in self.ent_dict[i]:
+                c = Counter(self.ent_dict[i])
+                del c[item]
+                mega_counter += c
+        return mega_counter.most_common(most_c)
