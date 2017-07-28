@@ -1,11 +1,16 @@
+import pickle
 class MySearchEngine():
     def __init__(self, file = None):
         
-        #file : (default None) an old database object. (as .npy) If a file is specified, 
+        #file : (default None) an old database object. (as .pickle) If a file is specified, 
         #the data from that file is transferred over
         
         if file is not None:
-            self.dict = np.load(file).item()
+            f = pickle.load( open(file, "rb"))
+            self.raw_text = f.raw_text
+            self.term_vectors = f.term_vectors
+            self.doc_freq = f.doc_freq
+            self.inverted_index = f.inverted_index
         else:
             # Dict[str, str]: maps document id to original/raw text
             self.raw_text = {}
@@ -23,15 +28,16 @@ class MySearchEngine():
     #  files and saving
     # ------------------------------------------------------------------------
     
-    def save(self, file_name = 'searchengine.npy' ):
+    def save(self, file_name = 'searchengine.pickle' ):
         """ saves the dictionary object
                 Parameters
                 ----------
                 file_name : the name of the engine obj file that is being saved to be loaded at a later time """
-        np.save(file_name, self.dict)
+        np.save(file_name, self)
+        pickle.dump( self, open(file_name, "wb") )
         return 'successfully saved'
 
-    def switch(self, new_file, old_file_name = 'searchengine.npy'):
+    def switch(self, new_file, old_file_name = 'searchengine.pickle'):
         """ switches databases based on a new file and an old file
                 Parameters
                 ----------
