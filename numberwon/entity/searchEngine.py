@@ -25,7 +25,10 @@ class MySearchEngine():
                 self.doc_freq = Counter()
                 self.inverted_index = defaultdict(set)
                 for key, value in f.items():
-                    self.add(key, value)
+                    if key in self.raw_text:
+                        continue
+                    else:
+                        self.add(key, value)
         else:
             # Dict[str, str]: maps document id to original/raw text
             self.raw_text = {}
@@ -42,6 +45,14 @@ class MySearchEngine():
     # ------------------------------------------------------------------------
     #  files and saving
     # ------------------------------------------------------------------------
+    
+    def upload_vd(self, file_name):
+        f = pickle.load( open(file_name, "rb"))
+        for key, value in f.items():
+            if key in self.raw_text:
+                continue
+            else:
+                self.add(key, value)
     
     def save(self, file_name = 'searchengine.pickle' ):
         """ saves the dictionary object
@@ -129,7 +140,7 @@ class MySearchEngine():
         # update document frequencies for terms found in this doc
         # i.e., counts should increase by 1 for each (unique) term in term vector
         self.doc_freq.update(term_vector.keys())
-    
+        
     def remove(self, id):
         """ Removes document from index.
         
