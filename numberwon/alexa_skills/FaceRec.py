@@ -83,7 +83,8 @@ class Face_Recognition:
             name_list : the list of names that match with the descriptor vectors
             database : the database """
         for i in range(len(desc_list)):
-            database.update_user_image(name_list[i], desc_list[i])
+            if not name_list[i] == "someone I do not know":
+                database.update_user_image(name_list[i], desc_list[i])
         print("database updated")
 
     def name_faces_from_picture(self, database):
@@ -116,4 +117,8 @@ class Face_Recognition:
             ----------
             database : the database """
         #desc = desc[0]
-        database.update(name, desc)
+        if not name in database.dict:
+            database.update(name, desc)
+        else:
+            print("made a mistake")
+            database.update_user_image(name, desc)
