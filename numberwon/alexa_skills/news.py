@@ -38,6 +38,8 @@ def no_intent():
 def news_intent(NewsTitle):
     headline  = get_headlines(NewsTitle)
     msg = "Tops news on {}: {}".format(NewsTitle,headline)
+    if headline is None:
+        msg = "No news found"
     return statement(msg)
 
 if __name__ == '__main__':
