@@ -57,7 +57,7 @@ class entityDatabase:
     def docsearch(self, qword):
         topdoc = self.engine.query(qword)[0][0]
         raw = self.engine.raw_text[topdoc] #whole doc
-        return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group() #first sentence
+        return re.match(r'(?:[^.:;]+[.:;]){1}', raw).group().replace('\n\nFILE PHOTO', "") #first sentence
     
     def get_title_and_first_sentence(self, qword):
         return self.engine.whats_new(qword)
