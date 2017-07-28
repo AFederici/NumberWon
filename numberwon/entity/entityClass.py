@@ -1,5 +1,4 @@
 from collections import Counter, defaultdict
-from nltk.tokenize import word_tokenize
 import pickle
 import string
 import nltk
@@ -9,9 +8,9 @@ from searchEngine import MySearchEngine
 
 class entityDatabase:
     def __init__(self):
-        # pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
         self.ent_dict = defaultdict(list)
         self.ent_dict2 = defaultdict(list)
+        self.engine = MySearchEngine()
 
     def get_by_id(self, id):
         return self.ent_dict[id]
@@ -88,14 +87,16 @@ class entityDatabase:
         return mega_counter.most_common(most_c)
 
     def add_File_Database(self, pickle_path):
-        p = pickle.load(open(pickle_path), "rb")
+        p = pickle.load(open(pickle_path, "rb"))
+        self.engine.upload_vd(pickle_path)
         # pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
         self.ent_dict = self.entize(p, self.ent_dict)
-        self.ent_dict2 = entize2(p, self.ent_dict2)
-
+        self.ent_dict2 = self.entize2(p, self.ent_dict2)
+        
     def add_Folder_Database(self, path_pickle_folder):
         #have paths in the form '/path/to/dir/*.pickle'
         for file in glob.glob(path_pickle_folder):
-            p = pickle.load(open(file), "rb")
+            p = pickle.load(open(pickle_path, "rb"))
+            self.engine.upload_vd(file)
             self.ent_dict = self.entize(p, self.ent_dict)
-            self.ent_dict2 = entize2(p, self.ent_dict2)
+            self.ent_dict2 = self.entize2(p, self.ent_dict2)

@@ -1,0 +1,24 @@
+{
+  "intents": [
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "NewsTitle",
+          "type": "NEWS"
+        }
+      ],
+      "intent": "NewsIntent"
+    }
+  ]
+}
+
+NewsIntent I would like to hear about {NewsTitle}
+NewsIntent Tell me about {NewsTitle}
+NewsIntent Top news about {NewsTitle}
+NewsIntent {NewsTitle}
