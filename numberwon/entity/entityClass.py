@@ -52,7 +52,7 @@ class entityDatabase:
           
     def searchNentity(self, qword):
         topdoc = self.engine.query(qword)[0][0]
-        return self.top_entity_associated_with_item(qword,self.engine.raw_text[topdoc]) #Megan's method
+        return self.top_entity_pos(qword,self.engine.raw_text[topdoc]) #Megan's method
 
     def docsearch(self, qword):
         topdoc = self.engine.query(qword)[0][0]
@@ -77,7 +77,8 @@ class entityDatabase:
                         if x[0] != z[0]:
                             #print((abs(x[1]-z[1])))
                             word_freq[z[0]] += 1/(abs((x[1]-z[1])))
-        return word_freq
+        
+        return word_freq.most_common(10)
         
     def top_entity_dict(self, item, most_c=10):
         #documents is already a list
