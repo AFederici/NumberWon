@@ -9,16 +9,8 @@ d = Database("goodfile.npy")
 num_faces = 0
 name = ""
 feature_vector = np.array([])
-# global face_detect
-# face_detect = False
 global state
 state = 0
-# global asking_about_names
-# asking_about_names = False
-# global asking_about_database
-# asking_about_database = False
-# global asked_about_database
-# asked_about_database = False
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -114,7 +106,7 @@ def no_intent():
         msg = "Something went wrong. Please try again."
         return statement(msg)
 
-@ask.intent("Melanie")
+@ask.intent("NameIntent")
 def name_intent(nameslot):
     print("name: " + str(nameslot))
     global name

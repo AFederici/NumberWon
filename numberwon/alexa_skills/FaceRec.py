@@ -71,7 +71,7 @@ class Face_Recognition:
                 least = v
                 least_key = key
         if least > 0.45:
-            return "No match found"
+            return "someone I do not know"
         else:
             return least_key
 
@@ -93,7 +93,21 @@ class Face_Recognition:
             database : the database """
         pic = self.take_picture()
         desc, names, num_faces = self.find_faces(pic, database)
-        return " ".join(names), names, desc
+        names_c = ""
+        for i in range(len(names)):
+            if len(names) > 1 and len(names) != 2:
+                if i == (len(names) - 1):
+                    names_c += "and " + str(names[i])
+                else:
+                    names_c += str(names[i]) + ", "
+            if len(names) == 2:
+                if i == 0:
+                    names_c += str(names[i]) + " and "
+                else:
+                    names_c += str(names[i])
+            else:
+                names_c =" ".join(names)
+        return names_c , names, desc
 
     def add_face(self, database, name, desc):
         """ takes a picture and ASSUMES that the face is a new one. Prompts the user to enter a new key for
@@ -101,5 +115,5 @@ class Face_Recognition:
             Parameters
             ----------
             database : the database """
-        desc = desc[0]
+        #desc = desc[0]
         database.update(name, desc)
