@@ -25,13 +25,14 @@ def homepage():
 
 @ask.launch
 def start_skill():
-    msg = "Hello. May I see your face?"
+    msg = "May I see your face?"
+    #print("STarted skill!")
     return question(msg)
 
 
 def take_picture():
     names = f.name_faces_from_picture(d)
-    print(names)
+    #print(names)
     return names
 
 
@@ -39,14 +40,21 @@ def take_picture():
 def name_faces():
     global state
     if state == 0:
+        global names_list
         names, names_list, desc_vectors = take_picture()
         global num_faces
         num_faces = len(desc_vectors)
         global feature_vector
         feature_vector = desc_vectors
-        faces_msg = "I see {}. Is that correct?".format(names)
-        state += 1
-        return question(faces_msg)
+        if len(names_list) == 1 and names == "someone I do not know":
+            faces_msg = "I see someone I do not know. Would you like me to add this person to the database?"
+            global state
+            state = 4
+            return question(faces_msg)
+        else:
+            faces_msg = "I see {}. Is that correct?".format(names)
+            state += 1
+            return question(faces_msg)
     elif state == 1:
         msg = "Would you like me to update the database?"
         state += 1
@@ -57,14 +65,26 @@ def name_faces():
         global names_list
         global d
         f.update_faces(feature_vector, names_list, d)
-        #d.save_obj("goodfile.npy")
+        d.save_obj("goodfile.npy")
         global state
         state = 0
         return statement(msg)
     elif state == 3:
         msg = "Adding {} to the database.".format(name)
         f.add_face(d, name, feature_vector)
-        # d.save_obj("goodfile.npy")
+        d.save_obj("newfile.npy")
+        global state
+        state = 0
+        return statement(msg)
+    elif state == 4:
+        msg = "Please say the correct name."
+        global state
+        state = 5
+        return question(msg)
+    elif state == 5:
+        msg = "Adding {} to the database.".format(name)
+        f.add_face(d, name, feature_vector)
+        d.save_obj("goodfile.npy")
         global state
         state = 0
         return statement(msg)
@@ -89,17 +109,23 @@ def no_intent():
             return statement(msg)
         else:
             msg = "Please say the correct name."
-            asking_about_names = True
             global state
             state = 3
             return question(msg)
     elif state == 2:
         msg = "Ok, thanks. Have a nice day."
-        asked_about_database = False
         global state
         state = 0
         return statement(msg)
     elif state == 3:
+        msg = "My apologies. Please say the correct name again."
+        return question(msg)
+    elif state == 4:
+        msg = "Ok, thanks. Have a nice day."
+        global state
+        state = 0
+        return statement(msg)
+    elif state == 5:
         msg = "My apologies. Please say the correct name again."
         return question(msg)
     else:
