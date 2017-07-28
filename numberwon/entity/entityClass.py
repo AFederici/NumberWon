@@ -8,20 +8,10 @@ from nltk.tokenize import word_tokenize
 from searchEngine import MySearchEngine
 
 class entityDatabase:
-    def __init__(self, pickle_path):
-<<<<<<< HEAD
-=======
-        pfile = open(pickle_path, mode='rb')
-        p = pickle.load(pfile)
-        #pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
-        self.engine = MySearchEngine(file=pickle_path,version='d')
->>>>>>> eb1d75b8664998ce45e06f7e082d4bb419d5e8e9
+    def __init__(self):
+        # pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
         self.ent_dict = defaultdict(list)
         self.ent_dict2 = defaultdict(list)
-<<<<<<< HEAD
-=======
-        self.ent_dict2 = self.entize2(p, self.ent_dict2)
->>>>>>> eb1d75b8664998ce45e06f7e082d4bb419d5e8e9
 
     def get_by_id(self, id):
         return self.ent_dict[id]
