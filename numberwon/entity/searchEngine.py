@@ -401,7 +401,7 @@ class MySearchEngine():
                 continue
             else:
                 break
-        return output
+        return output.replace('\n\nFILE PHOTO', "")
     
     def whats_new(self, key_word):
         #load in a filled search engine before calling
