@@ -1,4 +1,10 @@
 import pickle
+from collections import defaultdict, Counter
+import nltk
+from nltk.tokenize import word_tokenize
+import numpy as np
+import string
+import time
 class MySearchEngine():
     def __init__(self, file = None, version = None):
         #type in either e for engine or d for url and text database
