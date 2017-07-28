@@ -6,13 +6,17 @@ class entityDatabase:
     import MySearchEngine as engine
 
     def __init__(self, pickle_path):
-        self.ent_dict = defaultdict(list)
         p = pickle.load(open(pickle_path), "rb")
-        #pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
-        self.entize(p)
+        # pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
+        self.ent_dict = defaultdict(list)
+        self.ent_dict = self.entize(p, self.ent_dict)
+        self.ent_dict2 = defaultdict(list)
+        self.ent_dict2 = entize2(p, self.ent_dict2)
+
     def get_by_id(self, id):
         return self.ent_dict[id]
-    def entize(self, pickle):
+    def entize(self, pickle, dictionary):
+        #creates a dictionary where link = key, and value = list of entities
         for key, val in pickle.items():
             tokens = nltk.word_tokenize(val)
             pos = nltk.pos_tag(tokens)
@@ -21,12 +25,26 @@ class entityDatabase:
                 ents = named_entities.pop()
                 if getattr(ents, 'label', None) != None and ents.label() == "NE":
                     z = list(zip(*[ne for ne in ents]))[0]
-                    z = (" ".join(z),)
-                    self.ent_dict[key].append(z)
+                    z = " ".join(z)
+                    dictionary[key].append(z)
+
+     def entize2(self, pickle, dictionary):
+        counter = 0
+        for key, val in pickle.items():
+            tokens = nltk.word_tokenize(val)
+            pos = nltk.pos_tag(tokens)
+            named_entities = nltk.ne_chunk(pos, binary = True)
+            for i in range(0, len(named_entities)):
+                ents = named_entities.pop()
+                if getattr(ents, 'label', None) != None and ents.label() == "NE":
+                    z = list(zip(*[ne for ne in ents]))[0]
+                    z = (" ".join(z), counter)
+                    dictionary[key].append(z)
+                counter += len(ents)
+
     def searchNentity(qword):
         topdoc = engine.query(qword)[0][0]
         return top_entity_associated_with_item(qword,engine.raw_text[topdoc]) #Megan's method
-
     def docsearch(qword):
         topdoc = engine.query(qword)[0][0]
         raw = engine.raw_text[topdoc] #whole doc
@@ -59,3 +77,4 @@ class entityDatabase:
                                 else:
                                     word_freq[spli[x+z]] += 1
         return word_freq.most_common()
+
