@@ -1,16 +1,25 @@
 import pickle
 class MySearchEngine():
-    def __init__(self, file = None):
-        
+    def __init__(self, file = None, version = None):
+        #type in either e for engine or d for url and text database
         #file : (default None) an old database object. (as .pickle) If a file is specified, 
         #the data from that file is transferred over
+        #type is 
         
         if file is not None:
             f = pickle.load( open(file, "rb"))
-            self.raw_text = f.raw_text
-            self.term_vectors = f.term_vectors
-            self.doc_freq = f.doc_freq
-            self.inverted_index = f.inverted_index
+            if version == "e":
+                self.raw_text = f.raw_text
+                self.term_vectors = f.term_vectors
+                self.doc_freq = f.doc_freq
+                self.inverted_index = f.inverted_index
+            if version == "d":
+                self.raw_text = {}
+                self.term_vectors = {}
+                self.doc_freq = Counter()
+                self.inverted_index = defaultdict(set)
+                for key, value in f.items():
+                    self.add(key, value)
         else:
             # Dict[str, str]: maps document id to original/raw text
             self.raw_text = {}
