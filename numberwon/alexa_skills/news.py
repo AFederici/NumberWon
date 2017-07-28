@@ -4,6 +4,11 @@ import requests
 import time
 import unidecode
 import json
+from search.entityDatabase import entityDatabase
+
+edatb = entityDatabase()
+edatb.add_File_Database("search/t1.pickle")
+edatb.add_File_Database("search/t3.pickle")
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -17,8 +22,8 @@ def start_skill():
     msg = "Hello. What would you like to hear about the news?"
     return question(msg)
 
-def get_headlines():
-    return "Newsy news, blah blah weather news news."
+def get_headlines(NewsTitle):
+    return edatb.docsearch(NewsTitle)
 
 @ask.intent("AMAZON.YesIntent")
 def share_headlines():
