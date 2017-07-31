@@ -7,8 +7,11 @@ import json
 from search.entityDatabase import entityDatabase
 
 edatb = entityDatabase()
+
 edatb.add_File_Database("search/t1.pickle")
 edatb.add_File_Database("search/t3.pickle")
+
+from .collect_rss import *
 
 app = Flask(__name__)
 ask = Ask(app, '/')
