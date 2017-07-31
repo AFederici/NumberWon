@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_ask import Ask, statement, question
-from FaceRec import Face_Recognition
-from database import Database
+from face.FaceRec import Face_Recognition
+from face.database import Database
 import numpy as np
 
 f = Face_Recognition()
