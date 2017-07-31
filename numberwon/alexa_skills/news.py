@@ -8,9 +8,9 @@ from search.entityDatabase import entityDatabase
 
 edatb = entityDatabase()
 
-edatb.add_Folder_Database("C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search/pickles/*.pickle")
+edatb.add_Folder_Database("C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search/pickles")
 
-from .collect_rss import *
+from search.collect_rss import *
 
 app = Flask(__name__)
 ask = Ask(app, '/')

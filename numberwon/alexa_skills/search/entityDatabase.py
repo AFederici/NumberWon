@@ -98,9 +98,11 @@ class entityDatabase:
         self.ent_dict2 = self.entize2(p, self.ent_dict2)
 
     def add_Folder_Database(self, path_pickle_folder):
-        #have paths in the form '/path/to/dir/*.pickle'
-        for file in glob.glob(path_pickle_folder):
-            p = pickle.load(open(pickle_path, "rb"))
-            self.engine.upload_vd(file)
-            self.ent_dict = self.entize(p, self.ent_dict)
-            self.ent_dict2 = entize2(p, self.ent_dict2)
+        #have paths in the form '/path/to/dir'
+        import os
+        for f in os.listdir(path_pickle_folder):
+            if f.endswith(".pickle"):
+                p = pickle.load(open(path_pickle_folder + "/" + f, "rb"))
+                self.engine.upload_vd(path_pickle_folder + "/" + f)
+                self.ent_dict = self.entize(p, self.ent_dict)
+                self.ent_dict2 = self.entize2(p, self.ent_dict2)
