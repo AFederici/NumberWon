@@ -1,34 +1,34 @@
 import numpy as np
 
 
-class UserDatabase():
+class UserDatabase:
     def __init__(self, file=None):
         """ initializes an object of the Database class.
                 Parameters
                 ----------
                 file : (default None) an old database object. (as .npy) If a file is specified, the data from that file is
-                        transferred over
-                Variables
-                -------
-                variation: Classification if the variation is a song or the footprint. variation describes what type of
-                          dictionary it is, whether it is song id and titles or frequency and song id
-                dict: a new dictionary to store songs.
-                """
+                        transferred over """
+        self.list_of_names = []
         if file is not None:
             self.dict = np.load(file).item()
+            for i in self.dict:
+                self.list_of_names.append(i)
         else:
             self.dict = {}
 
     def __repr__(self):
         """ The repr command """
         lines = []
-        for key in self.dict.items():
-            lines.append('{}:{}'.format(key))
+        for names in self.dict.items():
+            lines.append(str(names))
         return '\n'.join(lines)
 
     def items(self):
         """ returns the database's dictionary objects """
         return self.dict
+
+    def names(self):
+        return self.list_of_names
 
     def get(self, key):
         """ gets from the database's dictionary the obj based on the key """
@@ -85,6 +85,9 @@ class UserDatabase():
         """ updates the preference list based on the user """
         self.dict[user].add_preference(preference, preference_add)
 
+    def remove_preferences_by_user(self, user, preference, preference_rm):
+        self.dict[user].del_preference(preference, preference_rm)
+
     def get_face_vector_by_user(self, user):
         return self.dict[user].face_vectors
 
@@ -95,3 +98,28 @@ class UserDatabase():
     def update(self, name, profile):
         """ adds a new val in the dictionary """
         self.dict[name] = profile
+        self.list_of_names.append(name)
+
+    def compare_faces(self, desc):
+        """ Finds the best match face for a descriptor vector
+            Parameters
+            ----------
+            database : the database
+            desc : the descriptor vector produced by the picture; a (128,) shape descriptor
+
+            Returns
+            ----------
+            least_key : the best-matched name for the descriptor vector """
+        least = 1
+        least_key = ""
+        for key in self.items():
+            v = np.sqrt(abs(np.sum((np.array(desc) - np.array(self.get_face_vector_by_user(key))) ** 2)))
+            if least > v:
+                least = v
+                least_key = key
+        print(least)
+        print(least_key)
+        if least > 0.45:
+            return None
+        else:
+            return least_key

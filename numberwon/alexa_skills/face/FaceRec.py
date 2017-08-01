@@ -30,7 +30,17 @@ class Face_Recognition:
         with use_camera() as camera:
             pic = take_picture()
         return pic
-
+    
+    def get_face_descriptor_vector(self):
+        pic = self.take_picture()
+        desc_list = []
+        detections = list(face_detect(pic, self.upscale))
+        for i in range(len(detections)):
+            shape = shape_predictor(pic, detections[i])
+            desc = np.array(face_rec_model.compute_face_descriptor(pic, shape))
+            desc_list.append(desc)
+        return desc_list
+    
     def find_faces(self, pic, database):
         """ finds all of the faces in a picture and produces a picture with the faces highlighted
             Parameters

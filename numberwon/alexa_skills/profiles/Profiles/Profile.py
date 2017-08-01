@@ -1,4 +1,3 @@
-#think of some machine learning ideas... generation??? identification???
 class Profile:
     def __init__(self, name, face_vectors=None, pref_dict={}, profile_status=True):
         """ initializes an object of the Database class.
@@ -14,13 +13,16 @@ class Profile:
         self.pref_dict = pref_dict
         self.profile_status = profile_status
 
+    def get_name(self):
+        return self.name
+
     def find_user_preferences(self, target_preference):
         if target_preference in self.pref_dict:
             return self.pref_dict[target_preference]
         else:
             return "Preference is not saved"
 
-    def update_profile_status(self):
+    def flip_profile_status(self):
         self.profile_status = not self.profile_status
 
     def update_face_vectors(self, new_face_vectors):
@@ -31,7 +33,15 @@ class Profile:
 
     def add_preference(self, pref_name, pref_list):
         if pref_name in self.pref_dict:
-            self.pref_dict[pref_name].append(pref_list)
+            self.pref_dict[pref_name] += [pref_list]
         else:
-            self.pref_dict[pref_name] = pref_list
+            self.pref_dict[pref_name] = [pref_list]
+
+    def del_preference(self, pref_name, pref_to_rm):
+        if pref_name in self.pref_dict:
+            new_l = []
+            for i in self.pref_dict[pref_name]:
+                if not i == pref_to_rm:
+                    new_l.append(i)
+            self.pref_dict[pref_name] = new_l
 
