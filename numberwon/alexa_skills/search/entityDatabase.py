@@ -76,7 +76,7 @@ class entityDatabase:
                             #print((abs(x[1]-z[1])))
                             word_freq[z[0]] += 1/(abs((x[1]-z[1])))
 
-        return word_freq.most_common(10)
+        return word_freq.most_common(most_c)
 
     def top_entity_dict(self, item, most_c=10):
         #documents is already a list
@@ -106,3 +106,4 @@ class entityDatabase:
                 self.engine.upload_vd(path_pickle_folder + "/" + f)
                 self.ent_dict = self.entize(p, self.ent_dict)
                 self.ent_dict2 = self.entize2(p, self.ent_dict2)
+                print(f, type(f))

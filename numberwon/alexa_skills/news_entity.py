@@ -5,10 +5,13 @@ import requests
 import time
 import unidecode
 import json
-from search.entityDatabase import entityDatabase
+
+import sys
+sys.path.insert(0, 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search')
+from entityDatabase import entityDatabase
 
 edatb = entityDatabase()
-edatb.add_Folder_Database(self, "C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/pickles")
+edatb.add_Folder_Database('C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search/pickles')
 #get links off a page: remove all that contain video
 #add all the links as pickle files
 app = Flask(__name__)
@@ -24,7 +27,9 @@ def start_skill():
     return question(msg)
 
 def get_entity(EntityName):
-    return edatb.top_entity_dict(self, EntityName, most_c=10)
+    c = edatb.top_entity_dict(EntityName, most_c=5)
+    listing = [tupling[0] for tupling in c]
+    return ", ".join(listing)
 
 @ask.intent("AMAZON.YesIntent")
 def share_headlines():
@@ -39,7 +44,40 @@ def no_intent():
 @ask.intent("EntIntent")
 def ent_intent(EntTitle):
     entity = get_entity(EntTitle)
-    msg = "Tops news on {}: {}".format(NewsTitle,headline)
-    if headline is None:
-        msg = "No news was found for {}".format(NewsTitle)
+    print(entity)
+    if entity is None:
+        msg = "No entities found for {}".format(EntTitle)
+    msg = "Top entities related to {}: {}".format(EntTitle, entity)
     return statement(msg)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
