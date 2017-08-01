@@ -106,4 +106,4 @@ class entityDatabase:
                 self.engine.upload_vd(path_pickle_folder + "/" + f)
                 self.ent_dict = self.entize(p, self.ent_dict)
                 self.ent_dict2 = self.entize2(p, self.ent_dict2)
-                print(f, type(f))
+                #print(f, type(f))
