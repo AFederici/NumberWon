@@ -8,7 +8,7 @@ from search.entityDatabase import entityDatabase
 
 edatb = entityDatabase()
 
-edatb.add_Folder_Database("C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search/pickles")
+edatb.add_Folder_Database("search/pickles")
 
 from search.collect_rss import *
 

@@ -17,7 +17,7 @@ def get_text(link):
 def collect(url, filename):
     # read RSS feed
     d = feedparser.parse(url)
-    
+
     # grab each article
     texts = {}
     for entry in d["entries"]:
@@ -25,7 +25,7 @@ def collect(url, filename):
         print("downloading: " + link)
         text = get_text(link)
         texts[link] = text
-    
+
     # pickle
     pickle.dump(texts, open(filename, "wb"))
 
@@ -33,10 +33,9 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Usage: python collect_rss.py <url> <filename>")
         sys.exit(1)
-    
+
     # https://www.reuters.com/tools/rss
     # http://feeds.reuters.com/Reuters/domesticNews
     url = sys.argv[1]
     filename = sys.argv[2]
     collect(url, filename)
-
