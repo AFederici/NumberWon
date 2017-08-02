@@ -25,10 +25,9 @@ def homepage():
 @ask.launch
 #tries to see who it is
 def start_skill():
-    session.attributes["User_Profiles"] = ud.names()
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = None
-    session.attributes["Current_User"]
+    update_current_user()
     if session.attributes["Current_User"] is None:
         msg = "The current user is no one"
     else:
@@ -56,7 +55,6 @@ def add_pref_intent(preferenceslot, addingpreferenceslot):
         ud.add_preferences_by_user(session.attributes["Current_User"], preferenceslot, addingpreferenceslot)
         msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
         ud.save_obj("profiles_test_database.npy")
-        session.attributes["User_Profiles"] = ud.names()
     return statement(msg)
 
 @ask.intent("RemovePreferenceIntent")
@@ -67,7 +65,6 @@ def add_pref_intent(preferenceslot, removingpreferenceslot):
         ud.remove_preferences_by_user(session.attributes["Current_User"], preferenceslot, removingpreferenceslot)
         msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
         ud.save_obj("profiles_test_database.npy")
-        session.attributes["User_Profiles"] = ud.names()
     return statement(msg)
 
 '''Switching profiles. (for now, based on img. Later will be based on voice)'''
@@ -76,12 +73,15 @@ def update_current_user():
     #takes a picture/takes voice sample
     #matches it to database
     #returns either the current user or None
-    global temp_face_vectors
-    '''can be called in the background of some functions!!!'''
-    desc = f.get_one_face_descriptor_vector()
-    temp_face_vectors = desc
-    user = ud.compare_faces(desc)
-    session.attributes["Current_User"] = user
+    if not "Current_User" in session.attributes:
+        session.attributes["Current_User"] = None
+    else:
+        global temp_face_vectors
+        '''can be called in the background of some functions!!!'''
+        desc = f.get_one_face_descriptor_vector()
+        temp_face_vectors = desc
+        user = ud.compare_faces(desc)
+        session.attributes["Current_User"] = user
 
 @ask.intent("CurrentUserIntent")
 def check_user():
@@ -121,7 +121,6 @@ def yes_intent():
         checking_user = 0
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
         ud.save_obj("profiles_test_database.npy")
-        session.attributes["User_Profiles"] = ud.names()
         session.attributes["Current_User"] = temp_name
         temp_name = ""
         return statement(msg)
@@ -130,7 +129,6 @@ def yes_intent():
         adding_user = 0
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
         ud.save_obj("profiles_test_database.npy")
-        session.attributes["User_Profiles"] = ud.names()
         session.attributes["Current_User"] = temp_name
         temp_name = ""
         return statement(msg)
@@ -142,7 +140,6 @@ def yes_intent():
             ud.list_of_names.remove(temp_name)
         if temp_name in ud.dict:
             del ud.dict[temp_name]
-        session.attributes["User_Profiles"] = ud.names()
         del_user = False
         temp_name = ""
         ud.save_obj("profiles_test_database.npy")
