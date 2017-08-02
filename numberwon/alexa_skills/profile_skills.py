@@ -16,12 +16,14 @@ del_user = False
 checking_user = 0
 adding_user = 0
 temp_name = ""
+temp_face_vectors = 0
 
 @app.route('/')
 def homepage():
     return "Profiles?"
 
 @ask.launch
+#tries to see who it is
 def start_skill():
     session.attributes["User_Profiles"] = ud.names()
     if not "Current_User" in session.attributes:
@@ -40,6 +42,8 @@ def get_pref_intent(preferenceslot):
     #pref = " ".join(ud.get_preferences_by_user(current_user, preferenceslot))
     if session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
+    elif ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot) is None:
+        msg = "You have no preferences for {} saved.".format(preferenceslot)
     else:
         msg = "Your preferences for {} are {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
     return statement(msg)
@@ -71,9 +75,11 @@ def add_pref_intent(preferenceslot, removingpreferenceslot):
 def update_current_user():
     #takes a picture/takes voice sample
     #matches it to database
-    #returns either the current user or "user could not be found"
+    #returns either the current user or None
+    global temp_face_vectors
     '''can be called in the background of some functions!!!'''
-    desc = f.get_face_descriptor_vector()
+    desc = f.get_one_face_descriptor_vector()
+    temp_face_vectors = desc
     user = ud.compare_faces(desc)
     session.attributes["Current_User"] = user
 
@@ -90,7 +96,7 @@ def check_user():
         msg = "I could not see anyone I identify. Would you like me to add a user?"
         checking_user = 1
     else:
-        msg = "The current user is {}. Is this the correct user?".format(session.attributes["Current_User"]) 
+        msg = "I see that {} is the current user. Is this correct?".format(session.attributes["Current_User"]) 
         checking_user = 2
     return question(msg)
 
@@ -99,6 +105,7 @@ def yes_intent():
     global checking_user
     global adding_user
     global temp_name
+    global temp_face_vectors
     if checking_user == 1:
         msg = "Please say the name of the user."
         checking_user = 3
@@ -106,11 +113,13 @@ def yes_intent():
     if checking_user == 2:
         msg = "Great. Thank you."
         checking_user = 0
+        ud.update_face_vectors_by_user(session.attributes["Current_User"], temp_face_vectors)
+        temp_face_vectors = 0
         return statement(msg)
     if checking_user == 4:
         msg = "The user has been added."
         checking_user = 0
-        ud.update(temp_name, Profile(temp_name, f.get_face_descriptor_vector()))
+        ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
         ud.save_obj("profiles_test_database.npy")
         session.attributes["User_Profiles"] = ud.names()
         session.attributes["Current_User"] = temp_name
@@ -119,7 +128,7 @@ def yes_intent():
     if adding_user == 2:
         msg = "The user has been added."
         adding_user = 0
-        ud.update(temp_name, Profile(temp_name, f.get_face_descriptor_vector()))
+        ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
         ud.save_obj("profiles_test_database.npy")
         session.attributes["User_Profiles"] = ud.names()
         session.attributes["Current_User"] = temp_name
@@ -136,6 +145,7 @@ def yes_intent():
         session.attributes["User_Profiles"] = ud.names()
         del_user = False
         temp_name = ""
+        ud.save_obj("profiles_test_database.npy")
         return statement(msg)
     else:
         msg = "I do not understand. Please try again."
@@ -146,6 +156,7 @@ def no_intent():
     global checking_user
     global adding_user
     global del_user
+    global temp_face_vectors
     if checking_user == 1 and adding_user == 0:
         msg = "Alright. Thank you."
         session.attributes["Current_User"] = None
@@ -154,6 +165,7 @@ def no_intent():
     if checking_user == 2 and adding_user == 0:
         msg = "My apologies. Please try again."
         checking_user = 0
+        temp_face_vectors = 0
         return statement(msg)
     if checking_user == 4 and adding_user == 0:
         msg = "My apologies. Please say the name again."
@@ -176,12 +188,15 @@ def name_intent(nameslot):
     global checking_user
     global adding_user
     global temp_name
-    if checking_user == 3 and adding_user == 0:
+    if nameslot == "" and checking_user == 3:
+        msg = "I could not understand the name. Please repeat."
+        return question(msg)
+    elif checking_user == 3 and adding_user == 0:
         checking_user = 4
         temp_name = nameslot
         msg = "Is {} correct?".format(nameslot)
         return question(msg)
-    if adding_user == 1 and checking_user == 0:
+    elif adding_user == 1 and checking_user == 0:
         adding_user = 2
         temp_name = nameslot
         msg = "Is {} correct?".format(nameslot)
@@ -190,11 +205,13 @@ def name_intent(nameslot):
         msg = "I do not understand. Please try again."
         return statement(msg)
 
+    
 '''Adding a new profile. (Name [amazon american names], Picture/voice sample [taken right there], any preferences [amazon literals])'''
 
 @ask.intent("AddUserIntent")
 def add_user_intent():
     global adding_user
+    global checking_user
     if adding_user == 0 and checking_user == 0:
         checking_user = 0
         msg = "Please say the name of the user you would like to add."
@@ -204,6 +221,7 @@ def add_user_intent():
         msg = "I do not understand. Please try again."
         return statement(msg)
 
+    
 ''' Deleting a profile '''
 
 @ask.intent("RemoveUserIntent")
@@ -216,8 +234,41 @@ def rem_user_intent(remnameslot):
     return question(msg)
 
 
-'''Retake photo of current user!!/switch users verbally/retake photo of user verbally'''
+'''Retake photo of current user!!/retake photo of specific user verbally'''
+
+@ask.intent("RetakeCustomPicIntent")
+def re_custom_pic_intent(recustompicslot):
+    if recustompicslot in ud.items():
+        new_face_vectors = f.get_one_face_descriptor_vector()
+        ud.get(recustompicslot).face_vectors = new_face_vectors
+        msg = "The picture for user {} was successfully updated.".format(recustompicslot)
+        ud.save_obj("profiles_test_database.npy")
+    else:
+        msg = "Could not find user in database. Please try again or add the user."
+    return statement(msg)
+
+@ask.intent("RetakePicIntent")
+def re_pic_intent():
+    if session.attributes["Current_User"] is None:
+        msg = "There is no current user. Please create a user or switch to another profile."
+    else:
+        new_face_vectors = f.get_one_face_descriptor_vector()
+        ud.get(session.attributes["Current_User"]).face_vectors = new_face_vectors
+        msg = "The picture for user {} was successfully updated.".format(session.attributes["Current_User"])
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
 
 
+'''switch users verbally'''
+
+@ask.intent("SwitchUserIntent")
+def switch_user_intent(newuserlot):
+    if newuserlot in ud.names():
+        session.attributes["Current_User"] = newuserlot
+        msg = "Current user was successfully switched to {}".format(session.attributes["Current_User"])
+    else:
+        msg = "There is no user named {} in our database. Please try again or add this user.".format(newuserlot)
+    return statement(msg)
+    
 if __name__ == '__main__':
     app.run(debug=True)

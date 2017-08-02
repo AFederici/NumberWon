@@ -20,7 +20,7 @@ class Profile:
         if target_preference in self.pref_dict:
             return self.pref_dict[target_preference]
         else:
-            return "Preference is not saved"
+            return None
 
     def flip_profile_status(self):
         self.profile_status = not self.profile_status
