@@ -14,5 +14,5 @@ def homepage():
 
 @ask.launch
 def start_skill():
-    msg = "\nHello. What would you like to hear about the news?"
+    msg = "Hi. What kind of fanfiction would you like to view?"
     return question(msg)
