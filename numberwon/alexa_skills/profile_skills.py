@@ -23,8 +23,9 @@ def homepage():
     return "Profiles?"
 
 @ask.launch
-#tries to see who it is
 def start_skill():
+    """ Starts the skill. Updates current user and if it doesn't exist assigns it to None. """
+    
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = None
     update_current_user()
@@ -38,8 +39,16 @@ def start_skill():
 
 @ask.intent("GetPreferenceIntent")
 def get_pref_intent(preferenceslot):
-    #pref = " ".join(ud.get_preferences_by_user(current_user, preferenceslot))
-    if session.attributes["Current_User"] is None:
+    """ returns the preferences saved based on the user
+        if there are no preferences, it returns something None.
+    
+        Parameters
+        ----------
+        preferenceslot : an AMAZON.LITERAL """
+    
+    if preferenceslot == "":
+        msg = "I could not find that preference. Please try again."
+    elif session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     elif ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot) is None:
         msg = "You have no preferences for {} saved.".format(preferenceslot)
@@ -49,6 +58,13 @@ def get_pref_intent(preferenceslot):
 
 @ask.intent("AddPreferenceIntent")
 def add_pref_intent(preferenceslot, addingpreferenceslot):
+    """ adds a preference to the Profile object!
+    
+        Parameters
+        ----------
+        preferenceslot : an AMAZON.LITERAL 
+        addingpreferenceslot : an AMAZON.LITERAL"""
+    
     if session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
@@ -59,6 +75,13 @@ def add_pref_intent(preferenceslot, addingpreferenceslot):
 
 @ask.intent("RemovePreferenceIntent")
 def add_pref_intent(preferenceslot, removingpreferenceslot):
+    """ removes a preference based on the preference name
+    
+        Parameters
+        ----------
+        preferenceslot : an AMAZON.LITERAL 
+        removingpreferenceslot : an AMAZON.LITERAL """
+    
     if session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
@@ -70,9 +93,9 @@ def add_pref_intent(preferenceslot, removingpreferenceslot):
 '''Switching profiles. (for now, based on img. Later will be based on voice)'''
 
 def update_current_user():
-    #takes a picture/takes voice sample
-    #matches it to database
-    #returns either the current user or None
+    """ takes a pictre (future: voice sample) and matches it to a database
+        returns either the current user or None if it cannot find it """
+
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = None
     else:
@@ -85,11 +108,11 @@ def update_current_user():
 
 @ask.intent("CurrentUserIntent")
 def check_user():
-    #updates user based off of user command
-    #calls update_current_user
-    #if user could not be found, asks if that is correct.
-    #If yes, user becomes a dummy profile and user is prompted if they want to add a profile. 
-    #If no, user face vectors are updated based on the correct profile
+    """ checks what the current user is in front of it and assigns it to sessions.attributes["Current_User"]
+        if user could not be found, assigns current_user to None
+        is prompted if the user wants to add a profile
+        if check is correct, updates face vectors based on profile """
+
     global checking_user
     update_current_user()
     if session.attributes["Current_User"] is None:
@@ -102,6 +125,8 @@ def check_user():
 
 @ask.intent("YesIntent")
 def yes_intent():
+    """ the Yes Intent. Does a whole lotta things. """
+
     global checking_user
     global adding_user
     global temp_name
@@ -150,6 +175,8 @@ def yes_intent():
 
 @ask.intent("NoIntent")
 def no_intent():
+    """ the No Intent. Does a whole lotta things. """
+    
     global checking_user
     global adding_user
     global del_user
@@ -182,6 +209,8 @@ def no_intent():
 
 @ask.intent("NameIntent")
 def name_intent(nameslot):
+    """ the Name Intent. Does a whole lotta things. """
+    
     global checking_user
     global adding_user
     global temp_name
@@ -207,6 +236,8 @@ def name_intent(nameslot):
 
 @ask.intent("AddUserIntent")
 def add_user_intent():
+    """ Adds a user based to the user database! """
+    
     global adding_user
     global checking_user
     if adding_user == 0 and checking_user == 0:
@@ -223,9 +254,11 @@ def add_user_intent():
 
 @ask.intent("RemoveUserIntent")
 def rem_user_intent(remnameslot):
-    msg = "Are you sure you would like to delete {} from users?".format(remnameslot)
+    """ removes a user from the ud based on the name """
+    
     global del_user
     global temp_name
+    msg = "Are you sure you would like to delete {} from users?".format(remnameslot)
     temp_name = remnameslot
     del_user = True
     return question(msg)
@@ -235,6 +268,12 @@ def rem_user_intent(remnameslot):
 
 @ask.intent("RetakeCustomPicIntent")
 def re_custom_pic_intent(recustompicslot):
+    """ based on the name, retakes the picture for what's in front of it.
+    
+        Parameters
+        ----------
+        recustompicslot : an AMAZON.NAME  """
+    
     if recustompicslot in ud.items():
         new_face_vectors = f.get_one_face_descriptor_vector()
         ud.get(recustompicslot).face_vectors = new_face_vectors
@@ -246,6 +285,8 @@ def re_custom_pic_intent(recustompicslot):
 
 @ask.intent("RetakePicIntent")
 def re_pic_intent():
+    """ based on the current user, retakes the picture for what's in front of it. """
+    
     if session.attributes["Current_User"] is None:
         msg = "There is no current user. Please create a user or switch to another profile."
     else:
@@ -260,6 +301,12 @@ def re_pic_intent():
 
 @ask.intent("SwitchUserIntent")
 def switch_user_intent(newuserlot):
+    """ based on the name given, switches the current_user to the profile
+    
+        Parameters
+        ----------
+        newuserlot : an AMAZON.NAME  """
+    
     if newuserlot in ud.names():
         session.attributes["Current_User"] = newuserlot
         msg = "Current user was successfully switched to {}".format(session.attributes["Current_User"])

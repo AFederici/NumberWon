@@ -32,6 +32,7 @@ class Face_Recognition:
         return pic
     
     def get_face_descriptor_vector(self):
+        """ Gets all the descriptor vectors from a picture. """
         pic = self.take_picture()
         desc_list = []
         detections = list(face_detect(pic, self.upscale))
@@ -42,6 +43,7 @@ class Face_Recognition:
         return desc_list
     
     def get_one_face_descriptor_vector(self):
+        """ Gets one descriptor vector from the first face it sees. """
         pic = self.take_picture()
         desc_list = []
         detection = list(face_detect(pic, self.upscale))[0]
