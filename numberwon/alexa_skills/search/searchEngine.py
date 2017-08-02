@@ -7,10 +7,10 @@ import string
 import time
 class MySearchEngine():
     def __init__(self, file = None, version = None):
-        #type in either e for engine or d for url and text database
+        #version: type in either e for engine or d for url and text database (enter e or d as string)
         #file : (default None) an old database object. (as .pickle) If a file is specified, 
         #the data from that file is transferred over
-        #type is 
+
         
         if file is not None:
             f = pickle.load( open(file, "rb"))
@@ -47,6 +47,12 @@ class MySearchEngine():
     # ------------------------------------------------------------------------
     
     def upload_vd(self, file_name):
+        """ saves the dictionary object
+                        Parameters
+                        ----------
+                        file_name : Str
+                            adds new articles/files to the search engine
+                            file_name should be given as a path name"""
         f = pickle.load( open(file_name, "rb"))
         for key, value in f.items():
             if key in self.raw_text:

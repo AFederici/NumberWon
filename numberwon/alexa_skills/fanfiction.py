@@ -12,6 +12,9 @@ class Fanfiction:
         for key, value in self.fanfiction_dict:
             lm = self.train_lm(value, n=10)
             self.text = self.generate_text(lm, 10, n_letters=200)
+            a = open(term + '.txt', 'w')
+            a.write(self.text)
+            a.close()
 
     def find_fanfiction(self, term, top=1):
         """ samples "top" fanfictions from Wattpad and stores them in a dictionary.
