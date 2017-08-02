@@ -110,7 +110,7 @@ class UserDatabase:
             Returns
             ----------
             least_key : the best-matched name for the descriptor vector """
-        least = 1
+        least = 1.0
         least_key = ""
         for key in self.items():
             v = np.sqrt(abs(np.sum((np.array(desc) - np.array(self.get_face_vector_by_user(key))) ** 2)))
@@ -119,7 +119,7 @@ class UserDatabase:
                 least_key = key
         print(least)
         print(least_key)
-        if least > 0.45:
+        if least > 0.59:
             return None
         else:
             return least_key

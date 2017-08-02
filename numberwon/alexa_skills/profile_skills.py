@@ -12,7 +12,7 @@ ud = UserDatabase("profiles_test_database.npy")
 app = Flask(__name__)
 ask = Ask(app, '/')
 
-current_user = None
+del_user = False
 checking_user = 0
 adding_user = 0
 temp_name = ""
@@ -24,50 +24,44 @@ def homepage():
 @ask.launch
 def start_skill():
     session.attributes["User_Profiles"] = ud.names()
-    for i in session.attributes["User_Profiles"]:
-        if ud.dict[i].profile_status:
-            global current_user
-            current_user = i
-    if current_user is None:
+    if not "Current_User" in session.attributes:
+        session.attributes["Current_User"] = None
+    session.attributes["Current_User"]
+    if session.attributes["Current_User"] is None:
         msg = "The current user is no one"
     else:
-        #if current profile is still nothing, calls check_user_profile. If profile unknown, goes to dummy profile.
-        msg = "The current user is {}.".format(current_user)
-    return statement(msg)
-
+        msg = "The current user is {}.".format(session.attributes["Current_User"])
+    return question(msg)
 
 '''Adding attributes/ to current profile'''
 
 @ask.intent("GetPreferenceIntent")
 def get_pref_intent(preferenceslot):
-    global current_user
     #pref = " ".join(ud.get_preferences_by_user(current_user, preferenceslot))
-    if current_user is None:
+    if session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
-        msg = "Your preferences for {} are {}".format(preferenceslot, ud.get_preferences_by_user(current_user, preferenceslot))
+        msg = "Your preferences for {} are {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
     return statement(msg)
 
 @ask.intent("AddPreferenceIntent")
 def add_pref_intent(preferenceslot, addingpreferenceslot):
-    global current_user
-    if current_user is None:
+    if session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
-        ud.add_preferences_by_user(current_user, preferenceslot, addingpreferenceslot)
-        msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(current_user, preferenceslot))
+        ud.add_preferences_by_user(session.attributes["Current_User"], preferenceslot, addingpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
         ud.save_obj("profiles_test_database.npy")
         session.attributes["User_Profiles"] = ud.names()
     return statement(msg)
 
 @ask.intent("RemovePreferenceIntent")
 def add_pref_intent(preferenceslot, removingpreferenceslot):
-    global current_user
-    if current_user is None:
+    if session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
-        ud.remove_preferences_by_user(current_user, preferenceslot, removingpreferenceslot)
-        msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(current_user, preferenceslot))
+        ud.remove_preferences_by_user(session.attributes["Current_User"], preferenceslot, removingpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
         ud.save_obj("profiles_test_database.npy")
         session.attributes["User_Profiles"] = ud.names()
     return statement(msg)
@@ -81,14 +75,7 @@ def update_current_user():
     '''can be called in the background of some functions!!!'''
     desc = f.get_face_descriptor_vector()
     user = ud.compare_faces(desc)
-    global current_user
-    if not current_user is None:
-        ud.get_user_by_name(current_user).profile_status = False
-        #print(str(current_user) + " is now " + str(ud.get_user_by_name(current_user).profile_status))
-    current_user = user
-    if not current_user is None:
-        ud.get_user_by_name(current_user).profile_status = True
-        #print(str(current_user) + " is now " + str(ud.get_user_by_name(current_user).profile_status))
+    session.attributes["Current_User"] = user
 
 @ask.intent("CurrentUserIntent")
 def check_user():
@@ -97,13 +84,13 @@ def check_user():
     #if user could not be found, asks if that is correct.
     #If yes, user becomes a dummy profile and user is prompted if they want to add a profile. 
     #If no, user face vectors are updated based on the correct profile
-    global current_user
     global checking_user
-    if current_user is None:
+    update_current_user()
+    if session.attributes["Current_User"] is None:
         msg = "I could not see anyone I identify. Would you like me to add a user?"
         checking_user = 1
     else:
-        msg = "The current user is {}. Is this the correct user?".format(current_user) 
+        msg = "The current user is {}. Is this the correct user?".format(session.attributes["Current_User"]) 
         checking_user = 2
     return question(msg)
 
@@ -126,7 +113,8 @@ def yes_intent():
         ud.update(temp_name, Profile(temp_name, f.get_face_descriptor_vector()))
         ud.save_obj("profiles_test_database.npy")
         session.attributes["User_Profiles"] = ud.names()
-        current_user = temp_name
+        session.attributes["Current_User"] = temp_name
+        temp_name = ""
         return statement(msg)
     if adding_user == 2:
         msg = "The user has been added."
@@ -134,7 +122,20 @@ def yes_intent():
         ud.update(temp_name, Profile(temp_name, f.get_face_descriptor_vector()))
         ud.save_obj("profiles_test_database.npy")
         session.attributes["User_Profiles"] = ud.names()
-        current_user = temp_name
+        session.attributes["Current_User"] = temp_name
+        temp_name = ""
+        return statement(msg)
+    if del_user == True and adding_user == 0 and checking_user == 0:
+        msg = "The user has been deleted."
+        if session.attributes["Current_User"] == temp_name:
+            session.attributes["Current_User"] = None
+        if temp_name in ud.list_of_names:
+            ud.list_of_names.remove(temp_name)
+        if temp_name in ud.dict:
+            del ud.dict[temp_name]
+        session.attributes["User_Profiles"] = ud.names()
+        del_user = False
+        temp_name = ""
         return statement(msg)
     else:
         msg = "I do not understand. Please try again."
@@ -144,9 +145,10 @@ def yes_intent():
 def no_intent():
     global checking_user
     global adding_user
+    global del_user
     if checking_user == 1 and adding_user == 0:
         msg = "Alright. Thank you."
-        current_user = None
+        session.attributes["Current_User"] = None
         checking_user = 0
         return statement(msg)
     if checking_user == 2 and adding_user == 0:
@@ -161,6 +163,10 @@ def no_intent():
         adding_user = 1
         msg = "My apologies. Please say the name again."
         return question(msg)
+    if del_user == True and adding_user == 0 and checking_user == 0:
+        msg = "Alright."
+        del_user = False
+        return statement(msg)
     else:
         msg = "I do not understand. Please try again."
         return statement(msg)
@@ -197,6 +203,21 @@ def add_user_intent():
     else:
         msg = "I do not understand. Please try again."
         return statement(msg)
+
+''' Deleting a profile '''
+
+@ask.intent("RemoveUserIntent")
+def rem_user_intent(remnameslot):
+    msg = "Are you sure you would like to delete {} from users?".format(remnameslot)
+    global del_user
+    global temp_name
+    temp_name = remnameslot
+    del_user = True
+    return question(msg)
+
+
+'''Retake photo of current user!!/switch users verbally/retake photo of user verbally'''
+
 
 if __name__ == '__main__':
     app.run(debug=True)

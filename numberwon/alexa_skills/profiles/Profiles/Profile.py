@@ -1,5 +1,5 @@
 class Profile:
-    def __init__(self, name, face_vectors=None, pref_dict={}, profile_status=True):
+    def __init__(self, name, face_vectors=None, pref_dict={}, profile_status=False):
         """ initializes an object of the Database class.
             Parameters
             ----------
