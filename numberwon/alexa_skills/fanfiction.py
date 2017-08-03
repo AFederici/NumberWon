@@ -2,20 +2,19 @@ import numpy as np
 from collections import defaultdict
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
-from collections import defaultdict
-
+from collections import defaultdict, Counter
+import html2text
 
 class Fanfiction:
-    def __init__(self, term):
-        self.fanfiction_dict = self.find_fanfiction(term=term)
-
-        for key, value in self.fanfiction_dict:
-            lm = self.train_lm(value, n=10)
-            self.text = self.generate_text(lm, 10, n_letters=200)
+    def __init__(self):
+        s = None
+    def ultimate_function(self, term, fanfiction_dict):
+        for key, value in fanfiction_dict.items():
+            lm = self.train_lm(value, 10)
+            self.text = html2text.html2text(self.generate_text(lm, 10, n_letters=200))
             a = open(term + '.txt', 'w')
             a.write(self.text)
             a.close()
-
     def find_fanfiction(self, term, top=1):
         """ samples "top" fanfictions from Wattpad and stores them in a dictionary.
         #warning: runs really slow
@@ -57,10 +56,11 @@ class Fanfiction:
 
                     paragraph = [str(j)[str(j).index('>') + 1:str(j).rfind('<')] for j in list2 if
                                  "data-p-id" in str(j)]
-                    final[term] += "\n".join(paragraph)
+                    final[term] += "<p>"
+                    final[term] += "</p> <p>".join(paragraph)
         return final
 
-    def unzip(pairs):
+    def unzip(self, pairs):
         """Splits list of pairs (tuples) into separate lists.
 
         Example: pairs = [("a", 1), ("b", 2)] --> ["a", "b"] and [1, 2]
@@ -70,7 +70,7 @@ class Fanfiction:
         """
         return tuple(zip(*pairs))
 
-    def normalize(counter):
+    def normalize(self, counter):
         """ Convert counter to a list of (letter, frequency) pairs, sorted in descending order of frequency.
 
             Parameters
@@ -92,7 +92,7 @@ class Fanfiction:
         total = sum(counter.values())
         return [(char, cnt / total) for char, cnt in counter.most_common()]
 
-    def train_lm(text, n):
+    def train_lm(self, text, n):
         """ Train character-based n-gram language model.
 
             This will learn: given a sequence of n-1 characters, what the probability
@@ -134,19 +134,21 @@ class Fanfiction:
 
         """
         raw_lm = defaultdict(Counter)
+
         history = "~" * (n - 1)
 
         # count number of times characters appear following different histories
         for x in text:
             raw_lm[history][x] += 1
             history = history[1:] + x
+            #print(history)
 
         # create final dictionary by normalizing
-        lm = {history: normalize(counter) for history, counter in raw_lm.items()}
+        lm = {history: self.normalize(counter) for history, counter in raw_lm.items()}
 
         return lm
 
-    def generate_letter(lm, history):
+    def generate_letter(self, lm, history):
         """ Randomly picks letter according to probability distribution associated with
             the specified history.
 
@@ -168,11 +170,11 @@ class Fanfiction:
         """
         if not history in lm:
             return "~"
-        letters, probs = unzip(lm[history])
+        letters, probs = self.unzip(lm[history])
         i = np.random.choice(letters, p=probs)
         return i
 
-    def generate_text(lm, n, nletters=100):
+    def generate_text(self, lm, n, nletters=100):
         """ Randomly generates nletters of text with n-gram language model lm.
 
             Parameters
@@ -192,7 +194,7 @@ class Fanfiction:
         history = "~" * (n - 1)
         text = []
         for i in range(nletters):
-            c = generate_letter(lm, history)
+            c = self.generate_letter(lm, history)
             text.append(c)
             history = history[1:] + c
         return "".join(text)

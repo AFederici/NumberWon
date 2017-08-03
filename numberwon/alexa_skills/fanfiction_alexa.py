@@ -11,6 +11,7 @@ ask = Ask(app, '/')
 
 from fanfiction import Fanfiction
 from profile_skills import update_current_user
+from itertools import *
 
 import sys
 sys.path.insert(0, 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/profiles/Profiles')
@@ -24,10 +25,19 @@ alexa_path = 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/prof
 import os
 save_path = 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/fanfiction_files'
 
+f = Fanfiction()
+together = list()
 for f in os.listdir(alexa_path):
     if f.endswith(".npy"):
         d = UserDatabase(f)
-        profiles = [val.pref_dict["fanfiction_pref"] for key, val in d.dict]
+        #find all keys that have fan in them
+        profiles = [val.find_user_preferences(key) for key, val in d.dict if "fan" in key]
+        together.extend(itertools.chain.from_iterable(profiles))
+#together is a list with all the possible fanfiction preferences: NO elements should be "None"
+
+for element in together:
+    fanfiction_dict = f.find_fanfiction(element)
+    f.ultimate_function(element, fanfiction_dict)
 
 @app.route('/')
 def homepage():
@@ -35,22 +45,46 @@ def homepage():
 
 @ask.launch
 def start_skill():
-    msg = "Hi. Are you interested in reading some fanfiction made just for you?"
+    if not "Current_User" in session.attributes:
+        session.attributes["Current_User"] = None
+    update_current_user()
+    if session.attributes["Current_User"] is None:
+        msg = "I could not find a user I recognize."
+        return statement(msg)
+    else:
+        msg = "Hi" + session.attributes["Current_User"] + ". Are you interested in reading some fanfiction made just for you?"
+    print("current user: ", session.attributes["Current_User"])
     return question(msg)
+
 @ask.intent("AMAZON.YesIntent")
 def yes_intent():
-    msg = "Pulling up user preferences for first person in frame, "
+    msg = "Pulling up user preferences for " + session.attributes["Current_User"]
+    session.attributes["Current_User"] = session.attributes["Current_User"].lower()
+
+    p = d.dict[session.attributes["Current_User"]]
+    listing = tuple(p.get_preferences_by_user(session.attributes["Current_User"], key) for key, val in p.pref_dict if "fan" in key)
+
+    print("preferences: ", listing)
+    content = ""
+    for term in listing:
+        with open(term + ".txt", "r") as z:
+            t = z.read()
+            print("first sentence of files :", t[:30])
+            content += term + 'fanfiction: \n' + t + "\n\n"
+
+    return statement(msg) \
+        .simple_card(title='Generated FanFic', content=content)
 
 @ask.intent("AMAZON.NoIntent")
 def no_intent():
     msg = "No problem. Have a nice day."
     return question(msg)
 
-@ask.intent("FanfictionIntent")
+"""@ask.intent("FanfictionIntent")
 def fanfiction_intent():
     u = UserDatabase(np.load('profiles_test_database.npy'))
     listing = [val for key, val in p.pref_dict if key is "#fanfiction pref?"]
     msg = "Pulling up fanfiction about {}".format(", ".join(listing))
     text = f.generate_text("FILL IN HERE")
     return statement(msg) \
-        .simple_card(title='CATS says...', content='Make your time')  # edit here
+        .simple_card(title='Generated FanFic', content='Make your time')"""  # edit here
