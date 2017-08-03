@@ -36,6 +36,7 @@ for f in os.listdir(alexa_path):
 #together is a list with all the possible fanfiction preferences: NO elements should be "None"
 
 for element in together:
+    sys.path.insert(0, save_path)
     fanfiction_dict = f.find_fanfiction(element)
     f.ultimate_function(element, fanfiction_dict)
 

@@ -8,10 +8,11 @@ import html2text
 class Fanfiction:
     def __init__(self):
         s = None
-    def ultimate_function(self, term, fanfiction_dict):
+    def ultimate_function(self, term, fanfiction_dict, n_letters = 200):
         for key, value in fanfiction_dict.items():
-            lm = self.train_lm(value, 10)
-            self.text = html2text.html2text(self.generate_text(lm, 10, n_letters=200))
+            lm = self.train_lm(value, 13)
+            self.text = html2text.html2text(self.generate_text(lm, 13, n_letters))
+            self.text = self.text[:self.text.rfind(".") + 1]
             a = open(term + '.txt', 'w')
             a.write(self.text)
             a.close()
@@ -197,4 +198,5 @@ class Fanfiction:
             c = self.generate_letter(lm, history)
             text.append(c)
             history = history[1:] + c
-        return "".join(text)
+        t = "".join(text)
+        return t
