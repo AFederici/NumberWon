@@ -7,7 +7,7 @@ from profiles.Profiles.UserDatabase import UserDatabase
 import numpy as np
 
 f = Face_Recognition()
-ud = UserDatabase("profiles_test_database.npy")
+ud = UserDatabase("profiles/profiles_test_database.npy")
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -35,60 +35,211 @@ def start_skill():
         msg = "The current user is {}.".format(session.attributes["Current_User"])
     return question(msg)
 
+
 '''Adding attributes/ to current profile'''
 
 @ask.intent("GetPreferenceIntent")
-def get_pref_intent(preferenceslot):
+def get_pref_intent(categoryslot):
     """ returns the preferences saved based on the user
         if there are no preferences, it returns something None.
     
         Parameters
         ----------
-        preferenceslot : an AMAZON.LITERAL """
+        categoryslot : an AMAZON.LITERAL """
     
-    if preferenceslot == "":
+    if categoryslot == "":
         msg = "I could not find that preference. Please try again."
     elif session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
-    elif ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot) is None:
-        msg = "You have no preferences for {} saved.".format(preferenceslot)
+    elif ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot) is None:
+        msg = "You have no preferences for {} saved.".format(categoryslot)
     else:
-        msg = "Your preferences for {} are {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
+        msg = "Your preferences for {} are {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
     return statement(msg)
 
 @ask.intent("AddPreferenceIntent")
-def add_pref_intent(preferenceslot, addingpreferenceslot):
+def add_pref_intent(categoryslot, preferenceslot):
     """ adds a preference to the Profile object!
     
         Parameters
         ----------
         preferenceslot : an AMAZON.LITERAL 
-        addingpreferenceslot : an AMAZON.LITERAL"""
-    
-    if session.attributes["Current_User"] is None:
+        categoryslot : an AMAZON.LITERAL"""
+    if categoryslot == "" or preferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
-        ud.add_preferences_by_user(session.attributes["Current_User"], preferenceslot, addingpreferenceslot)
-        msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
+        ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, preferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("AddPreferenceStockIntent")
+def add_pref_intent(categoryslot, stockpreferenceslot):
+    """ adds a preference to the Profile object!
+    
+        Parameters
+        ----------
+        stockpreferenceslot : a custom list of stocks 
+        categoryslot : an AMAZON.LITERAL """
+    
+    if categoryslot == "" or stockpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.add_preferences_by_user(session.attributes["Current_User"], "stocks", stockpreferenceslot)
+        msg = "Your preferences for {} are now {}".format("stocks", ud.get_preferences_by_user(session.attributes["Current_User"], "stocks"))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("AddPreferenceBookIntent")
+def add_pref_intent(categoryslot, bookpreferenceslot):
+    """ adds a preference to the Profile object!
+    
+        Parameters
+        ----------
+        bookpreferenceslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL """
+    
+    if categoryslot == "" or bookpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, bookpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("AddPreferenceCharIntent")
+def add_pref_intent(categoryslot, charpreferenceslot):
+    """ adds a preference to the Profile object!
+    
+        Parameters
+        ----------
+        charpreferenceslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL """
+    
+    if categoryslot == "" or charpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, charpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("AddPreferenceTVIntent")
+def add_pref_intent(categoryslot, TVpreferenceslot):
+    """ adds a preference to the Profile object!
+    
+        Parameters
+        ----------
+        TVpreferenceslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL"""
+    if categoryslot == "" or TVpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, TVpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
         ud.save_obj("profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("RemovePreferenceIntent")
-def add_pref_intent(preferenceslot, removingpreferenceslot):
+def remove_pref_intent(categoryslot, preferenceslot):
     """ removes a preference based on the preference name
     
         Parameters
         ----------
-        preferenceslot : an AMAZON.LITERAL 
-        removingpreferenceslot : an AMAZON.LITERAL """
-    
-    if session.attributes["Current_User"] is None:
+        categoryslot : an AMAZON.LITERAL 
+        preferenceslot : an AMAZON.LITERAL """
+    if categoryslot == "" or preferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
         msg = "There is no current user saved."
     else:
-        ud.remove_preferences_by_user(session.attributes["Current_User"], preferenceslot, removingpreferenceslot)
-        msg = "Your preferences for {} are now {}".format(preferenceslot, ud.get_preferences_by_user(session.attributes["Current_User"], preferenceslot))
+        ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, preferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
         ud.save_obj("profiles_test_database.npy")
     return statement(msg)
+
+@ask.intent("RemovePreferenceStockIntent")
+def remove_pref_intent(categoryslot, stockpreferenceslot):
+    """ removes a preference based on the preference name
+    
+        Parameters
+        ----------
+        categoryslot : an AMAZON.LITERAL 
+        stockpreferenceslot : an AMAZON.LITERAL """
+    if categoryslot == "" or stockpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.remove_preferences_by_user(session.attributes["Current_User"], "stocks", stockpreferenceslot)
+        msg = "Your preferences for {} are now {}".format("stocks", ud.get_preferences_by_user(session.attributes["Current_User"], "stocks"))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("RemovePreferenceBookIntent")
+def remove_pref_intent(categoryslot, bookpreferenceslot):
+    """ removes a preference based on the preference name
+    
+        Parameters
+        ----------
+        categoryslot : an AMAZON.LITERAL 
+        bookpreferenceslot : an AMAZON.LITERAL """
+    if categoryslot == "" or bookpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, bookpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("RemovePreferenceCharIntent")
+def remove_pref_intent(categoryslot, charpreferenceslot):
+    """ removes a preference based on the preference name
+    
+        Parameters
+        ----------
+        categoryslot : an AMAZON.LITERAL 
+        charpreferenceslot : an AMAZON.LITERAL """
+    if categoryslot == "" or charpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, charpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
+@ask.intent("RemovePreferenceTVIntent")
+def remove_pref_intent(categoryslot, TVpreferenceslot):
+    """ removes a preference based on the preference name
+    
+        Parameters
+        ----------
+        categoryslot : an AMAZON.LITERAL 
+        TVpreferenceslot : an AMAZON.LITERAL """
+    if categoryslot == "" or TVpreferenceslot == "":
+        msg = "I could not understand. Please try again."
+    elif session.attributes["Current_User"] is None:
+        msg = "There is no current user saved."
+    else:
+        ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, TVpreferenceslot)
+        msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
+        ud.save_obj("profiles_test_database.npy")
+    return statement(msg)
+
 
 '''Switching profiles. (for now, based on img. Later will be based on voice)'''
 
@@ -286,7 +437,7 @@ def re_custom_pic_intent(recustompicslot):
 @ask.intent("RetakePicIntent")
 def re_pic_intent():
     """ based on the current user, retakes the picture for what's in front of it. """
-    
+
     if session.attributes["Current_User"] is None:
         msg = "There is no current user. Please create a user or switch to another profile."
     else:

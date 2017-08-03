@@ -51,7 +51,7 @@ test my profiles\
     \{\
       "slots": [\
         \{\
-          "name": "preferenceslot",\
+          "name": "categoryslot",\
           "type": "AMAZON.LITERAL"\
         \}\
       ],\
@@ -60,11 +60,11 @@ test my profiles\
     \{\
       "slots": [\
         \{\
-          "name": "preferenceslot",\
+          "name": "categoryslot",\
           "type": "AMAZON.LITERAL"\
         \},\
         \{\
-          "name": "addingpreferenceslot",\
+          "name": "preferenceslot",\
           "type": "AMAZON.LITERAL"\
         \}\
       ],\
@@ -73,15 +73,119 @@ test my profiles\
     \{\
       "slots": [\
         \{\
-          "name": "preferenceslot",\
+          "name": "categoryslot",\
           "type": "AMAZON.LITERAL"\
         \},\
         \{\
-          "name": "removingpreferenceslot",\
+          "name": "stockpreferenceslot",\
+          "type": "TYPE_OF_STOCK"\
+        \}\
+      ],\
+      "intent": "AddPreferenceStockIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "bookpreferenceslot",\
+          "type": "AMAZON.Book"\
+        \}\
+      ],\
+      "intent": "AddPreferenceBookIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "charpreferenceslot",\
+          "type": "AMAZON.FictionalCharacter"\
+        \}\
+      ],\
+      "intent": "AddPreferenceCharIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "tvpreferenceslot",\
+          "type": "AMAZON.TVSeries"\
+        \}\
+      ],\
+      "intent": "AddPreferenceTVIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "preferenceslot",\
           "type": "AMAZON.LITERAL"\
         \}\
       ],\
       "intent": "RemovePreferenceIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "stockpreferenceslot",\
+          "type": "TYPE_OF_STOCK"\
+        \}\
+      ],\
+      "intent": "RemovePreferenceStockIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "bookpreferenceslot",\
+          "type": "AMAZON.Book"\
+        \}\
+      ],\
+      "intent": "RemovePreferenceBookIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "charpreferenceslot",\
+          "type": "AMAZON.FictionalCharacter"\
+        \}\
+      ],\
+      "intent": "RemovePreferenceCharIntent"\
+    \},\
+    \{\
+      "slots": [\
+        \{\
+          "name": "categoryslot",\
+          "type": "AMAZON.LITERAL"\
+        \},\
+        \{\
+          "name": "tvpreferenceslot",\
+          "type": "AMAZON.TVSeries"\
+        \}\
+      ],\
+      "intent": "RemovePreferenceTVIntent"\
     \},\
     \{\
       "slots": [\
@@ -111,38 +215,85 @@ YesIntent sure\
 NoIntent no\
 NoIntent no thanks\
 NoIntent nope\
-\
 CurrentUserIntent who is the current user\
 CurrentUserIntent check current user\
 CurrentUserIntent check the current user\
 CurrentUserIntent current user\
 CurrentUserIntent check user\
-\
 AddUserIntent add a user\
 AddUserIntent new user\
-\
+RetakePicIntent retake my picture\
+RetakePicIntent retake picture\
 NameIntent \{nameslot\}\
 NameIntent my name is \{nameslot\}\
-\
 RemoveUserIntent delete \{remnameslot\}\
 RemoveUserIntent remove user \{remnameslot\}\
 RemoveUserIntent delete user \{remnameslot\}\
 RemoveUserIntent remove \{remnameslot\}\
-\
-RetakePicIntent retake my picture\
-RetakePicIntent retake picture\
-\
-SwitchUserIntent switch profile to \{newuserlot\}\
-SwitchUserIntent switch to \{newuserlot\}\
-\
+GetPreferenceIntent \{news|categoryslot\} preferences\
+GetPreferenceIntent tell me my \{news|categoryslot\} preferences\
+GetPreferenceIntent what are my \{news|categoryslot\} preferences\
+GetPreferenceIntent what are my preferences for \{news|categoryslot\}\
+GetPreferenceIntent tell me my preferences for \{news|categoryslot\}\
+GetPreferenceIntent \{fanfiction|categoryslot\} preferences\
+GetPreferenceIntent tell me my \{fanfiction|categoryslot\} preferences\
+GetPreferenceIntent what are my \{fanfiction|categoryslot\} preferences\
+GetPreferenceIntent what are my preferences for \{fanfiction|categoryslot\}\
+GetPreferenceIntent tell me my preferences for \{fanfiction|categoryslot\}\
+GetPreferenceIntent \{stocks|categoryslot\}\
+GetPreferenceIntent tell me my \{stocks|categoryslot\}\
+GetPreferenceIntent what are my \{stocks|categoryslot\}\
+GetPreferenceIntent what are my preferences for \{stocks|categoryslot\}\
+GetPreferenceIntent tell me my preferences for \{stocks|categoryslot\}\
+GetPreferenceIntent \{stock|categoryslot\} preferences\
+GetPreferenceIntent tell me my \{stock|categoryslot\} preferences\
+GetPreferenceIntent what are my \{stock|categoryslot\} preferences\
+GetPreferenceIntent what are my preferences for \{stock|categoryslot\}\
+GetPreferenceIntent tell me my preferences for \{stock|categoryslot\}\
+AddPreferenceIntent add \{sports|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{entertainment|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{politics|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{buisness|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{company|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{domestic|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{enviornment|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{health|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{lifestyle|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{most read|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{oddly enough|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{people|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{science|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{technology|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{wealth|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{world|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceIntent add \{world news|preferenceslot\} to my \{news|categoryslot\} preferences\
+AddPreferenceStockIntent add \{stockpreferenceslot\} to my \{stock|categoryslot\} preferences\
+AddPreferenceStockIntent add \{stockpreferenceslot\} to my \{stocks|categoryslot\}\
+AddPreferenceStockIntent add \{stockpreferenceslot\} to my \{stocks|categoryslot\}\
+AddPreferenceBookIntent add \{bookpreferenceslot\} to my \{fanfiction|categoryslot\} preferences\
+AddPreferenceCharIntent add \{charpreferenceslot\} to my \{fanfiction|categoryslot\} preferences\
+AddPreferenceTVIntent add \{tvpreferenceslot\} to my \{fanfiction|categoryslot\} preferences\
+RemovePreferenceIntent remove \{sports|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{entertainment|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{politics|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{buisness|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{company|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{domestic|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{enviornment|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{health|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{lifestyle|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{most read|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{oddly enough|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{people|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{science|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{technology|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{wealth|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{world|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceIntent remove \{world news|preferenceslot\} from my \{news|categoryslot\} preferences\
+RemovePreferenceStockIntent remove \{stockpreferenceslot\} from my \{stock|categoryslot\} preferences\
+RemovePreferenceBookIntent remove \{bookpreferenceslot\} from my \{fanfiction|categoryslot\} preferences\
+RemovePreferenceCharIntent remove \{charpreferenceslot\} from my \{fanfiction|categoryslot\} preferences\
+RemovePreferenceTVIntent remove \{tvpreferenceslot\} from my \{fanfiction|categoryslot\} preferences\
 RetakeCustomPicIntent retake picture for \{recustompicslot\}\
-\
-GetPreferenceIntent \{news|preferenceslot\} preferences\
-GetPreferenceIntent tell me my \{news|preferenceslot\} preferences\
-GetPreferenceIntent what are my \{news|preferenceslot\} preferences\
-GetPreferenceIntent what are my preferences for \{news|preferenceslot\}\
-GetPreferenceIntent tell me my preferences for \{news|preferenceslot\}\
-\
-AddPreferenceIntent add \{sports|addingpreferenceslot\} to my \{news|preferenceslot\} preferences\
-\
-RemovePreferenceIntent remove \{sports|removingpreferenceslot\} from my \{news|preferenceslot\} preferences}
+SwitchUserIntent switch profile to \{newuserlot\}\
+SwitchUserIntent switch to \{newuserlot\}}
