@@ -16,13 +16,6 @@ import itertools
 from profiles.Profiles.Profile import Profile
 from profiles.Profiles.UserDatabase import UserDatabase
 
-#alexa_path = 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/profiles'
-#sys.path.insert(0, alexa_path)
-#every Fanfiction instance saves a text file into of top fanfiction for a term
-#iterates through all the databases and saves txt files based on preferences
-#import os
-#save_path = 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/fanfiction_files'
-
 f = Fanfiction()
 d = UserDatabase("profiles/profiles_test_database.npy")
 
@@ -78,11 +71,6 @@ def no_intent():
     msg = "No problem. Have a nice day."
     return question(msg)
 
-"""@ask.intent("FanfictionIntent")
-def fanfiction_intent():
-    u = UserDatabase(np.load('profiles_test_database.npy'))
-    listing = [val for key, val in p.pref_dict if key is "#fanfiction pref?"]
-    msg = "Pulling up fanfiction about {}".format(", ".join(listing))
-    text = f.generate_text("FILL IN HERE")
-    return statement(msg) \
-        .simple_card(title='Generated FanFic', content='Make your time')"""  # edit here
+
+if __name__ == '__main__':
+    app.run(debug=True)
