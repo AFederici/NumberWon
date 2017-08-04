@@ -16,8 +16,6 @@ app = Flask(__name__)
 ask = Ask(app, '/')
 
 
-# fix so that Echo can ask if ans is right, and then update it based off of what user inputs.
-
 @app.route('/')
 def homepage():
     return "Face Rec"
@@ -25,19 +23,20 @@ def homepage():
 
 @ask.launch
 def start_skill():
+    """starts by asking a question"""
     msg = "May I see your face?"
-    #print("STarted skill!")
     return question(msg)
 
 
 def take_picture():
+    """takes the user's picture"""
     names = f.name_faces_from_picture(d)
-    #print(names)
     return names
 
 
 @ask.intent("YesIntent")
 def name_faces():
+    """runs if the user says yes"""
     global state
     if state == 0:
         global names_list
@@ -94,6 +93,7 @@ def name_faces():
 
 @ask.intent("NoIntent")
 def no_intent():
+    """runs if the user says no"""
     global state
     if state == 0:
         msg = "Ok, thanks. Have a nice day."
@@ -134,6 +134,7 @@ def no_intent():
 
 @ask.intent("NameIntent")
 def name_intent(nameslot):
+    """gets the name that the user says"""
     print("name: " + str(nameslot))
     global name
     name = nameslot

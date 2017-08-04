@@ -5,6 +5,9 @@ from face.database import Database
 from profiles.Profiles.Profile import Profile
 from profiles.Profiles.UserDatabase import UserDatabase
 import numpy as np
+from vrecog.record import record_to_file
+import vrecog.speaker_classifier_tflearn as speaker_classifier_tflearn
+
 
 f = Face_Recognition()
 ud = UserDatabase("profiles/profiles_test_database.npy")
@@ -252,10 +255,13 @@ def update_current_user():
         global temp_face_vectors
         '''can be called in the background of some functions!!!'''
         desc = f.get_one_face_descriptor_vector()
-        #v_desc = r.record_something()
         temp_face_vectors = desc
         user = ud.compare_faces(desc)
-        print(user)
+        speaker_classifier_tflearn.loadmodel() #load/reload model
+        record.record_to_file("temp",train=False) #create data
+        v_user = speaker_classifier_tflearn.test("temp.wav.ig") #call whenevr want to classify
+        print("image: " + str(user))
+        print("voice: " + str(v_user))
         session.attributes["Current_User"] = user
 
 @ask.intent("CurrentUserIntent")
@@ -278,7 +284,7 @@ def check_user():
 @ask.intent("YesIntent")
 def yes_intent():
     """ the Yes Intent. Does a whole lotta things. """
-
+    
     global checking_user
     global adding_user
     global temp_name
@@ -297,6 +303,8 @@ def yes_intent():
         msg = "The user has been added."
         checking_user = 0
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
+        record_to_file(temp_name)
+        speaker_classifier_tflearn.train()
         ud.save_obj("profiles_test_database.npy")
         session.attributes["Current_User"] = temp_name
         temp_name = ""
@@ -305,6 +313,8 @@ def yes_intent():
         msg = "The user has been added."
         adding_user = 0
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
+        record_to_file(temp_name)
+        speaker_classifier_tflearn.train()
         ud.save_obj("profiles_test_database.npy")
         session.attributes["Current_User"] = temp_name
         temp_name = ""
@@ -328,7 +338,6 @@ def yes_intent():
 @ask.intent("NoIntent")
 def no_intent():
     """ the No Intent. Does a whole lotta things. """
-    
     global checking_user
     global adding_user
     global del_user
@@ -465,6 +474,18 @@ def switch_user_intent(newuserlot):
     else:
         msg = "There is no user named {} in our database. Please try again or add this user.".format(newuserlot)
     return statement(msg)
+
+'''add voice'''
+#add intent later
+def add_voice_to_user(user_name):
+    record_to_file(user_name)
+    speaker_classifier_tflearn.train()
+
+#add intent later
+@ask.intent("AddVoiceIntent")
+def add_voice_to_current_user():
+    record_to_file(session.attributes["Current_User"])
+    speaker_classifier_tflearn.train()
     
 if __name__ == '__main__':
     app.run(debug=True)
