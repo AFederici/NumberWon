@@ -12,6 +12,12 @@ edatb.add_Folder_Database("search/pickles")
 
 # from search.collect_rss import *
 
+#import all the shit
+#when start skill, sees if current user is someone it recognizes. If yes, calls something else.
+    #can check if session.attributes[current_user] == none or not
+#if no, proceede as normal
+#if yes, only check certain documents
+
 app = Flask(__name__)
 ask = Ask(app, '/')
 

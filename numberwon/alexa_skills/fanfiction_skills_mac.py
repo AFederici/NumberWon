@@ -10,7 +10,7 @@ import html2text
 app = Flask(__name__)
 ask = Ask(app, '/')
 
-from fanfiction import Fanfiction
+from fanfiction_files.fanfiction import Fanfiction
 from profile_skills import update_current_user
 import itertools
 
@@ -51,7 +51,7 @@ def start_skill():
         msg = "I could not find a user I recognize."
         return statement(msg)
     else:
-        msg = "Hi" + session.attributes["Current_User"] + ". Are you interested in reading some fanfiction made just for you?"
+        msg = "Hi " + session.attributes["Current_User"] + ". Are you interested in reading some fanfiction made just for you?"
     print("current user: ", session.attributes["Current_User"])
     return question(msg)
 
@@ -75,7 +75,7 @@ def char_intent(number): #number type: AMAZON.NUMBER
     content = ""
 
     for term in listing:
-        with open("fanfiction_files/" + str(term) + ".txt", "r", 'cp1252') as z:
+        with open("fanfiction_files/" + str(term) + ".txt", "r") as z:
             value = str(z.read())
             lm = f.train_lm(value, 13)
             text = html2text.html2text(f.generate_text(lm, 13, number))
