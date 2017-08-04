@@ -252,6 +252,7 @@ def update_current_user():
         global temp_face_vectors
         '''can be called in the background of some functions!!!'''
         desc = f.get_one_face_descriptor_vector()
+        #v_desc = r.record_something()
         temp_face_vectors = desc
         user = ud.compare_faces(desc)
         print(user)

@@ -160,7 +160,7 @@ class UserDatabase:
         self.dict[user] = profile
         self.list_of_names.append(user)
 
-    def compare_faces(self, desc):
+    def compare_faces(self, desc=None, v_desc=None):
         """ Finds the best match face for a descriptor vector
             Parameters
             ----------
@@ -169,16 +169,24 @@ class UserDatabase:
             Returns
             ----------
             least_key : the best-matched name for the descriptor vector """
-        least = 1.0
-        least_key = ""
-        for key in self.items():
-            v = np.sqrt(abs(np.sum((np.array(desc) - np.array(self.get_face_vector_by_user(key))) ** 2)))
-            if least > v:
-                least = v
-                least_key = key
-        print(least)
-        print(least_key)
-        if least > 0.59:
-            return None
-        else:
-            return least_key
+        key = None
+
+        if not v_desc is None:
+            # compare voice vectors here
+            # key = compare
+            pass
+        if not desc is None:
+            least = 1.0
+            least_key = ""
+            for key in self.items():
+                v = np.sqrt(abs(np.sum((np.array(desc) - np.array(self.get_face_vector_by_user(key))) ** 2)))
+                if least > v:
+                    least = v
+                    least_key = key
+            print(least)
+            print(least_key)
+            if least > 0.59:
+                pass
+            else:
+                key = least_key
+        return key
