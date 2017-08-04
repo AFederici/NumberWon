@@ -32,6 +32,7 @@ class Face_Recognition:
         return pic
     
     def get_face_descriptor_vector(self):
+        """ Gets all the descriptor vectors from a picture. """
         pic = self.take_picture()
         desc_list = []
         detections = list(face_detect(pic, self.upscale))
@@ -40,6 +41,15 @@ class Face_Recognition:
             desc = np.array(face_rec_model.compute_face_descriptor(pic, shape))
             desc_list.append(desc)
         return desc_list
+    
+    def get_one_face_descriptor_vector(self):
+        """ Gets one descriptor vector from the first face it sees. """
+        pic = self.take_picture()
+        desc_list = []
+        detection = list(face_detect(pic, self.upscale))[0]
+        shape = shape_predictor(pic, detection)
+        desc = np.array(face_rec_model.compute_face_descriptor(pic, shape))
+        return desc
     
     def find_faces(self, pic, database):
         """ finds all of the faces in a picture and produces a picture with the faces highlighted

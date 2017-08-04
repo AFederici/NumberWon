@@ -6,16 +6,19 @@ import time
 import unidecode
 import json
 
+#get links off a page: remove all that contain video
+#add all the links as pickle files
+
+
 import sys
 sys.path.insert(0, 'C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search')
 from entityDatabase import entityDatabase
-
 edatb = entityDatabase()
 edatb.add_Folder_Database('C:/Users/User/Desktop/beaver/NumberWon/numberwon/alexa_skills/search/pickles')
-#get links off a page: remove all that contain video
-#add all the links as pickle files
+
 app = Flask(__name__)
 ask = Ask(app, '/')
+
 
 @app.route('/')
 def homepage():
@@ -27,6 +30,7 @@ def start_skill():
     return question(msg)
 
 def get_entity(EntityName):
+    EntityName = EntityName.lower()
     c = edatb.top_entity_dict(EntityName, most_c=5)
     listing = [tupling[0] for tupling in c]
     return ", ".join(listing)
@@ -44,7 +48,8 @@ def no_intent():
 @ask.intent("EntIntent")
 def ent_intent(EntTitle):
     entity = get_entity(EntTitle)
-    print(entity)
+    print(entity, "my entity")
+    print(EntTitle, "ÉntTitle")
     if entity is None:
         msg = "No entities found for {}".format(EntTitle)
     msg = "Top entities related to {}: {}".format(EntTitle, entity)

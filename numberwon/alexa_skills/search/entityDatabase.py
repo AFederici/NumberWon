@@ -8,15 +8,43 @@ from search.searchEngine import MySearchEngine
 
 class entityDatabase:
     def __init__(self):
+    """
+        self.ent_dict is a Dict that contains lists of string entities, stored as the dict's value
+        self.ent_dict is a Dict that contains lists of tuples(Str, int); the first element is entity, the second element is position in raw text
+        self.engine helps entityDatabase do doc_search, which is searching for most recent news about an entity"""
+
         self.ent_dict = defaultdict(list)
         self.ent_dict2 = defaultdict(list)
         self.engine = MySearchEngine()
 
     def get_by_id(self, id):
+        """ gets entities for a certain RSS Reuters link
+        Parameters
+        ----------
+            id: string
+             http link for a Reuters article
+
+        Returns
+        ----------
+            list[str]
+             returns a list of strings for link: id; strings are all the entities in that article"""
+
         return self.ent_dict[id]
 
     def entize(self, pickle, dictionary):
         #creates a dictionary where link = key, and value = list of entities
+        """ Parameters
+            ----------
+                pickle: .pickle file
+                 pickle stores a dictionary where keys = links and values = raw text of article for each link
+                dictionary: Dict[str, list]
+                 usually self.ent_dict, either as an empty or partially filled Dict
+
+            Returns
+            ----------
+                dictionary: Dict[str, list]
+                 returns a Dict where all the info from pickle is added to dictionary"""
+
         for key, val in pickle.items():
             tokens = nltk.word_tokenize(val)
             pos = nltk.pos_tag(tokens)
@@ -25,11 +53,25 @@ class entityDatabase:
                 ents = named_entities.pop()
                 if getattr(ents, 'label', None) != None and ents.label() == "NE":
                     z = list(zip(*[ne for ne in ents]))[0]
-                    z = " ".join(z)
+                    z = (" ".join(z)).lower()
                     dictionary[key].append(z)
         return dictionary
 
     def entize2(self, pickle, dictionary):
+        # creates a dictionary where link = key, and value = list of tuples
+        """ Parameters
+            ----------
+                pickle: .pickle file
+                 pickle stores a dictionary where keys = links and values = raw text of article for each link
+                dictionary: Dict[str, list]
+                 usually self.ent_dict2, either as an empty or partially filled Dict
+
+            Returns
+            ----------
+                dictionary: Dict[str, list]
+                 returns a Dict where all the info from pickle is added to dictionary.
+                 position of the entity in rawtext is stored as the second element of each tuple"""
+
         counter = 0
         for key, val in pickle.items():
             tokens = nltk.word_tokenize(val)
@@ -39,7 +81,7 @@ class entityDatabase:
                 ents = named_entities.pop()
                 if getattr(ents, 'label', None) != None and ents.label() == "NE":
                     z = list(zip(*[ne for ne in ents]))[0]
-                    z = (" ".join(z), counter)
+                    z = ((" ".join(z)).lower(), counter)
                     dictionary[key].append(z)
                 counter += len(ents)
         return dictionary
@@ -106,4 +148,4 @@ class entityDatabase:
                 self.engine.upload_vd(path_pickle_folder + "/" + f)
                 self.ent_dict = self.entize(p, self.ent_dict)
                 self.ent_dict2 = self.entize2(p, self.ent_dict2)
-                print(f, type(f))
+                #print(f, type(f))

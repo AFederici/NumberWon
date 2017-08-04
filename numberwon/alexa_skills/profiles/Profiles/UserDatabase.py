@@ -7,7 +7,7 @@ class UserDatabase:
                 Parameters
                 ----------
                 file : (default None) an old database object. (as .npy) If a file is specified, the data from that file is
-                        transferred over """
+                    transferred over """
         self.list_of_names = []
         if file is not None:
             self.dict = np.load(file).item()
@@ -28,6 +28,7 @@ class UserDatabase:
         return self.dict
 
     def names(self):
+        """ returns the list of user names """
         return self.list_of_names
 
     def get(self, key):
@@ -60,57 +61,115 @@ class UserDatabase:
         """ deletes a song from the database based on its id
                 Parameters
                 ----------
-                _id :  the song id to be deleted """
+                name : name of the user """
         del self.dict[name]
 
     def get_user_by_name(self, name):
         """ search song by user
                 Parameters
                 ----------
-                _id :  the song id to be deleted """
+                name :  the name of the user to find
+
+                Returns
+                ---------
+                either self.dict[name] or None if the user cannot be recognized """
+
         if name in self.dict:
             return self.dict[name]
         else:
-            return 'un-recognized user'
+            return None
 
-    def get_preferences_by_user(self, user, preference):
-        """ returns a list of preferences """
-        return self.dict[user].find_user_preferences(preference)
+    def get_preferences_by_user(self, user, category):
+        """ gets preferences based off of category
+                Parameters
+                ----------
+                user :  the name of the user to find preferences for
+                preference :  the name of the category to find preferences
 
-    def get_profile_status_by_user(self, user):
-        """ returns the profile status of the specified user """
-        return self.dict[user].profile_status
+                Returns
+                ---------
+                a list of preferences (str) """
 
-    def add_preferences_by_user(self, user, preference, preference_add):
-        """ updates the preference list based on the user """
-        self.dict[user].add_preference(preference, preference_add)
+        return self.dict[user].find_user_preferences(category)
 
-    def remove_preferences_by_user(self, user, preference, preference_rm):
-        self.dict[user].del_preference(preference, preference_rm)
+    def add_preferences_by_user(self, user, category, preference_add):
+        """ adds a preference to a list of (category) preferences
+                Parameters
+                ----------
+                user :  the name of the user to find preferences for
+                category :  the name of the category to find preferences
+                preference_add : the preference to add
+
+                Returns
+                ---------
+                nothing """
+
+        self.dict[user].add_preference(category, preference_add)
+
+    def remove_preferences_by_user(self, user, category, preference_rm):
+        """ removes a preference from a list of (category) preferences
+                Parameters
+                ----------
+                user :  the name of the user to find preferences for
+                category :  the name of the category to find preferences
+                preference_rm : the preference to remove
+
+                Returns
+                ---------
+                nothing """
+
+        self.dict[user].del_preference(category, preference_rm)
 
     def get_face_vector_by_user(self, user):
+        """ gets the face vector of the user
+                Parameters
+                ----------
+                user :  the name of the user to get face vectors for
+
+                Returns
+                ---------
+                a np array of the face vector """
+
         return self.dict[user].face_vectors
 
-    def update_face_vectors_by_user(self, name, new_face_vectors):
-        """ takes the average of the olf descriptor vector and the new one to update """
-        self.dict[name].update_face_vectors(new_face_vectors)
+    def update_face_vectors_by_user(self, user, new_face_vectors):
+        """ takes the average of the old descriptor vector and the new one to update
+                Parameters
+                ----------
+                user :  the name of the user to update face vector
+                new_face_vectors :  the new np array of face vectors
 
-    def update(self, name, profile):
-        """ adds a new val in the dictionary """
-        self.dict[name] = profile
-        self.list_of_names.append(name)
+                Returns
+                ---------
+                nothing """
+
+        self.dict[user].update_face_vectors(new_face_vectors)
+
+    def update(self, user, profile):
+        """ adds a new user in the dictionary and adds their name to the list of names
+                Parameters
+                ----------
+                user :  the name of the user to update face vector
+                profile :  the Profile object to add
+
+                Returns
+                ---------
+                nothing """
+
+        user = user.lower()
+        self.dict[user] = profile
+        self.list_of_names.append(user)
 
     def compare_faces(self, desc):
         """ Finds the best match face for a descriptor vector
             Parameters
             ----------
-            database : the database
             desc : the descriptor vector produced by the picture; a (128,) shape descriptor
 
             Returns
             ----------
             least_key : the best-matched name for the descriptor vector """
-        least = 1
+        least = 1.0
         least_key = ""
         for key in self.items():
             v = np.sqrt(abs(np.sum((np.array(desc) - np.array(self.get_face_vector_by_user(key))) ** 2)))
@@ -119,7 +178,7 @@ class UserDatabase:
                 least_key = key
         print(least)
         print(least_key)
-        if least > 0.45:
+        if least > 0.59:
             return None
         else:
             return least_key
