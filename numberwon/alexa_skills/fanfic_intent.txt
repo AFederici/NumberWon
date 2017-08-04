@@ -5,6 +5,23 @@
     },
     {
       "intent": "AMAZON.NoIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "number",
+          "type": "AMAZON.NUMBER"
+        }
+      ],
+      "intent": "CharacterIntent"
     }
   ]
 }
+
+AMAZON.YesIntent yes
+AMAZON.YesIntent yup
+AMAZON.NoIntent no
+CharacterIntent {number}
+CharacterIntent {number} characters please
+CharacterIntent How about {number} characters
+CharacterIntent Give me {number} characters
