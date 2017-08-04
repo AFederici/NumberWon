@@ -13,15 +13,16 @@ import speech_data as data
 import tensorflow as tf
 print("You are using tensorflow version "+ tf.__version__) #+" tflearn version "+ tflearn.version)
 if tf.__version__ >= '0.12' and os.name == 'nt':
-	print("sorry, tflearn is not ported to tensorflow 0.12 on windows yet!(?)")
+	# print("sorry, tflearn is not ported to tensorflow 0.12 on windows yet!(?)")
 	quit() # why? works on Mac?
+
 # path='data/spoken_numbers_pcm/'
-path='data/ss/'
+path='data/test/'
 speakers = data.get_speakers(path)
 number_classes=len(speakers)
 print("speakers",speakers)
 
-batch=data.wave_batch_generator(batch_size=1000, source=data.Source.DIGIT_WAVES, target=data.Target.speaker,path=path)
+batch=data.wave_batch_generator(batch_size=100, source=data.Source.DIGIT_WAVES, target=data.Target.speaker,path=path)
 X,Y=next(batch)
 
 
@@ -36,6 +37,7 @@ net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
 
 model = tflearn.DNN(net)
 model.fit(X, Y, n_epoch=100, show_metric=True, snapshot_step=100)
+model.save('my_model.tflearn')
 
 # demo_file = "8_Vicki_260.wav"
 demo_file = "_megan_4.wav"
