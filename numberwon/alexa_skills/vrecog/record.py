@@ -68,11 +68,11 @@ def record():
     it without getting chopped off.
     """
     p = pyaudio.PyAudio()
-    os.system('afplay /System/Library/Sounds/Glass.aiff')
     stream = p.open(format=FORMAT, channels=1, rate=RATE,
         input=True, output=True,
         frames_per_buffer=CHUNK_SIZE)
-
+    os.system('afplay /System/Library/Sounds/Glass.aiff')
+        
     num_silent = 0
     snd_started = False
 
@@ -111,14 +111,14 @@ def record_to_file(path,train=True): #name
     sample_width, data = record()
     data = pack('<' + ('h'*len(data)), *data)
     path2 = 'data/people/'
-    wf = wave.open(path2+path+'.wav', 'wb')
+    wf = wave.open(path2+path+'.wav.ig', 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(sample_width)
     wf.setframerate(RATE)
     wf.writeframes(data)
     wf.close()
     if train:
-        y, sr = librosa.load(path2+path+'.wav')
+        y, sr = librosa.load(path2+path+'.wav.ig')
         for i in range(16):
             if i == 4:
                 librosa.output.write_wav('{}_{}_{}.wav'.format(path2,path,i+1), y, sr)
