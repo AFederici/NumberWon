@@ -64,6 +64,7 @@ def test(fname):
 	result=model.predict([result])
 	result=data.one_hot_to_item(result,speakers)
 	print("predicted speaker for %s : result = %s "%(demo_file,result))
+	return result
 
 if __name__ == '__main__':
     command = raw_input("What to do\n")

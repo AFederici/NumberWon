@@ -5,6 +5,7 @@ import librosa
 
 import pyaudio
 import wave
+import os
 
 THRESHOLD = 2500
 CHUNK_SIZE = 1024
@@ -67,6 +68,7 @@ def record():
     it without getting chopped off.
     """
     p = pyaudio.PyAudio()
+    os.system('afplay /System/Library/Sounds/Glass.aiff')
     stream = p.open(format=FORMAT, channels=1, rate=RATE,
         input=True, output=True,
         frames_per_buffer=CHUNK_SIZE)
@@ -104,7 +106,7 @@ def record():
     # r = add_silence(r, 0.2)
     return sample_width, r
 
-def record_to_file(path): #name
+def record_to_file(path,train=True): #name
     "Records from the microphone and outputs the resulting data to 'path'"
     sample_width, data = record()
     data = pack('<' + ('h'*len(data)), *data)
@@ -115,13 +117,14 @@ def record_to_file(path): #name
     wf.setframerate(RATE)
     wf.writeframes(data)
     wf.close()
-    y, sr = librosa.load(path)
-    for i in range(16):
-        if i == 4:
-            librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y, sr)
-        else:
-            y_stretch = librosa.effects.time_stretch(y, (i*2/16)+.5)  # .5 to 2.5 factor
-            librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y_stretch, sr)
+    if train:
+        y, sr = librosa.load(path)
+        for i in range(16):
+            if i == 4:
+                librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y, sr)
+            else:
+                y_stretch = librosa.effects.time_stretch(y, (i*2/16)+.5)  # .5 to 2.5 factor
+                librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y_stretch, sr)
 
 if __name__ == '__main__':
     print("please speak a word into the microphone")
