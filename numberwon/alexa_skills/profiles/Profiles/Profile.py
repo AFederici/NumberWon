@@ -8,7 +8,7 @@ class Profile:
                 pref_dict : a dictionary {"key" : [] )} of preferences
                 profile_status : not needed, please ignore. Default is False """
 
-        self.name = name
+        self.name = name.lower()
         self.face_vectors = face_vectors
         self.pref_dict = pref_dict
         self.profile_status = profile_status

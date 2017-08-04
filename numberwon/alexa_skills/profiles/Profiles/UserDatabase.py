@@ -156,6 +156,7 @@ class UserDatabase:
                 ---------
                 nothing """
 
+        user = user.lower()
         self.dict[user] = profile
         self.list_of_names.append(user)
 

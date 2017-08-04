@@ -25,7 +25,6 @@ def homepage():
 @ask.launch
 def start_skill():
     """ Starts the skill. Updates current user and if it doesn't exist assigns it to None. """
-    
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = None
     update_current_user()
@@ -255,6 +254,7 @@ def update_current_user():
         desc = f.get_one_face_descriptor_vector()
         temp_face_vectors = desc
         user = ud.compare_faces(desc)
+        print(user)
         session.attributes["Current_User"] = user
 
 @ask.intent("CurrentUserIntent")
