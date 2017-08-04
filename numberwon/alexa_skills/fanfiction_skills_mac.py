@@ -31,7 +31,7 @@ import sys
 for element in together:
     sys.path.insert(0, save_path)
     fanfiction_dict = f.find_fanfiction(element)
-    a = open(element + '.txt', 'w')
+    a = open(element + '_test.txt', 'w')
     a.write(fanfiction_dict[element])
     a.close()
 
@@ -72,7 +72,7 @@ def char_intent(number): #number type: AMAZON.NUMBER
     content = ""
 
     for term in listing:
-        with open("fanfiction_files/" + str(term) + ".txt", "r", encoding='cp1252') as z:
+        with open("fanfiction_files/" + str(term) + "_test.txt", "r", encoding='cp1252') as z:
             value = str(z.read())
             lm = f.train_lm(value, 13)
             text = html2text.html2text(f.generate_text(lm, 13, int(number)))
