@@ -18,35 +18,52 @@ if tf.__version__ >= '0.12' and os.name == 'nt':
 
 # path='data/spoken_numbers_pcm/'
 path='data/test/'
-speakers = data.get_speakers(path)
-number_classes=len(speakers)
-print("speakers",speakers)
-
-
-# Classification
-tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
-
-net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
-net = tflearn.fully_connected(net, 64)
-net = tflearn.dropout(net, 0.5)
-net = tflearn.fully_connected(net, number_classes, activation='softmax')
-net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
-model = tflearn.DNN(net)
+speakers = None
+number_classes = None
+model = None
 
 def train():
+	global speakers, number_classes, model
+	speakers = data.get_speakers(path)
+	number_classes=len(speakers)
+	print("speakers",speakers)
+
+	# Classification
+	tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
+
+	net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
+	net = tflearn.fully_connected(net, 64)
+	net = tflearn.dropout(net, 0.5)
+	net = tflearn.fully_connected(net, number_classes, activation='softmax')
+	net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
+	model = tflearn.DNN(net)
 	batch=data.wave_batch_generator(batch_size=1000, source=data.Source.DIGIT_WAVES, target=data.Target.speaker,path=path)
 	X,Y=next(batch)
 	model.fit(X, Y, n_epoch=100, show_metric=True, snapshot_step=100)
 	model.save('vrecog.tflearn')
 
-def test():
-	# demo_file = "8_Vicki_260.wav"
+def loadmodel():
+	global speakers, number_classes, model
+	speakers = data.get_speakers(path)
+	number_classes=len(speakers)
+	print("speakers",speakers)
+
+	# Classification
+	tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
+
+	net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
+	net = tflearn.fully_connected(net, 64)
+	net = tflearn.dropout(net, 0.5)
+	net = tflearn.fully_connected(net, number_classes, activation='softmax')
+	net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
+	model = tflearn.DNN(net)
 	model.load('vrecog.tflearn')
-	demo_file = "_michael_5.wav"
-	demo=data.load_wav_file(path+demo_file)
-	result=model.predict([demo])
+
+def test(fname):
+	result=data.load_wav_file(path+fname)
+	result=model.predict([result])
 	result=data.one_hot_to_item(result,speakers)
-	print("predicted speaker for %s : result = %s "%(demo_file,result)) # ~ 97% correct
+	print("predicted speaker for %s : result = %s "%(demo_file,result))
 
 if __name__ == '__main__':
     command = raw_input("What to do\n")
@@ -54,4 +71,6 @@ if __name__ == '__main__':
 if command == 'train':
 	train()
 elif command == 'test':
-	test()
+	loadmodel()
+	demo_file = "_michael_5.wav"
+	test(demo_file)

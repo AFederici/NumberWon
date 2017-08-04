@@ -161,7 +161,7 @@ def get_speakers(path=pcm_path):
 	def nobad(name):
 		return "_" in name and not "." in name.split("_")[1] and not 'DS_Store' in name
 	speakers=list(set(map(speaker,filter(nobad,files))))
-	print(len(speakers)," speakers: ",speakers)
+	# print(len(speakers)," speakers: ",speakers)
 	return speakers
 
 def load_wav_file(name):

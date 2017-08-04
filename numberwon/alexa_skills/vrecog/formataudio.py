@@ -1,6 +1,7 @@
 import librosa
 path='data/test/' #default
-def formataudio():
+# path='data/people/'
+def formataudio(path2):
     y, sr = librosa.load(path+path2+'.wav.ig')
     for i in range(16):
         if i == 4:
@@ -10,4 +11,4 @@ def formataudio():
             librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y_stretch, sr)
 if __name__ == '__main__':
     path2 = raw_input("Please enter the file to format\n")
-    formataudio()
+    formataudio(path2)

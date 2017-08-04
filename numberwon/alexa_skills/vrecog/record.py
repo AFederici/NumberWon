@@ -108,20 +108,20 @@ def record_to_file(path): #name
     "Records from the microphone and outputs the resulting data to 'path'"
     sample_width, data = record()
     data = pack('<' + ('h'*len(data)), *data)
-
-    wf = wave.open('_'+path, 'wb')
+    path = 'data/people/'+path+'.wav.ig'
+    wf = wave.open(path, 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(sample_width)
     wf.setframerate(RATE)
     wf.writeframes(data)
     wf.close()
-    y, sr = librosa.load('_'+path)
-    for i in range(1,17):
+    y, sr = librosa.load(path)
+    for i in range(16):
         if i == 4:
-            librosa.output.write_wav('_{}_{}.wav'.format(path,i), y, sr)
+            librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y, sr)
         else:
             y_stretch = librosa.effects.time_stretch(y, (i*2/16)+.5)  # .5 to 2.5 factor
-            librosa.output.write_wav('_{}_{}.wav'.format(path,i), y_stretch, sr)
+            librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y_stretch, sr)
 
 if __name__ == '__main__':
     print("please speak a word into the microphone")
