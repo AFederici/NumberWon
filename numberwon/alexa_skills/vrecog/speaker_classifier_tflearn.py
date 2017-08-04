@@ -4,7 +4,7 @@
 import os
 
 import tflearn
-import vrecog.speech_data as data
+import speech_data as data
 
 # Simple speaker recognition demo, with 99% accuracy in under a minute ( on digits sample )
 
