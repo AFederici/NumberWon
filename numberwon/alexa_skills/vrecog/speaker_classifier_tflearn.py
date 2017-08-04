@@ -72,5 +72,5 @@ if __name__ == '__main__':
 		train()
 	elif command == 'test':
 		loadmodel()
-		demo_file = "_michael_5.wav"
+		demo_file = "personname.wav.ig"
 		test(demo_file)

@@ -68,11 +68,11 @@ def record():
     it without getting chopped off.
     """
     p = pyaudio.PyAudio()
+    os.system('afplay /System/Library/Sounds/Glass.aiff')
     stream = p.open(format=FORMAT, channels=1, rate=RATE,
         input=True, output=True,
         frames_per_buffer=CHUNK_SIZE)
-    os.system('afplay /System/Library/Sounds/Glass.aiff')
-        
+
     num_silent = 0
     snd_started = False
 
