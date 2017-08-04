@@ -99,16 +99,14 @@ class entityDatabase:
         # returns the top entity based on position in text
         """ Parameters
             ----------
-                qword
-                 pickle stores a dictionary where keys = links and values = raw text of article for each link
-                dictionary: Dict[str, list]
-                 usually self.ent_dict2, either as an empty or partially filled Dict
-
+                qword: str
+                    string of terms that we complete a query on
             Returns
             ----------
-                dictionary: Dict[str, list]
-                 returns a Dict where all the info from pickle is added to dictionary.
-                 position of the entity in rawtext is stored as the second element of each tuple"""
+                list[tuple]
+                    list of tuples: (str, int)
+                    first term is Entity, second term is how often the term appears next to qword
+        """
 
         if self.engine.query(qword) != []:
             topdoc = self.engine.query(qword)[0][0]
@@ -116,6 +114,19 @@ class entityDatabase:
         return None
 
     def docsearch(self, qword):
+        #returns the top article most relevent to the query word, qword
+        #what's new with qword?
+
+        """
+        Parameters
+        ----------------
+            qword: str
+                search term
+        Returns
+        ----------------
+            type: str
+                first sentence of most relevant article
+        """
         if self.engine.query(qword) != []:
             topdoc = self.engine.query(qword)[0][0]
             raw = self.engine.raw_text[topdoc] #whole doc
@@ -123,14 +134,27 @@ class entityDatabase:
         return None
 
     def get_title_and_first_sentence(self, qword):
+        #RETURN title And firSt SeNTENCE OF MOSt RELEVanT arTICLE
+        #apologize for wACKY CASE
         return self.engine.whats_new(qword)
 
     def top_entity_pos(self, item, most_c=10):
+
         #search for item.
             #for i in feed. if i == feed:
         #create a list of words that are close to word in proximity
         #score based on proximity to word.
         #documents is already a list
+
+        """
+        #returns top entity based on distance from item when item occurs in texts
+        :param item: str
+            search term
+        :param most_c: int
+            optional parameter: number of entities to return
+        :return: list[tuple]
+            tuples contain most commonly found entities next to item in raw text
+        """
         word_freq = Counter()
         for i in self.ent_dict2:
             #print(self.ent_dict2[i])
@@ -146,6 +170,16 @@ class entityDatabase:
     def top_entity_dict(self, item, most_c=10):
         #documents is already a list
         #turn each list into a counter, add all counters together.
+        """
+        #returns tuples contain most commonly associated with item across all docs
+
+        :param item: str
+            search term
+        :param most_c: int
+            optional parameter: number of entities to return
+        :return: list[tuple]
+            returned result is based on number of times it appears in articles item also appears in
+        """
         mega_counter = Counter()
         for i in self.ent_dict:
             #get list of counters etc
@@ -156,6 +190,12 @@ class entityDatabase:
         return mega_counter.most_common(most_c)
 
     def add_File_Database(self, pickle_path):
+        #add a pickle file's contents to the database
+        """
+        #
+        :param pickle_path: str
+            system path to file
+        """
         p = pickle.load(open(pickle_path, "rb"))
         self.engine.upload_vd(pickle_path)
         # pickle_path example: "C:\\Users\\User\\Desktop\\beaver\\NumberWon\\numberwon\\entity\\test.pickle"
@@ -164,6 +204,10 @@ class entityDatabase:
 
     def add_Folder_Database(self, path_pickle_folder):
         #have paths in the form '/path/to/dir'
+        #adds all pickle files in a
+        """
+        :param path_pickle_folder:
+        """
         import os
         for f in os.listdir(path_pickle_folder):
             if f.endswith(".pickle"):

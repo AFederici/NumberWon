@@ -30,6 +30,10 @@ def start_skill():
     return question(msg)
 
 def get_entity(EntityName):
+    """
+    :param EntityName:
+    :return:
+    """
     EntityName = EntityName.lower()
     c = edatb.top_entity_dict(EntityName, most_c=5)
     listing = [tupling[0] for tupling in c]
@@ -53,7 +57,7 @@ def ent_intent(EntTitle):
     if entity is None:
         msg = "No entities found for {}".format(EntTitle)
     msg = "Top entities related to {}: {}".format(EntTitle, entity)
-    return statement(msg)
+    return statement(msg).simple_card(title="Top Entities for "+EntTitle, content = entity)
 
 if __name__ == '__main__':
     app.run(debug=True)
