@@ -17,7 +17,7 @@ if tf.__version__ >= '0.12' and os.name == 'nt':
 	quit() # why? works on Mac?
 
 # path='data/spoken_numbers_pcm/'
-path='data/test/'
+path='data/people/'
 speakers = None
 number_classes = None
 model = None
@@ -67,11 +67,10 @@ def test(fname):
 	return result
 
 if __name__ == '__main__':
-    command = raw_input("What to do\n")
-
-if command == 'train':
-	train()
-elif command == 'test':
-	loadmodel()
-	demo_file = "_michael_5.wav"
-	test(demo_file)
+	command = raw_input("What to do\n")
+	if command == 'train':
+		train()
+	elif command == 'test':
+		loadmodel()
+		demo_file = "_michael_5.wav"
+		test(demo_file)
