@@ -69,7 +69,7 @@ def no_intent():
 def char_intent(number): #number type: AMAZON.NUMBER
     session.attributes["Current_User"] = session.attributes["Current_User"].lower()
     p = d.dict[session.attributes["Current_User"]]
-    listing = tuple(p.get_preferences_by_user(session.attributes["Current_User"], key) for key, val in p.pref_dict if "fan" in key)
+    listing = [val2 for key1, val2 in p.pref_dict.items() if "fan" in key1]
     listing = itertools.chain.from_iterable(listing)
     print("preferences: ", listing)
     content = ""
