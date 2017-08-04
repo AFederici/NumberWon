@@ -42,16 +42,14 @@ def yes_intent():
             ind = 0
         else:
             ind = np.random.randint(0, len(book_pref)-1)
-        title, desc = find_genres(book_pref[ind])
-        msg = "I found a book titled {} based on your preference of {}.".format(title,book_pref[ind])
-        return statement(msg).simple_card(title=title, content=desc)
-    #gets pref catagories in current user
-    #sees if books is one of them
-    #if not, ends
-    #if yes, finds genres and gets random
-        #checks for incorrect term
-    #has a card as well that has the complete description (and cover???)
-    #also maybe asks "would you like to order"???
+        title, desc, link = find_genres(book_pref[ind])
+        if title == "":
+            msg = "I'm sorry. I couldn't find anything. Please try again."
+            return statement(msg)
+        else:
+            msg = "I found a book titled {} based on your preference of {}.".format(title,book_pref[ind])
+            print(link)
+            return statement(msg).simple_card(title=title, content=desc)
 
 @ask.intent("AMAZON.NoIntent")
 def no_intent():
@@ -88,16 +86,11 @@ def find_genres(term):
             foundclose = True
     desc = soup2.find_all("span")
     desc_str = ""
-    #get id "buy button"
-    button = soup2.find(id="bookTitle")
-    print("button " + str(button))
-    #get href
     for tags in desc:
         tags = str(tags)
-        if tags[:18] == "<span id=\"freeText" and tags[18] != "C": #and tags['id'][:8] == "freeText" and tags['id'][8] != "C"
+        if tags[:18] == "<span id=\"freeText" and tags[18] != "C":
             desc_str = tags
-            break
-        
+            break    
     foundclose = False
     desc_str = desc_str.replace("<br>", "")
     desc_str = desc_str.replace("<br/>", "")
@@ -110,13 +103,19 @@ def find_genres(term):
         if foundclose:
             desc_str_2 += desc_str[x]
         if desc_str[x] == ">" and not foundclose:
-            foundclose = True
-    #cover_img = soup2.find(id="coverImage").get('src')  
-    return title_str.replace("\n", "").strip(), desc_str_2 #, cover_img
-
-'''
-uses alexa Cards to display something
-'''
+            foundclose = True 
+    button = soup2.find(id="buyButton")
+    if not button is None:
+        button = button.get('href')
+        button = "https://www.goodreads.com" + str(button)
+    #cover_imgs = soup2.find_all('img')
+    #cover_img = "ci"
+    #for imgs in cover_imgs:
+       # print(str(imgs)[:19])
+        #if str(imgs)[:19] == "<img id=\"coverImage":
+            #cover_img = imgs.get('src')
+    #print(str(cover_img))
+    return title_str.replace("\n", "").strip(), desc_str_2, button
 
 if __name__ == '__main__':
     app.run(debug=True)
