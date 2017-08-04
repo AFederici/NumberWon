@@ -10,7 +10,7 @@ edatb = entityDatabase()
 
 edatb.add_Folder_Database("search/pickles")
 
-from search.collect_rss import *
+# from search.collect_rss import *
 
 app = Flask(__name__)
 ask = Ask(app, '/')
