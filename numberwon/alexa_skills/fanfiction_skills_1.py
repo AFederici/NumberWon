@@ -25,6 +25,7 @@ profiles = [val.find_user_preferences(key) for key, val in d.dict.items() if "fa
 together.extend(itertools.chain.from_iterable(profiles))
 #together is a list with all the possible fanfiction preferences: NO elements should be "None"
 
+
 for element in together:
     sys.path.insert(0, save_path)
     fanfiction_dict = f.find_fanfiction(element)

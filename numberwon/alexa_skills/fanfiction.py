@@ -10,6 +10,7 @@ class Fanfiction:
         s = None
     def ultimate_function(self, term, fanfiction_dict, n_letters = 200):
         for key, value in fanfiction_dict.items():
+            value = str(value)
             lm = self.train_lm(value, 13)
             self.text = html2text.html2text(self.generate_text(lm, 13, n_letters))
             self.text = self.text[:self.text.rfind(".") + 1]
