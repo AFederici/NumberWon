@@ -11,11 +11,16 @@ class entityDatabase:
         """
         Variables
         ------------------
-            self.ent_dict: Dict[
-                contains lists of string entities, stored as the dict's value
-            self.ent_dict2 is a Dict that contains lists of tuples(Str, int);
-                the first element is entity, the second element is position in raw text
-        self.engine helps entityDatabase do doc_search, which is searching for most recent news about an entity"""
+            self.ent_dict: Dict[Str, list]
+                key: link
+                value: contains lists of string entities for each doc
+            self.ent_dict2: Dict[Str, tuple]
+                key: link
+                value: lists of tuples(Str, int).
+                the first element of each tuple is an entity, the second element is position in the raw text
+            self.engine: MySearchEngine
+                helps entityDatabase do doc_search, which is searching for most recent news about an entity
+        """
 
         self.ent_dict = defaultdict(list)
         self.ent_dict2 = defaultdict(list)
@@ -91,6 +96,20 @@ class entityDatabase:
         return dictionary
 
     def searchNentity(self, qword):
+        # returns the top entity based on position in text
+        """ Parameters
+            ----------
+                qword
+                 pickle stores a dictionary where keys = links and values = raw text of article for each link
+                dictionary: Dict[str, list]
+                 usually self.ent_dict2, either as an empty or partially filled Dict
+
+            Returns
+            ----------
+                dictionary: Dict[str, list]
+                 returns a Dict where all the info from pickle is added to dictionary.
+                 position of the entity in rawtext is stored as the second element of each tuple"""
+
         if self.engine.query(qword) != []:
             topdoc = self.engine.query(qword)[0][0]
             return self.top_entity_pos(qword,self.engine.raw_text[topdoc]) #Megan's method

@@ -42,14 +42,13 @@ def yes_intent():
             ind = 0
         else:
             ind = np.random.randint(0, len(book_pref)-1)
-        title, desc, link = find_genres(book_pref[ind])
-        if title == "":
-            msg = "I'm sorry. I couldn't find anything. Please try again."
-            return statement(msg)
-        else:
-            msg = "I found a book titled {} based on your preference of {}.".format(title,book_pref[ind])
-            print(link)
-            return statement(msg).simple_card(title=title, content=desc)
+        title, desc = find_genres(book_pref[ind])
+    if title == "":
+        msg = "I'm sorry. I couldn't find anything. Please try again."
+        return statement(msg)
+    else:
+        msg = "I found a book titled {} based on your preference of {}.".format(title, book_pref[ind])
+        return statement(msg).simple_card(title=title, content=desc)
 
 @ask.intent("AMAZON.NoIntent")
 def no_intent():
@@ -108,14 +107,16 @@ def find_genres(term):
     if not button is None:
         button = button.get('href')
         button = "https://www.goodreads.com" + str(button)
-    #cover_imgs = soup2.find_all('img')
-    #cover_img = "ci"
-    #for imgs in cover_imgs:
-       # print(str(imgs)[:19])
-        #if str(imgs)[:19] == "<img id=\"coverImage":
-            #cover_img = imgs.get('src')
-    #print(str(cover_img))
-    return title_str.replace("\n", "").strip(), desc_str_2, button
+    print(button)
+    return title_str.replace("\n", "").strip(), desc_str_2
+
+#cover_imgs = soup2.find_all('img')
+#cover_img = "ci"
+#for imgs in cover_imgs:
+    # print(str(imgs)[:19])
+    #if str(imgs)[:19] == "<img id=\"coverImage":
+        #cover_img = imgs.get('src')
+        #print(str(cover_img))
 
 if __name__ == '__main__':
     app.run(debug=True)

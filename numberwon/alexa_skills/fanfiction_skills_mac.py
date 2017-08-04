@@ -69,7 +69,7 @@ def no_intent():
 def char_intent(number): #number type: AMAZON.NUMBER
     session.attributes["Current_User"] = session.attributes["Current_User"].lower()
     p = d.dict[session.attributes["Current_User"]]
-    listing = tuple(p.get_preferences_by_user(session.attributes["Current_User"], key) for key, val in p.pref_dict if "fan" in key)
+    listing = [val2 for key1, val2 in p.pref_dict.items() if "fan" in key1]
     listing = itertools.chain.from_iterable(listing)
     print("preferences: ", listing)
     content = ""
@@ -80,7 +80,7 @@ def char_intent(number): #number type: AMAZON.NUMBER
             lm = f.train_lm(value, 13)
             text = html2text.html2text(f.generate_text(lm, 13, number))
             text = text[:text.rfind(".") + 1]
-            content += term.title() + 'Fanfiction: \n' + value + "\n\n"
+            content += term.title() + 'Fanfiction: \n' + text + "\n\n"
 
     msg = "Pulling up fanfiction for " + session.attributes["Current_User"]
     return statement(msg).simple_card(title='Generated FanFic', content=content)
