@@ -50,7 +50,7 @@ def start_skill():
 
 @ask.intent("AMAZON.YesIntent")
 def yes_intent():
-    msg = "Pulling up user preferences for " + session.attributes["Current_User"]
+    msg = "Pulling up fanfiction for " + session.attributes["Current_User"]
     session.attributes["Current_User"] = session.attributes["Current_User"].lower()
 
     p = d.dict[session.attributes["Current_User"]]
@@ -62,7 +62,7 @@ def yes_intent():
         with open(term + ".txt", "r") as z:
             t = z.read()
             print("first sentence of files :", t[:30])
-            content += term + 'fanfiction: \n' + t + "\n\n"
+            content += term.title() + 'Fanfiction: \n' + t + "\n\n"
 
     return statement(msg) \
         .simple_card(title='Generated FanFic', content=content)
