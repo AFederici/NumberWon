@@ -265,10 +265,10 @@ def wave_batch_generator(batch_size=10,source=Source.DIGIT_WAVES,target=Target.d
 	# input_width=CHUNK*6 # wow, big!!
 	import glob
 	files = glob.glob(path+'*.wav')
-	print(files)
+	# print(files)
 	while True:
 		shuffle(files)
-		print("loaded batch of %d files" % len(files))
+		# print("loaded batch of %d files" % len(files))
 		for wav in files:
 			if not wav.endswith(".wav"):continue
 			if target==Target.digits: labels.append(dense_to_one_hot(int(wav[0])))

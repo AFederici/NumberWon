@@ -1,13 +1,13 @@
 import librosa
-path='data/test/_michael' #default
+path='data/test/' #default
 def formataudio():
-    y, sr = librosa.load(path+'.wav.ig')
-    for i in range(1,17):
+    y, sr = librosa.load(path+path2+'.wav.ig')
+    for i in range(16):
         if i == 4:
-            librosa.output.write_wav('{}_{}.wav'.format(path,i), y, sr)
+            librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y, sr)
         else:
             y_stretch = librosa.effects.time_stretch(y, (i*2/16)+.5)  # .5 to 2.5 factor
-            librosa.output.write_wav('{}_{}.wav'.format(path,i), y_stretch, sr)
+            librosa.output.write_wav('{}_{}_{}.wav'.format(path,path2,i+1), y_stretch, sr)
 if __name__ == '__main__':
-    path = raw_input("Please enter the file to format\n")
+    path2 = raw_input("Please enter the file to format\n")
     formataudio()
