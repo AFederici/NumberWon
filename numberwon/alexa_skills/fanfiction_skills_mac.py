@@ -20,6 +20,7 @@ from profiles.Profiles.UserDatabase import UserDatabase
 f = Fanfiction()
 d = UserDatabase("profiles/profiles_test_database.npy")
 
+save_path = "/Users/megankaye/Desktop/BeaverWorks/Work/NumberWon/numberwon/alexa_skills/fanfiction_files"
 together = list()
 #find all keys that have fan in them
 profiles = [val.find_user_preferences(key) for key, val in d.dict.items() if "fan" in val.pref_dict]
@@ -27,7 +28,7 @@ together.extend(itertools.chain.from_iterable(profiles))
 #together is a list with all the possible fanfiction preferences: NO elements should be "None"
 
 #MEGAN PLEASE DEFIND SAVE_PATH as '.../NumberWon/numberwon/alexa_skills/fanfiction_files
-save_path = #MEGAN INSERT HERE
+#save_path = #MEGAN INSERT HERE
 
 import sys
 for element in together:
@@ -69,12 +70,12 @@ def char_intent(number): #number type: AMAZON.NUMBER
     session.attributes["Current_User"] = session.attributes["Current_User"].lower()
     p = d.dict[session.attributes["Current_User"]]
     listing = tuple(p.get_preferences_by_user(session.attributes["Current_User"], key) for key, val in p.pref_dict if "fan" in key)
-
+    listing = itertools.chain.from_iterable(listing)
     print("preferences: ", listing)
     content = ""
 
     for term in listing:
-        with open(term + ".txt", "r") as z:
+        with open("fanfiction_files/" + str(term) + ".txt", "r", 'cp1252') as z:
             value = str(z.read())
             lm = f.train_lm(value, 13)
             text = html2text.html2text(f.generate_text(lm, 13, number))

@@ -8,9 +8,13 @@ from search.searchEngine import MySearchEngine
 
 class entityDatabase:
     def __init__(self):
-    """
-        self.ent_dict is a Dict that contains lists of string entities, stored as the dict's value
-        self.ent_dict is a Dict that contains lists of tuples(Str, int); the first element is entity, the second element is position in raw text
+        """
+        Variables
+        ------------------
+            self.ent_dict: Dict[
+                contains lists of string entities, stored as the dict's value
+            self.ent_dict2 is a Dict that contains lists of tuples(Str, int);
+                the first element is entity, the second element is position in raw text
         self.engine helps entityDatabase do doc_search, which is searching for most recent news about an entity"""
 
         self.ent_dict = defaultdict(list)

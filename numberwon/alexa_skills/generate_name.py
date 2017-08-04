@@ -90,7 +90,7 @@ def country(country_name):
     s = BeautifulSoup(page, "lxml")
 
     name = s.find(attrs = {"class": "info", "class": "address"}).find("h3").text
-    msg = name
+    msg = "Your randomly generated name is: " + name
     return statement(msg).simple_card(title='Generated Name', content="Your randomly generated name is: \n" + name)
 
 if __name__ == '__main__':
