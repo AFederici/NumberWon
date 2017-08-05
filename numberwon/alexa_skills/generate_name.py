@@ -26,12 +26,10 @@ def start_skill():
 
 @ask.intent("AMAZON.YesIntent")
 def yes_intent():
+    #provides gender options through voice & Alexa app
     msg = "What gender would you like your random name to be? You can choose one gender from the following: "
     link_option = soup.find("select", {"id": "gen"}).find_all("option")
-    #session.attributes["Link Option"] = link_option
-    #print(link_option, "link option")
     value = [x.text for x in link_option]
-    #print(value)
     ele = str("\n".join(value)) # last two lines form the options to be displayed on the AlexaApp card
     msg += str(", ".join(value))#reads the options to the user
 
@@ -44,6 +42,7 @@ def no_intent():
 
 @ask.intent("GenderIntent")
 def gender(gender_name):
+    # stores user's preference for name's gender
     session.attributes["Gender"] = gender_name.lower()
     link_option = soup.find("select", {"id": "gen"}).find_all("option")
     option_value = [opt["value"] for opt in link_option if gender_name.lower() in opt.text.lower()]  # to be inputted into url
@@ -51,15 +50,16 @@ def gender(gender_name):
         return statement("Gender option failed. Try again.")
     session.attributes["Gender_ID"] = option_value[0]
 
+    # provides name set options through voice & Alexa app, mainly Alexa app
     msg = "What name set would you like to have your name originate from? View options in the Alexa App."
     link_option = soup.find("select", {"id": "n"}).find_all("option")
-
     value = [x.text for x in link_option]
     ele = "\n".join(value)
     return question(msg).simple_card(title='Name Set Options', content="You can choose one name set from the following: \n" + ele)
 
 @ask.intent("NameSetIntent")
 def name(name_set):
+    # stores user's preference for name's nameset
     session.attributes["Name Set"] = name_set.lower()
     link_option = soup.find("select", {"id": "n"}).find_all("option")
     option_value = [opt["value"] for opt in link_option if name_set.lower() in opt.text.lower()]  # to be inputted into url
@@ -67,15 +67,16 @@ def name(name_set):
         return statement("Name set option failed. Try again.")
     session.attributes["NameSet_ID"] = option_value[0]
 
+    # provides country of origin options through voice & Alexa app, mainly Alexa app
     msg = "What country would you like to have your name originate from? View options in the Alexa App."
     link_option = soup.find("select", {"id": "c"}).find_all("option")
-
     value = [x.text for x in link_option]
     ele = "\n".join(value)
     return question(msg).simple_card(title='Country Options', content="You can choose one country from the following: \n" + ele)
 
 @ask.intent("CountryIntent")
 def country(country_name):
+    # stores user's preference for name's country of origin
     session.attributes["Country"] = country_name.lower()
     link_option = soup.find("select", {"id": "c"}).find_all("option")
     option_value = [opt["value"] for opt in link_option if
@@ -84,11 +85,13 @@ def country(country_name):
         return statement("Country option failed. Try again.")
     session.attributes["Country_ID"] = option_value[0]
 
+    #creates BeautifulSoup out of website request
     site = "http://www.fakenamegenerator.com/gen-" + session.attributes["Gender_ID"] + "-" + session.attributes["NameSet_ID"] + "-" + session.attributes["Country_ID"] + ".php"
     req = Request(site, headers=hdr)
     page = urlopen(req)
     s = BeautifulSoup(page, "lxml")
 
+    #finds the random name within the soup
     name = s.find(attrs = {"class": "info", "class": "address"}).find("h3").text
     msg = "Your randomly generated name is: " + name
     return statement(msg).simple_card(title='Generated Name', content="Your randomly generated name is: \n" + name)

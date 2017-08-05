@@ -1,0 +1,806 @@
+Name: Profiles
+invocation: test my profiles
+ngrok: https://d9858b4e.ngrok.io
+
+
+{
+  "intents": [
+    {
+      "intent": "YesIntent"
+    },
+    {
+      "intent": "NoIntent"
+    },
+    {
+      "intent": "CurrentUserIntent"
+    },
+    {
+      "intent": "AddUserIntent"
+    },
+    {
+      "intent": "RetakePicIntent"
+    },
+    {
+      "intent": "AddVoiceIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "nameslot",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ],
+      "intent": "NameIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "remnameslot",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ],
+      "intent": "RemoveUserIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        }
+      ],
+      "intent": "GetPreferenceIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "preferenceslot",
+          "type": "AMAZON.LITERAL"
+        }
+      ],
+      "intent": "AddPreferenceIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "stockpreferenceslot",
+          "type": "TYPE_OF_STOCK"
+        }
+      ],
+      "intent": "AddPreferenceStockIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "bookpreferenceslot",
+          "type": "AMAZON.Book"
+        }
+      ],
+      "intent": "AddPreferenceBookIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "charpreferenceslot",
+          "type": "AMAZON.FictionalCharacter"
+        }
+      ],
+      "intent": "AddPreferenceCharIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "tvpreferenceslot",
+          "type": "AMAZON.TVSeries"
+        }
+      ],
+      "intent": "AddPreferenceTVIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "preferenceslot",
+          "type": "AMAZON.LITERAL"
+        }
+      ],
+      "intent": "RemovePreferenceIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "stockpreferenceslot",
+          "type": "TYPE_OF_STOCK"
+        }
+      ],
+      "intent": "RemovePreferenceStockIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "bookpreferenceslot",
+          "type": "AMAZON.Book"
+        }
+      ],
+      "intent": "RemovePreferenceBookIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "charpreferenceslot",
+          "type": "AMAZON.FictionalCharacter"
+        }
+      ],
+      "intent": "RemovePreferenceCharIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "categoryslot",
+          "type": "AMAZON.LITERAL"
+        },
+        {
+          "name": "tvpreferenceslot",
+          "type": "AMAZON.TVSeries"
+        }
+      ],
+      "intent": "RemovePreferenceTVIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "recustompicslot",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ],
+      "intent": "RetakeCustomPicIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "newuserlot",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ],
+      "intent": "SwitchUserIntent"
+    }
+  ]
+}
+
+custom slot type: TYPE_OF_STOCK
+Disney
+3M
+ACE Limited
+Abbott Laboratories
+Abercrombie and Fitch
+Abercrombie and Fitchmpany
+Accenture
+Adobe Systems
+Advanced Micro Devices
+AES
+Aetna
+AFLAC
+Agilent Technologies
+AGL Resources
+Air Products and Chemicals
+Airgas
+Akamai Technologies
+Alcoa
+Alexion Pharmaceuticals
+Allegheny Technologies
+Allergan
+Allstate
+Alpha Natural Resources
+Altera
+Altria Group
+Amazon
+Amazon.com
+Ameren
+American Electric Power
+American Express
+American Intl Group
+American Tower
+American Tower A
+Ameriprise Financial
+AmerisourceBergen
+Amgen
+Amphenol
+Amphenol A
+Anadarko Petroleum
+Analog Devices
+Aon plc
+Apacheoration
+Apartment Investment & Mgmt
+Apollo Group
+Apple
+Applied Materials
+Archer-Daniels-Midland
+Assurant
+AT&T
+Autodesk
+Automatic Data Processing
+AutoNation
+AutoZone
+AvalonBaymmunities
+Avery Dennison
+Avon Products
+Baker Hughes
+Ball
+Bank of America
+The Bank of New York Mellon
+Bard
+Baxter International
+BB&Toration
+Beam
+Becton Dickinson
+Bed Bath & Beyond
+Bemismpany
+Berkshire Hathaway
+Best Buy
+Big Lots
+BIOGEN IDEC
+BlackRock
+Block H&R
+BMC Software
+Boeingmpany
+BorgWarner
+Boston Properties
+Boston Scientific
+Bristol-Myers Squibb
+Broadcomoration
+Brown-Formanoration
+C. H. Robinson Worldwide
+CA
+Cablevision Systems
+Cabot Oil and Gas
+Cameron International
+Campbell Soup
+Capital One Financial
+Cardinal Health
+Carefusion
+Carmax
+Carnival
+Caterpillar
+CBRE Group
+CBS
+Celgene
+CenterPoint Energy
+CenturyLink
+Cerner
+CF Industries Holdings
+Charles Schwab
+Chesapeake Energy
+Chevron
+Chipotle Mexican Grill
+Chubb
+CIGNA
+Cincinnati Financial
+Cintasoration
+Cisco Systems
+Citigroup
+Citrix Systems
+Cliffs Natural Resources
+Clorox
+CME Group
+CMS Energy
+Coach
+Cocala
+Coca-Cola Enterprises
+Cognizant Technology Solutions
+Colgate-Palmolive
+Comcast
+Comerica
+Computer Sciences
+ConAgra Foods
+ConocoPhillips
+CONSOL Energy
+Consolidated Edison
+Constellation Brands
+Cooper Industries
+Corning
+Costco
+Coventry Health Care
+Covidien plc
+Crown Castle International
+CSX
+Cummins
+CVS Caremark
+D. R. Horton
+Danaher
+Darden Restaurants
+DaVita
+Dean Foods
+Deere and Co
+Dell
+Denbury Resources
+Dentsply International
+Devon Energy
+DeVry
+Diamond Offshore Drilling
+DirecTV
+Discover Financial Services
+Discoverymmunications
+Dollar Tree
+Dominion Resources
+Donnelley and Sons
+R.R. and Sons
+Dover
+Dow Chemical
+Dr Pepper Snapple Group
+DTE Energy
+Du Pont
+Duke Energy
+Dun and Bradstreet
+E-Trade
+Eastman Chemical
+Eaton
+eBay
+Ecolab
+Edison International
+Edwards Lifesciences
+Electronic Arts
+EMC
+Emerson Electric
+Ensco plc
+Entergy
+EOG Resources
+EQToration
+Equifax
+Equity Residential
+Estee Lauders
+Exelon
+Expedia
+Expeditors International
+Express Scripts
+Exxon Mobil
+F5 Networks
+Family Dollar Stores
+Fastenal
+Federated Investors
+FedExoration
+Fidelity National Information Services
+Fifth Third Bancorp
+First Horizon National
+First Solar
+FirstEnergy
+Fiserv
+FLIR Systems
+Flowserveoration
+Fluor
+FMCoration
+FMC Technologies
+Ford Motor
+Forest Laboratories
+Fossil
+Franklin Resources
+Freeport-McMoran Cp and Gld
+Frontiermmunications
+GameStop
+Gannett
+Gap
+The Gap
+General Dynamics
+General Electric
+General Mills
+Genuine Parts
+Genworth Financial
+Gilead Sciences
+Goldman Sachs
+Goldman Sachs Group
+Goodyear
+Goodyear Tire and Rubber
+Google
+Grainger
+W.W.
+Halliburton
+Harley-Davidson
+Harman International Industries
+Harrisoration
+Hartford Financial Svc.Gp.
+Hasbro
+HCP
+Health Care REIT
+Heinz
+H.J.
+Helmerich and Payne
+Hessoration
+Hewlett-Packard
+Home Depot
+Honeywell International
+Hormel Foods
+Hospira
+Host Hotels and Resorts
+Hudson City Bancorp
+Humana
+Huntington Bancshares
+Illinois Tool Works
+Ingersoll-Rand PLC
+Integrys Energy Group
+Intel
+IntercontinentalExchange
+International Bus Machines
+International Flav/Frag
+International Game Technology
+International Paper
+Interpublic Group
+Intuit
+Intuitive Surgical
+Invesco Ltd.
+Iron Mountainorporated
+Jabil Circuit
+Jacobs Engineering Group
+JDS Uniphase
+Johnson and Johnson
+Johnsonntrols
+Joy Global
+JPMorgan Chase and Co
+Juniper Networks
+Kellogg
+KeyCorp
+Kimberly-Clark
+Kimco Realty
+Kinder Morgan
+KLA-Tencor
+Kohls
+Kraft Foods-A
+Kroger
+L-3mmunications Holdings
+Laboratory of America Holding
+Lam Research
+Legg Mason
+Leggett and Platt
+Lennar
+Leucadia National
+Lexmark International
+Life Technologies
+Lilly and Co
+Eli and Co
+Limited Brands
+Lincoln National
+Linear Technology
+Lockheed Martin
+Loews
+Lorillard
+Lowes
+LSIoration
+M&T Bank
+Macys
+Marathon Oil
+Marathon Petroleum
+Marriott International
+Marsh and McLennan
+Masco
+Mastercard
+Mattel
+McCormick and Co
+McDonalds
+McGraw-Hill
+McKesson
+Mead Johnson
+MeadWestvacooration
+Medtronic
+Merck and Co
+MetLife
+MetroPCSmmunications
+Microchip Technology
+Micron Technology
+Microsoft
+Molex
+Molsonors Brewingmpany
+Monsanto
+Monster Beverage
+Moodys
+Morgan Stanley
+The Mosaicmpany
+Motorola Solutions
+Murphy Oil
+Mylan
+Nabors Industries Ltd.
+NASDAQ OMX Group
+National Oilwell Varco
+NetApp
+NetFlix
+Newell Rubbermaid
+Newfield Exploration
+Newmont Mining (Hldg.)
+Newsoration
+NextEra Energy Resources
+NIKE
+NiSource
+Noble
+Noble Energy
+Nordstrom
+Norfolk Southern
+Northern Trust
+Northrop Grumman
+Northeast Utilities
+NRG Energy
+Nucor
+Nvidiaoration
+NYSE Euronext
+O Reilly Automotive
+Occidental Petroleum
+Omnicom Group
+ONEOK
+Oracle
+Owens-Illinois
+PACCAR
+Pall
+Parker-Hannifin
+Pattersonmpanies
+Paychex
+Peabody Energy
+Penney (J.C.)
+Peoples United Bank
+Pepco Holdings
+PepsiCo
+PerkinElmer
+Perrigo
+Pfizer
+PG&E
+Philip Morris International
+Phillips 66
+Pinnacle West Capital
+Pioneer Natural Resources
+Pitney-Bowes
+Plum Creek Timber
+PNC Financial Services
+Polo Ralph Lauren
+PPG Industries
+PPL
+Praxair
+Precision Castparts
+Priceline.com
+Principal Financial Group
+Procter & Gamble
+Progressive
+ProLogis
+Prudential Financial
+Public Serv. Enterprise
+Public Storage
+Pulte Homes
+QEP Resources
+Quanta Services
+QUALCOMM
+Quest Diagnostics
+Range Resources
+Raytheon
+Red Hat
+Regions Financial
+Republic Services
+Reynolds American
+Robert Half International
+Rockwell Automation
+Rockwellllins
+Roper Industries
+Ross Stores
+Rowans.
+Ryder System
+Safeway
+SAIC
+Salesforce.com
+SanDiskoration
+SCANA
+Schlumberger Ltd.
+Scripps Networks Interactive
+Seagate Technology
+Sealed Air(New)
+Sears Holdingsoration
+Sempra Energy
+Sherwin-Williams
+Sigma-Aldrich
+Simon Property Group
+SLMoration
+Smucker
+Snap-On
+Southern
+Southwest Airlines
+Southwestern Energy
+Spectra Energy
+Sprint Nextel
+St Jude Medical
+Stanley Black & Decker
+Staples
+Starbucks
+Starwood Hotels & Resorts
+State Street
+Stericycle
+Stryker
+Sunoco
+SunTrust Banks
+Symantec
+Sysco
+T. Rowe Price Group
+Target
+TEnnectivity Ltd
+TECO Energy
+Tenet Healthcare
+Teradata
+Teradyne
+Tesoro Petroleum
+Texas Instruments
+Textron
+The Hersheympany
+The Travelersmpanies
+Thermo Fisher Scientific
+Tiffany and Co
+Time Warner
+Time Warner Cable
+Titanium Metals
+TJXmpanies
+Torchmark
+Total System Services
+TripAdvisor
+Tyson Foods
+Tyco International
+U.S. Bancorp
+Union Pacific
+United Health Group
+United Parcel Service
+United States Steel
+United Technologies
+Unum Group
+Urban Outfitters
+V.F.
+Valero Energy
+Varian Medical Systems
+Ventas
+Verisign
+Verizonmmunications
+Viacom
+Visa
+Vornado Realty Trust
+Vulcan Materials
+Wal-Mart Stores
+Walgreen
+Walt Disney
+Washington Post
+Waste Management
+Watersoration
+Watson Pharmaceuticals
+WellPoint
+Wells Fargo
+Western Digital
+Western Union
+Weyerhaeuser
+Whirlpool
+Whole Foods Market
+Williamss
+Windstreamoration
+Wisconsin Energyoration
+WPX Energy
+Wyndham Worldwide
+Wynn Resorts Ltd
+Xcel Energy
+Xerox
+Xilinx
+XL Capital
+Xylem
+Yahoo
+Yum! Brands
+Zimmer Holdings
+
+YesIntent yes
+YesIntent yeah
+YesIntent ok
+YesIntent sure
+NoIntent no
+NoIntent no thanks
+NoIntent nope
+CurrentUserIntent who is the current user
+CurrentUserIntent check current user
+CurrentUserIntent check the current user
+CurrentUserIntent current user
+CurrentUserIntent check user
+AddUserIntent add a user
+AddUserIntent new user
+RetakePicIntent retake my picture
+RetakePicIntent retake picture
+AddVoiceIntent add voice to my profile
+NameIntent {nameslot}
+NameIntent my name is {nameslot}
+RemoveUserIntent delete {remnameslot}
+RemoveUserIntent remove user {remnameslot}
+RemoveUserIntent delete user {remnameslot}
+RemoveUserIntent remove {remnameslot}
+GetPreferenceIntent {news|categoryslot} preferences
+GetPreferenceIntent tell me my {news|categoryslot} preferences
+GetPreferenceIntent what are my {news|categoryslot} preferences
+GetPreferenceIntent what are my preferences for {news|categoryslot}
+GetPreferenceIntent tell me my preferences for {news|categoryslot}
+GetPreferenceIntent {fanfiction|categoryslot} preferences
+GetPreferenceIntent tell me my {fanfiction|categoryslot} preferences
+GetPreferenceIntent what are my {fanfiction|categoryslot} preferences
+GetPreferenceIntent what are my preferences for {fanfiction|categoryslot}
+GetPreferenceIntent tell me my preferences for {fanfiction|categoryslot}
+GetPreferenceIntent {stocks|categoryslot}
+GetPreferenceIntent tell me my {stocks|categoryslot}
+GetPreferenceIntent what are my {stocks|categoryslot}
+GetPreferenceIntent what are my preferences for {stocks|categoryslot}
+GetPreferenceIntent tell me my preferences for {stocks|categoryslot}
+GetPreferenceIntent {stock|categoryslot} preferences
+GetPreferenceIntent tell me my {stock|categoryslot} preferences
+GetPreferenceIntent what are my {stock|categoryslot} preferences
+GetPreferenceIntent what are my preferences for {stock|categoryslot}
+GetPreferenceIntent tell me my preferences for {stock|categoryslot}
+AddPreferenceIntent add {sports|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {entertainment|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {politics|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {buisness|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {company|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {domestic|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {enviornment|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {health|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {lifestyle|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {most read|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {oddly enough|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {people|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {science|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {technology|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {wealth|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {world|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceIntent add {world news|preferenceslot} to my {news|categoryslot} preferences
+AddPreferenceStockIntent add {stockpreferenceslot} to my {stock|categoryslot} preferences
+AddPreferenceStockIntent add {stockpreferenceslot} to my {stocks|categoryslot}
+AddPreferenceStockIntent add {stockpreferenceslot} to my {stocks|categoryslot}
+AddPreferenceBookIntent add {bookpreferenceslot} to my {fanfiction|categoryslot} preferences
+AddPreferenceCharIntent add {charpreferenceslot} to my {fanfiction|categoryslot} preferences
+AddPreferenceTVIntent add {tvpreferenceslot} to my {fanfiction|categoryslot} preferences
+RemovePreferenceIntent remove {sports|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {entertainment|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {politics|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {buisness|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {company|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {domestic|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {enviornment|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {health|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {lifestyle|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {most read|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {oddly enough|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {people|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {science|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {technology|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {wealth|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {world|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceIntent remove {world news|preferenceslot} from my {news|categoryslot} preferences
+RemovePreferenceStockIntent remove {stockpreferenceslot} from my {stock|categoryslot} preferences
+RemovePreferenceBookIntent remove {bookpreferenceslot} from my {fanfiction|categoryslot} preferences
+RemovePreferenceCharIntent remove {charpreferenceslot} from my {fanfiction|categoryslot} preferences
+RemovePreferenceTVIntent remove {tvpreferenceslot} from my {fanfiction|categoryslot} preferences
+RetakeCustomPicIntent retake picture for {recustompicslot}
+SwitchUserIntent switch profile to {newuserlot}
+SwitchUserIntent switch to {newuserlot}

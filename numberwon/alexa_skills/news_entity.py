@@ -32,7 +32,7 @@ def start_skill():
 def get_entity(EntityName):
     """
     :param EntityName:
-    :return:
+    :return: list of top 5 tuples most relevant to EntityName, separated by comma and space
     """
     EntityName = EntityName.lower()
     c = edatb.top_entity_dict(EntityName, most_c=5)
@@ -51,6 +51,7 @@ def no_intent():
 
 @ask.intent("EntIntent")
 def ent_intent(EntTitle):
+    #says top 5 entities to user and records results in Alexa App
     entity = get_entity(EntTitle)
     print(entity, "my entity")
     print(EntTitle, "ÉntTitle")

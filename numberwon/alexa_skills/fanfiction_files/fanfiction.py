@@ -9,6 +9,16 @@ class Fanfiction:
     def __init__(self):
         s = None
     def ultimate_function(self, term, fanfiction_dict, n_letters = 200):
+        """
+        :param term: str
+            topic of fanfiction, i.e. "harry potter"
+        :param fanfiction_dict: Dict[Str, Str]
+            key = term
+            value = all raw text from top fanfiction result
+        :param n_letters: int
+            number of characters in returned fanfiction
+        :return: saves computer-generated fanfic to a txt file
+        """
         for key, value in fanfiction_dict.items():
             value = str(value)
             lm = self.train_lm(value, 13)
@@ -21,19 +31,19 @@ class Fanfiction:
         """ samples "top" fanfictions from Wattpad and stores them in a dictionary.
         #warning: runs really slow
 
-                    Parameters
-                    -----------
-                    term: String
-                        relevant term, category, or genre of which you sample off Wattpad
+        Parameters
+        -----------
+        term: String
+            relevant term, category, or genre of which you sample off Wattpad
 
-                    optional- top: int
-                        specifics the number of fanfictions you sample, up to 15
+        optional- top: int
+            specifics the number of fanfictions you sample, up to 15
 
-                    Returns
-                    -------
-                    Dict[String, String] of raw texts
-                        key: term (i.e. "harry potter")
-                        value: raw text of all fanfictions sampled
+        Returns
+        -------
+        Dict[String, String] of raw texts
+            key: term (i.e. "harry potter")
+            value: raw text of all fanfictions sampled
 
         """
         site = "https://www.wattpad.com/search/" + term
