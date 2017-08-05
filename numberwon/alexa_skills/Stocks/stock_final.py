@@ -20,55 +20,59 @@ class Stocks():
         self.grad = {}
         self.grad2 = {}
         self.tickers = []
-        self.first_date = ''
-        self.last_date =  ''
+        #most recent
+        self.first_date = '2017-08-04'
+        self.last_date =  '2016-08-04'
         self.my_stocks = []
     def fill(self):
-        self.close = pickle.load( open('sp500.pickle', "rb"))
-        self.cos_trans = pickle.load( open('cos_trans.pickle', "rb"))
-        self.mov_avg = pickle.load( open('moving_averages.pickle', "rb"))
-        self.comp_tick = pickle.load( open('tick_and_comp.pickle', "rb"))
-        self.grad = pickle.load( open('grads.pickle', "rb"))
-        self.grad2 = pickle.load( open('2grads.pickle', "rb"))
+        self.close = pickle.load( open('Stocks/sp500.pickle', "rb"))
+        self.cos_trans = pickle.load( open('Stocks/cos_trans.pickle', "rb"))
+        self.mov_avg = pickle.load( open('Stocks/moving_averages.pickle', "rb"))
+        self.comp_tick = pickle.load( open('Stocks/tick_and_comp.pickle', "rb"))
+        self.grad = pickle.load( open('Stocks/grads.pickle', "rb"))
+        self.grad2 = pickle.load( open('Stocks/2grads.pickle', "rb"))
         self.tickers = self.mov_avg.keys()
         self.first_date = self.close['AAPL'].keys()[-1]
         self.last_date = self.close['AAPL'].keys()[0]
 
     def set_my_stocks(self, list_of_stock):
         self.my_stocks = list_of_stock
+        
     def get_my_stocks(self):
         return self.my_stocks
+    
     def add_preference(self, stock):
         self.my_stocks.append(stock)
 
-    def new_company(self, company, ticker):
-        self.comp_tick[company] = ticker
-        self.tickers.append(ticker)
+    def new_company_list(self, comps, tickers):
+        insert = list(zip(comps, tickers))
+        for i in insert:
+            self.comp_tick[i[0]] = i[1]
+            self.tickers.append(i[1])
         pickle.dump(self.comp_tick, open('tick_and_comp.pickle', "wb") )
-        self.datacollection(tickers = ticker)
-        self.moving_averages(ticker)
-        self.dct(ticker)
-        self.gradients(ticker)
+            
+    def populate(self):
+        self.datacollection(self.tickers)
+        self.moving_averages(self.tickers)
+        self.dct(self.tickers)
+        self.gradients(self.tickers)
 
-    def datacollection(self, tickers = None ): 
+    def datacollection(self, tickers): 
         #strings in the form '2016-7-30'
-        self.first_date = '2016-08-04'
-        self.last_date = '2017-08-04'
         data_source = 'google'
         # We would like all available data from 01/01/2000 until 12/31/2016.
-        start_date = '2016-08-04'
-        end_date = '2017-08-04'
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
-        panel_data = data.DataReader(tickers, data_source, start_date, end_date)
+        panel_data = data.DataReader(tickers, data_source, self.last_date, self.first_date)
         # Getting just the adjusted closing prices. This will return a Pandas DataFrame
         # The index in this DataFrame is the major index of the panel_data.
         close = panel_data['Close']
-        all_weekdays = pd.date_range(start=start_date, end=end_date, freq='B')
+        all_weekdays = pd.date_range(start=self.last_date, end=self.first_date, freq='B')
         original_close = close.reindex(all_weekdays)
         original_close.fillna(method = 'bfill', inplace=True)
         for tick in tickers:
             self.close[tick] = original_close[tick]
         pickle.dump(self.close, open('sp500.pickle', "wb") )
+        
     def moving_averages(self, tickers):
         for i in tickers:
             l = []
@@ -166,6 +170,7 @@ class Stocks():
         print3 = self.mov_avg[symbol]
         ##################################### 
         return (print1, print2, print2days, print3)
+    
     def my_companies(self):
         all_stocks = []
         for stock in self.my_stocks:
