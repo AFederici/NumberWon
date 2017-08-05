@@ -12,6 +12,11 @@ from profile_skills import update_current_user
 app = Flask(__name__)
 ask = Ask(app, '/')
 
+#TO DO:
+#check if site is bad
+#incorporate links/book covers?
+#document
+
 ud = UserDatabase("profiles/profiles_test_database.npy")
 
 @app.route('/')
@@ -57,20 +62,23 @@ def no_intent():
 
 def find_genres(term):
     """ """
+    #get site
     term = term.strip()
     term = term.lower()
     site = "https://www.goodreads.com/genres/" + term
-    #print(site)
     hdr = {'User-Agent': 'Mozilla/5.0'}
     req = Request(site, headers=hdr)
     page = urlopen(req)
     soup = BeautifulSoup(page, "lxml")
+    #check if site is bad
     url = []
+    #get random book
     for link in soup.find_all('a'):
         if link.get('href')[:11] == "/book/show/": 
             url.append("https://www.goodreads.com"+ str(link.get('href')))
     ind = np.random.randint(0, len(url)-1)
     req2 = Request(url[ind], headers=hdr)
+    #get title of book
     page2 = urlopen(req2)
     soup2 = BeautifulSoup(page2, "lxml")
     title = str(soup2.find(id="bookTitle"))
@@ -83,6 +91,7 @@ def find_genres(term):
             title_str += title[i]
         if title[i] == ">" and not foundclose:
             foundclose = True
+    #description     
     desc = soup2.find_all("span")
     desc_str = ""
     for tags in desc:
@@ -102,7 +111,8 @@ def find_genres(term):
         if foundclose:
             desc_str_2 += desc_str[x]
         if desc_str[x] == ">" and not foundclose:
-            foundclose = True 
+            foundclose = True
+    #buy link
     button = soup2.find(id="buyButton")
     if not button is None:
         button = button.get('href')
