@@ -27,6 +27,7 @@ profiles = [val.find_user_preferences(key) for key, val in d.dict.items() if "fa
 together.extend(itertools.chain.from_iterable(profiles))
 #together is a list with all the possible fanfiction preferences: NO elements should be "None"
 
+#finds fanfiction based on all the user preferences and stores them in fanfiction_files
 import sys
 for element in together:
     sys.path.insert(0, save_path)
@@ -41,6 +42,7 @@ def homepage():
 
 @ask.launch
 def start_skill():
+    #update_current_user takes a picture and identifies you
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = None
     update_current_user()
@@ -64,6 +66,18 @@ def no_intent():
 
 @ask.intent("CharacterIntent")
 def char_intent(number): #number type: AMAZON.NUMBER
+    """
+    :param number: int, AMAZON.NUMBER
+        number of characters of text to generate
+    :return: fanfiction as an Alexa card
+
+    Variables:
+    d = UserDatabase
+        d.dict = Dict[Str, Profile]; d.dict maps users to their profile instance
+    p = Profile
+        p.pref_dict - Dict[Str, list]
+        p.pref_dict maps a preference (key) to a list of preferences (value)
+    """
     session.attributes["Current_User"] = session.attributes["Current_User"].lower()
     p = d.dict[session.attributes["Current_User"]]
     listing = [val2 for key1, val2 in p.pref_dict.items() if "fan" in key1]
