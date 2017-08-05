@@ -2,7 +2,7 @@
 #!/usr/local/bin/python
 #!/usr/bin/env PYTHONIOENCODING="utf-8" python
 import os
-
+import tensorflow as tf
 import tflearn
 import vrecog.speech_data as data
 
@@ -30,6 +30,7 @@ def train():
 	print("speakers",speakers)
 
 	# Classification
+	tf.reset_default_graph()
 	tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
 
 	net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
@@ -45,22 +46,23 @@ def train():
 	model.save('vrecog/vrecog.tflearn')
 
 def test(fname):
-	# speakers = data.get_speakers(path)
-	# number_classes=len(speakers)
-	# print("speakers",number_classes,speakers)
-	#
-	# # Classification
-	# tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
-	#
-	# net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
-	# net = tflearn.fully_connected(net, 64)
-	# net = tflearn.dropout(net, 0.5)
-	# net = tflearn.fully_connected(net, number_classes, activation='softmax')
-	# net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
-	# modelb = tflearn.DNN(net)
-	# modelb.load('vrecog/vrecog.tflearn')
+	speakers = data.get_speakers(path)
+	number_classes=len(speakers)
+	print("speakers",number_classes,speakers)
+
+	# Classification
+	tf.reset_default_graph()
+	tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
+
+	net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
+	net = tflearn.fully_connected(net, 64)
+	net = tflearn.dropout(net, 0.5)
+	net = tflearn.fully_connected(net, number_classes, activation='softmax')
+	net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
+	modelb = tflearn.DNN(net)
+	modelb.load('vrecog/vrecog.tflearn')
 	result=data.load_wav_file(path+fname)
-	result=model.predict([result])
+	result=modelb.predict([result])
 	print(result)
 	result=data.one_hot_to_item(result,speakers)
 	print("predicted speaker for %s : result = %s "%(fname,result))
