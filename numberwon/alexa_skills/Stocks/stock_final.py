@@ -1,4 +1,3 @@
-from yahoo_finance import Share
 from pprint import pprint
 from pandas_datareader import data
 import matplotlib.pyplot as plt

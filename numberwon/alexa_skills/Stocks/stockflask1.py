@@ -9,7 +9,7 @@ import numpy as np
 app = Flask(__name__)
 ask = Ask(app, '/')
 
-from stocktest import Stocks 
+from stock_final import Stocks 
 #from profile_skills import update_current_user
 #import itertools
 #from profiles.Profiles.Profile import Profile
