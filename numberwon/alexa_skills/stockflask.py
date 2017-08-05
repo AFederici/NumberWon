@@ -31,7 +31,7 @@ def homepage():
 @ask.launch
 def start_skill():
     if not "Current_User" in session.attributes:
-        session.attributes["Current_User"] = "aj"
+        session.attributes["Current_User"] = None
     update_current_user()
     print (session.attributes["Current_User"])
     if session.attributes["Current_User"] is None:
@@ -39,7 +39,9 @@ def start_skill():
         return question(msg)
     else:
         s.set_my_stocks(ud.get_preferences_by_user(session.attributes["Current_User"], 'stocks'))
-        get_stock("my stocks")
+        print(s.get_my_stocks())
+        msg = "Hello. Are you interested in hearing about Stocks"
+        return question(msg)
 
 @ask.intent("AMAZON.YesIntent")
 def yes_intent():
@@ -54,9 +56,13 @@ def no_intent():
 @ask.intent("StockIntent")
 def get_stock(stocks):
     if stocks == "my list" or stocks == "my stocks":
+        print('hi')
         session.attributes['company_names'] = s.get_my_stocks()
+        print(session.attributes['company_names'])
         numbs = s.my_companies()
-        comp_closes = zip(session.attributes['company_names'], numbs)
+        print(numbs)
+        comp_closes = list(zip(session.attributes['company_names'], numbs))
+        print(comp_closes)
         msg = ""
         for a,b in comp_closes:
             msg += "{} closed at ${}. ".format(a,b[0])
@@ -65,7 +71,7 @@ def get_stock(stocks):
         numbs = s.search(stocks)
         session.attributes['company_names'] = stocks
         msg = "The recent close for {} was ${}. What else would you like to hear about? Ask for help if you want some ideas".format(session.attributes['company_names'] , numbs[0])
-    return question(msg)
+        return question(msg)
 
 @ask.intent("InformationIntent")
 def get_info(information):

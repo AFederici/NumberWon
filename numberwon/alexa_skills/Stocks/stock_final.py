@@ -171,7 +171,9 @@ class Stocks():
             print(self.first_date)
             print2 = self.close[symbol].max()
             #the last this many days
-            print2days = (self.first_date - self.last_date).days
+            s = dt.datetime.strptime(self.first_date, '%Y-%m-%d')
+            l = dt.datetime.strptime(self.last_date, '%Y-%m-%d')
+            print2days = (s - l).days
 
 
         print3 = self.mov_avg[symbol]

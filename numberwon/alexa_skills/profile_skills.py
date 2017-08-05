@@ -255,12 +255,12 @@ def update_current_user():
         desc = f.get_one_face_descriptor_vector()
         temp_face_vectors = desc
         user = ud.compare_faces(desc)
-        #record_to_file("temp",train=False) #create data
-        #v_user = str(speaker_classifier_tflearn.test("temp.wav.ig")) #call whenevr want to classify
+        record_to_file("temp",train=False) #create data
+        v_user = str(speaker_classifier_tflearn.test("temp.wav.ig")) #call whenevr want to classify
         print("image: " + str(user))
-       # print("voice: " + str(v_user))
-        #if user is None:
-            #user = v_user
+        print("voice: " + str(v_user))
+        if user is None:
+            user = v_user
         session.attributes["Current_User"] = user
 
 @ask.intent("CurrentUserIntent")
