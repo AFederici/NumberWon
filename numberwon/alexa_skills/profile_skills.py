@@ -74,7 +74,7 @@ def add_pref_intent(categoryslot, preferenceslot):
     else:
         ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, preferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("AddPreferenceStockIntent")
@@ -93,7 +93,7 @@ def add_pref_intent(categoryslot, stockpreferenceslot):
     else:
         ud.add_preferences_by_user(session.attributes["Current_User"], "stocks", stockpreferenceslot)
         msg = "Your preferences for {} are now {}".format("stocks", ud.get_preferences_by_user(session.attributes["Current_User"], "stocks"))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("AddPreferenceBookIntent")
@@ -112,7 +112,7 @@ def add_pref_intent(categoryslot, bookpreferenceslot):
     else:
         ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, bookpreferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("AddPreferenceCharIntent")
@@ -131,7 +131,7 @@ def add_pref_intent(categoryslot, charpreferenceslot):
     else:
         ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, charpreferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("AddPreferenceTVIntent")
@@ -149,7 +149,7 @@ def add_pref_intent(categoryslot, TVpreferenceslot):
     else:
         ud.add_preferences_by_user(session.attributes["Current_User"], categoryslot, TVpreferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("RemovePreferenceIntent")
@@ -167,7 +167,7 @@ def remove_pref_intent(categoryslot, preferenceslot):
     else:
         ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, preferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("RemovePreferenceStockIntent")
@@ -185,7 +185,7 @@ def remove_pref_intent(categoryslot, stockpreferenceslot):
     else:
         ud.remove_preferences_by_user(session.attributes["Current_User"], "stocks", stockpreferenceslot)
         msg = "Your preferences for {} are now {}".format("stocks", ud.get_preferences_by_user(session.attributes["Current_User"], "stocks"))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("RemovePreferenceBookIntent")
@@ -203,7 +203,7 @@ def remove_pref_intent(categoryslot, bookpreferenceslot):
     else:
         ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, bookpreferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("RemovePreferenceCharIntent")
@@ -221,7 +221,7 @@ def remove_pref_intent(categoryslot, charpreferenceslot):
     else:
         ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, charpreferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 @ask.intent("RemovePreferenceTVIntent")
@@ -239,7 +239,7 @@ def remove_pref_intent(categoryslot, TVpreferenceslot):
     else:
         ud.remove_preferences_by_user(session.attributes["Current_User"], categoryslot, TVpreferenceslot)
         msg = "Your preferences for {} are now {}".format(categoryslot, ud.get_preferences_by_user(session.attributes["Current_User"], categoryslot))
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 
@@ -257,7 +257,7 @@ def update_current_user():
         temp_face_vectors = desc
         user = ud.compare_faces(desc)
         record_to_file("temp",train=False) #create data
-        v_user = speaker_classifier_tflearn.test("temp.wav.ig") #call whenevr want to classify
+        v_user = str(speaker_classifier_tflearn.test("temp.wav.ig")) #call whenevr want to classify
         print("image: " + str(user))
         print("voice: " + str(v_user))
         if user is None:
@@ -305,7 +305,7 @@ def yes_intent():
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
         record_to_file(temp_name)
         speaker_classifier_tflearn.train()
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
         session.attributes["Current_User"] = temp_name
         temp_name = ""
         return statement(msg)
@@ -315,7 +315,7 @@ def yes_intent():
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
         record_to_file(temp_name)
         speaker_classifier_tflearn.train()
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
         session.attributes["Current_User"] = temp_name
         temp_name = ""
         return statement(msg)
@@ -329,7 +329,7 @@ def yes_intent():
             del ud.dict[temp_name]
         del_user = False
         temp_name = ""
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
         return statement(msg)
     else:
         msg = "I do not understand. Please try again."
@@ -439,7 +439,7 @@ def re_custom_pic_intent(recustompicslot):
         new_face_vectors = f.get_one_face_descriptor_vector()
         ud.get(recustompicslot).face_vectors = new_face_vectors
         msg = "The picture for user {} was successfully updated.".format(recustompicslot)
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     else:
         msg = "Could not find user in database. Please try again or add the user."
     return statement(msg)
@@ -454,7 +454,7 @@ def re_pic_intent():
         new_face_vectors = f.get_one_face_descriptor_vector()
         ud.get(session.attributes["Current_User"]).face_vectors = new_face_vectors
         msg = "The picture for user {} was successfully updated.".format(session.attributes["Current_User"])
-        ud.save_obj("profiles_test_database.npy")
+        ud.save_obj("profiles/profiles_test_database.npy")
     return statement(msg)
 
 
