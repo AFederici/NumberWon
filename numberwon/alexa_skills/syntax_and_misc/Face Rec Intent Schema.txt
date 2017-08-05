@@ -1,0 +1,33 @@
+name: face recognition
+invocation: face rec
+
+{
+  "intents": [
+    {
+      "intent": "YesIntent"
+    },
+    {
+      "intent": "NoIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "nameslot",
+          "type": "AMAZON.US_FIRST_NAME"
+        }
+      ],
+      "intent": "NameIntent"
+    }
+  ]
+}
+
+
+YesIntent yes
+YesIntent yeah
+YesIntent ok
+YesIntent sure
+NoIntent no
+NoIntent no thanks
+NoIntent nope
+NameIntent {nameslot}
+NameIntent my name is {nameslot}

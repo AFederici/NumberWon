@@ -1,0 +1,32 @@
+name: News Helper
+invocation: news helper
+
+{
+  "intents": [
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "NewsTitle",
+          "type": "NEWS"
+        }
+      ],
+      "intent": "NewsIntent"
+    }
+  ]
+}
+
+AMAZON.YesIntent yes
+AMAZON.NoIntent no
+NewsIntent I would like to hear about {NewsTitle}
+NewsIntent Tell me about {NewsTitle}
+NewsIntent Top news about {NewsTitle}
+NewsIntent {NewsTitle}
+
+ngrok: https://d9858b4e.ngrok.io
+
