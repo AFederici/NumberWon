@@ -5,8 +5,8 @@ from face.database import Database
 from profiles.Profiles.Profile import Profile
 from profiles.Profiles.UserDatabase import UserDatabase
 import numpy as np
-#from vrecog.record import record_to_file
-#import vrecog.speaker_classifier_tflearn as speaker_classifier_tflearn
+from vrecog.record import record_to_file
+import vrecog.speaker_classifier_tflearn as speaker_classifier_tflearn
 
 
 f = Face_Recognition()
@@ -248,7 +248,6 @@ def remove_pref_intent(categoryslot, TVpreferenceslot):
 def update_current_user():
     """ takes a pictre (future: voice sample) and matches it to a database
         returns either the current user or None if it cannot find it """
-
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = None
     else:
@@ -257,11 +256,12 @@ def update_current_user():
         desc = f.get_one_face_descriptor_vector()
         temp_face_vectors = desc
         user = ud.compare_faces(desc)
-        #speaker_classifier_tflearn.loadmodel() #load/reload model
-        #record.record_to_file("temp",train=False) #create data
-        #v_user = speaker_classifier_tflearn.test("temp.wav.ig") #call whenevr want to classify
+        record_to_file("temp",train=False) #create data
+        v_user = speaker_classifier_tflearn.test("temp.wav.ig") #call whenevr want to classify
         print("image: " + str(user))
-        #print("voice: " + str(v_user))
+        print("voice: " + str(v_user))
+        if user is None:
+            user = v_user
         session.attributes["Current_User"] = user
 
 @ask.intent("CurrentUserIntent")
@@ -303,8 +303,8 @@ def yes_intent():
         msg = "The user has been added."
         checking_user = 0
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
-        #record_to_file(temp_name)
-        #speaker_classifier_tflearn.train()
+        record_to_file(temp_name)
+        speaker_classifier_tflearn.train()
         ud.save_obj("profiles_test_database.npy")
         session.attributes["Current_User"] = temp_name
         temp_name = ""
@@ -313,8 +313,8 @@ def yes_intent():
         msg = "The user has been added."
         adding_user = 0
         ud.update(temp_name, Profile(temp_name, f.get_one_face_descriptor_vector()))
-        #record_to_file(temp_name)
-        #speaker_classifier_tflearn.train()
+        record_to_file(temp_name)
+        speaker_classifier_tflearn.train()
         ud.save_obj("profiles_test_database.npy")
         session.attributes["Current_User"] = temp_name
         temp_name = ""

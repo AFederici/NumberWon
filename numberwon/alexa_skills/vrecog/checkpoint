@@ -1,2 +1,2 @@
-model_checkpoint_path: "vrecog.tflearn"
-all_model_checkpoint_paths: "vrecog.tflearn"
+model_checkpoint_path: "/Users/megankaye/Desktop/BeaverWorks/Work/NumberWon/numberwon/alexa_skills/vrecog/vrecog.tflearn"
+all_model_checkpoint_paths: "/Users/megankaye/Desktop/BeaverWorks/Work/NumberWon/numberwon/alexa_skills/vrecog/vrecog.tflearn"

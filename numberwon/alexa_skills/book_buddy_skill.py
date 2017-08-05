@@ -8,6 +8,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from profile_skills import update_current_user
+import webbrowser
 
 app = Flask(__name__)
 ask = Ask(app, '/')
@@ -53,8 +54,9 @@ def yes_intent():
         return statement(msg)
     else:
         msg = "I found a book titled {} based on your preference of {}.".format(title, book_pref[ind])
+        webbrowser.open(link, new=0, autoraise=True)
         print(img)
-        return statement(msg).simple_card(title=title, context=desc)
+        return statement(msg).simple_card(title=title, content=desc)
 
 @ask.intent("AMAZON.NoIntent")
 def no_intent():
