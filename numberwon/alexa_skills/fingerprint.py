@@ -19,22 +19,26 @@ def homepage():
 
 @ask.launch
 def start_skill():
+    """starts by asking a question"""
     msg = "Hello. Would you like me to identify a song?"
     return question(msg)
 
 def get_song():
+    """Listens to the microphone recording and compares to the database of songs, returning highest match or none if below threshold"""
     # Don't worry about this implementation yet. Just return a string.
-    S1,f1 = a.load_spectrogram(a.mic_input(7))
+    S1,f1 = a.load_spectrogram(a.mic_input(5))
     return ff.compare(d,ff.find_peaks(S1,f1))
 
 @ask.intent("AMAZON.YesIntent")
 def share_headlines():
+    """runs if the user says yes"""
     song = get_song()
     song_msg = "The current song is: {}".format(song)
     return statement(song_msg)
 
 @ask.intent("AMAZON.NoIntent")
 def no_intent():
+    """runs if the user says no"""
     msg = "Ok, thanks. Have a nice day."
     return statement(msg)
 
