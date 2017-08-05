@@ -47,13 +47,14 @@ def yes_intent():
             ind = 0
         else:
             ind = np.random.randint(0, len(book_pref)-1)
-        title, desc = find_genres(book_pref[ind])
+        title, desc, link, img = find_genres(book_pref[ind])
     if title == "":
         msg = "I'm sorry. I couldn't find anything. Please try again."
         return statement(msg)
     else:
         msg = "I found a book titled {} based on your preference of {}.".format(title, book_pref[ind])
-        return statement(msg).simple_card(title=title, content=desc)
+        print(img)
+        return statement(msg).simple_card(title=title, context=desc)
 
 @ask.intent("AMAZON.NoIntent")
 def no_intent():
@@ -71,6 +72,7 @@ def find_genres(term):
     page = urlopen(req)
     soup = BeautifulSoup(page, "lxml")
     #check if site is bad
+    #soup.find_all('div')
     url = []
     #get random book
     for link in soup.find_all('a'):
@@ -117,16 +119,25 @@ def find_genres(term):
     if not button is None:
         button = button.get('href')
         button = "https://www.goodreads.com" + str(button)
+    #cover images
+    cover_imgs = str(soup2.find_all(id='topcol'))
+    cover_img = ""
+    src_found = False
+    for imgs in range(len(cover_imgs)):
+        if imgs+2 <= (len(cover_imgs) - 1):
+            check = str(cover_imgs[imgs-5:imgs])
+        else:
+            break
+        if check == "src=\"":
+            src_found = True     
+        if src_found and cover_imgs[imgs] == "\"":
+            break
+        if src_found:
+            cover_img += cover_imgs[imgs]
     print(button)
-    return title_str.replace("\n", "").strip(), desc_str_2
+    print(cover_img)
+    return title_str.replace("\n", "").strip(), desc_str_2, button, cover_img
 
-#cover_imgs = soup2.find_all('img')
-#cover_img = "ci"
-#for imgs in cover_imgs:
-    # print(str(imgs)[:19])
-    #if str(imgs)[:19] == "<img id=\"coverImage":
-        #cover_img = imgs.get('src')
-        #print(str(cover_img))
 
 if __name__ == '__main__':
     app.run(debug=True)
