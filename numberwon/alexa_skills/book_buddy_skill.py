@@ -64,7 +64,12 @@ def no_intent():
     return statement(msg)
 
 def find_genres(term):
-    """ """
+    """ finds genres based off of the users preferences
+        if there are no preferences, it returns something None.
+
+        Parameters
+        ----------
+        term : the random preference given"""
     #get site
     term = term.strip()
     term = term.lower()

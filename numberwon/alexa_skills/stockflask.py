@@ -33,7 +33,7 @@ def start_skill():
     if not "Current_User" in session.attributes:
         session.attributes["Current_User"] = "aj"
     update_current_user()
-    print (session.attribute["Current_User"])
+    print (session.attributes["Current_User"])
     if session.attributes["Current_User"] is None:
         msg = "Hello. Are you interested in hearing about Stocks"
         return question(msg)

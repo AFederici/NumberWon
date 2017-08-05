@@ -8,7 +8,6 @@ import numpy as np
 from vrecog.record import record_to_file
 import vrecog.speaker_classifier_tflearn as speaker_classifier_tflearn
 
-
 f = Face_Recognition()
 ud = UserDatabase("profiles/profiles_test_database.npy")
 
