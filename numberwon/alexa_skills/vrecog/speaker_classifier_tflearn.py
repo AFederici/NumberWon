@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 #!/usr/local/bin/python
-#!/usr/bin/env PYTHONIOENCODING="utf-8" python
+# initial code from https://raw.githubusercontent.com/pannous/tensorflow-speech-recognition/master/speaker_classifier_tflearn.py
 import os
 import tensorflow as tf
 import tflearn
 import vrecog.speech_data as data
 
-# Simple speaker recognition demo, with 99% accuracy in under a minute ( on digits sample )
-
-# | Adam | epoch: 030 | loss: 0.05330 - acc: 0.9966 -- iter: 0000/1000
-# 'predicted speaker for 9_Vicki_260 : result = ', 'Vicki'
 import tensorflow as tf
 print("You are using tensorflow version "+ tf.__version__) #+" tflearn version "+ tflearn.version)
-if tf.__version__ >= '0.12' and os.name == 'nt':
-	# print("sorry, tflearn is not ported to tensorflow 0.12 on windows yet!(?)")
-	quit() # why? works on Mac?
 
 # path='data/spoken_numbers_pcm/'
 path='data/people/'
@@ -22,8 +15,8 @@ number_classes=0
 speakers=None
 model=None
 
-
 def train():
+	"""Trains the neural network"""
 	global speakers, number_classes
 	speakers = data.get_speakers(path)
 	number_classes=len(speakers)
@@ -46,6 +39,12 @@ def train():
 	model.save('vrecog/vrecog.tflearn')
 
 def test(fname):
+	"""Predicts the person talking in the wav file
+
+	Parameters
+	----------
+	fname : file name, wav format
+	"""
 	speakers = data.get_speakers(path)
 	number_classes=len(speakers)
 	print("speakers",number_classes,speakers)
@@ -73,6 +72,5 @@ if __name__ == '__main__':
 	if command == 'train':
 		train()
 	elif command == 'test':
-		# loadmodel()
 		demo_file = "personname.wav.ig"
 		test(demo_file)

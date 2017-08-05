@@ -44,11 +44,11 @@ def start_skill():
 def get_pref_intent(categoryslot):
     """ returns the preferences saved based on the user
         if there are no preferences, it returns something None.
-    
+
         Parameters
         ----------
         categoryslot : an AMAZON.LITERAL """
-    
+
     if categoryslot == "":
         msg = "I could not find that preference. Please try again."
     elif session.attributes["Current_User"] is None:
@@ -62,10 +62,10 @@ def get_pref_intent(categoryslot):
 @ask.intent("AddPreferenceIntent")
 def add_pref_intent(categoryslot, preferenceslot):
     """ adds a preference to the Profile object!
-    
+
         Parameters
         ----------
-        preferenceslot : an AMAZON.LITERAL 
+        preferenceslot : an AMAZON.LITERAL
         categoryslot : an AMAZON.LITERAL"""
     if categoryslot == "" or preferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -80,12 +80,12 @@ def add_pref_intent(categoryslot, preferenceslot):
 @ask.intent("AddPreferenceStockIntent")
 def add_pref_intent(categoryslot, stockpreferenceslot):
     """ adds a preference to the Profile object!
-    
+
         Parameters
         ----------
-        stockpreferenceslot : a custom list of stocks 
+        stockpreferenceslot : a custom list of stocks
         categoryslot : an AMAZON.LITERAL """
-    
+
     if categoryslot == "" or stockpreferenceslot == "":
         msg = "I could not understand. Please try again."
     elif session.attributes["Current_User"] is None:
@@ -99,12 +99,12 @@ def add_pref_intent(categoryslot, stockpreferenceslot):
 @ask.intent("AddPreferenceBookIntent")
 def add_pref_intent(categoryslot, bookpreferenceslot):
     """ adds a preference to the Profile object!
-    
+
         Parameters
         ----------
-        bookpreferenceslot : an AMAZON.LITERAL 
+        bookpreferenceslot : an AMAZON.LITERAL
         categoryslot : an AMAZON.LITERAL """
-    
+
     if categoryslot == "" or bookpreferenceslot == "":
         msg = "I could not understand. Please try again."
     elif session.attributes["Current_User"] is None:
@@ -118,12 +118,12 @@ def add_pref_intent(categoryslot, bookpreferenceslot):
 @ask.intent("AddPreferenceCharIntent")
 def add_pref_intent(categoryslot, charpreferenceslot):
     """ adds a preference to the Profile object!
-    
+
         Parameters
         ----------
-        charpreferenceslot : an AMAZON.LITERAL 
+        charpreferenceslot : an AMAZON.LITERAL
         categoryslot : an AMAZON.LITERAL """
-    
+
     if categoryslot == "" or charpreferenceslot == "":
         msg = "I could not understand. Please try again."
     elif session.attributes["Current_User"] is None:
@@ -137,10 +137,10 @@ def add_pref_intent(categoryslot, charpreferenceslot):
 @ask.intent("AddPreferenceTVIntent")
 def add_pref_intent(categoryslot, TVpreferenceslot):
     """ adds a preference to the Profile object!
-    
+
         Parameters
         ----------
-        TVpreferenceslot : an AMAZON.LITERAL 
+        TVpreferenceslot : an AMAZON.LITERAL
         categoryslot : an AMAZON.LITERAL"""
     if categoryslot == "" or TVpreferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -155,10 +155,10 @@ def add_pref_intent(categoryslot, TVpreferenceslot):
 @ask.intent("RemovePreferenceIntent")
 def remove_pref_intent(categoryslot, preferenceslot):
     """ removes a preference based on the preference name
-    
+
         Parameters
         ----------
-        categoryslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL
         preferenceslot : an AMAZON.LITERAL """
     if categoryslot == "" or preferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -173,10 +173,10 @@ def remove_pref_intent(categoryslot, preferenceslot):
 @ask.intent("RemovePreferenceStockIntent")
 def remove_pref_intent(categoryslot, stockpreferenceslot):
     """ removes a preference based on the preference name
-    
+
         Parameters
         ----------
-        categoryslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL
         stockpreferenceslot : an AMAZON.LITERAL """
     if categoryslot == "" or stockpreferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -191,10 +191,10 @@ def remove_pref_intent(categoryslot, stockpreferenceslot):
 @ask.intent("RemovePreferenceBookIntent")
 def remove_pref_intent(categoryslot, bookpreferenceslot):
     """ removes a preference based on the preference name
-    
+
         Parameters
         ----------
-        categoryslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL
         bookpreferenceslot : an AMAZON.LITERAL """
     if categoryslot == "" or bookpreferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -209,10 +209,10 @@ def remove_pref_intent(categoryslot, bookpreferenceslot):
 @ask.intent("RemovePreferenceCharIntent")
 def remove_pref_intent(categoryslot, charpreferenceslot):
     """ removes a preference based on the preference name
-    
+
         Parameters
         ----------
-        categoryslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL
         charpreferenceslot : an AMAZON.LITERAL """
     if categoryslot == "" or charpreferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -227,10 +227,10 @@ def remove_pref_intent(categoryslot, charpreferenceslot):
 @ask.intent("RemovePreferenceTVIntent")
 def remove_pref_intent(categoryslot, TVpreferenceslot):
     """ removes a preference based on the preference name
-    
+
         Parameters
         ----------
-        categoryslot : an AMAZON.LITERAL 
+        categoryslot : an AMAZON.LITERAL
         TVpreferenceslot : an AMAZON.LITERAL """
     if categoryslot == "" or TVpreferenceslot == "":
         msg = "I could not understand. Please try again."
@@ -277,14 +277,14 @@ def check_user():
         msg = "I could not see anyone I identify. Would you like me to add a user?"
         checking_user = 1
     else:
-        msg = "I see that {} is the current user. Is this correct?".format(session.attributes["Current_User"]) 
+        msg = "I see that {} is the current user. Is this correct?".format(session.attributes["Current_User"])
         checking_user = 2
     return question(msg)
 
 @ask.intent("YesIntent")
 def yes_intent():
     """ the Yes Intent. Does a whole lotta things. """
-    
+
     global checking_user
     global adding_user
     global temp_name
@@ -371,7 +371,7 @@ def no_intent():
 @ask.intent("NameIntent")
 def name_intent(nameslot):
     """ the Name Intent. Does a whole lotta things. """
-    
+
     global checking_user
     global adding_user
     global temp_name
@@ -392,13 +392,13 @@ def name_intent(nameslot):
         msg = "I do not understand. Please try again."
         return statement(msg)
 
-    
+
 '''Adding a new profile. (Name [amazon american names], Picture/voice sample [taken right there], any preferences [amazon literals])'''
 
 @ask.intent("AddUserIntent")
 def add_user_intent():
     """ Adds a user based to the user database! """
-    
+
     global adding_user
     global checking_user
     if adding_user == 0 and checking_user == 0:
@@ -410,13 +410,13 @@ def add_user_intent():
         msg = "I do not understand. Please try again."
         return statement(msg)
 
-    
+
 ''' Deleting a profile '''
 
 @ask.intent("RemoveUserIntent")
 def rem_user_intent(remnameslot):
     """ removes a user from the ud based on the name """
-    
+
     global del_user
     global temp_name
     msg = "Are you sure you would like to delete {} from users?".format(remnameslot)
@@ -430,11 +430,11 @@ def rem_user_intent(remnameslot):
 @ask.intent("RetakeCustomPicIntent")
 def re_custom_pic_intent(recustompicslot):
     """ based on the name, retakes the picture for what's in front of it.
-    
+
         Parameters
         ----------
         recustompicslot : an AMAZON.NAME  """
-    
+
     if recustompicslot in ud.items():
         new_face_vectors = f.get_one_face_descriptor_vector()
         ud.get(recustompicslot).face_vectors = new_face_vectors
@@ -463,11 +463,11 @@ def re_pic_intent():
 @ask.intent("SwitchUserIntent")
 def switch_user_intent(newuserlot):
     """ based on the name given, switches the current_user to the profile
-    
+
         Parameters
         ----------
         newuserlot : an AMAZON.NAME  """
-    
+
     if newuserlot in ud.names():
         session.attributes["Current_User"] = newuserlot
         msg = "Current user was successfully switched to {}".format(session.attributes["Current_User"])
@@ -486,6 +486,6 @@ def add_voice_to_user(user_name):
 def add_voice_to_current_user():
     record_to_file(session.attributes["Current_User"])
     speaker_classifier_tflearn.train()
-    
+
 if __name__ == '__main__':
     app.run(debug=True)

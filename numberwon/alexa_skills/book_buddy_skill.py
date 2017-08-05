@@ -78,7 +78,7 @@ def find_genres(term):
     url = []
     #get random book
     for link in soup.find_all('a'):
-        if link.get('href')[:11] == "/book/show/": 
+        if link.get('href')[:11] == "/book/show/":
             url.append("https://www.goodreads.com"+ str(link.get('href')))
     ind = np.random.randint(0, len(url)-1)
     req2 = Request(url[ind], headers=hdr)
@@ -95,14 +95,14 @@ def find_genres(term):
             title_str += title[i]
         if title[i] == ">" and not foundclose:
             foundclose = True
-    #description     
+    #description
     desc = soup2.find_all("span")
     desc_str = ""
     for tags in desc:
         tags = str(tags)
         if tags[:18] == "<span id=\"freeText" and tags[18] != "C":
             desc_str = tags
-            break    
+            break
     foundclose = False
     desc_str = desc_str.replace("<br>", "")
     desc_str = desc_str.replace("<br/>", "")
@@ -131,7 +131,7 @@ def find_genres(term):
         else:
             break
         if check == "src=\"":
-            src_found = True     
+            src_found = True
         if src_found and cover_imgs[imgs] == "\"":
             break
         if src_found:
