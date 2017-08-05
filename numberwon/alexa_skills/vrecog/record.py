@@ -7,7 +7,7 @@ import pyaudio
 import wave
 import os
 
-THRESHOLD = 2500
+THRESHOLD = 2250
 CHUNK_SIZE = 1024
 FORMAT = pyaudio.paInt16
 RATE = 44100
