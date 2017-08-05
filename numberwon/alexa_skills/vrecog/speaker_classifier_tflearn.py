@@ -4,7 +4,7 @@
 import os
 
 import tflearn
-import speech_data as data
+import vrecog.speech_data as data
 
 # Simple speaker recognition demo, with 99% accuracy in under a minute ( on digits sample )
 
@@ -18,12 +18,13 @@ if tf.__version__ >= '0.12' and os.name == 'nt':
 
 # path='data/spoken_numbers_pcm/'
 path='data/people/'
-speakers = None
-number_classes = None
-model = None
+number_classes=0
+speakers=None
+model=None
+
 
 def train():
-	global speakers, number_classes, model
+	global speakers, number_classes
 	speakers = data.get_speakers(path)
 	number_classes=len(speakers)
 	print("speakers",speakers)
@@ -36,34 +37,33 @@ def train():
 	net = tflearn.dropout(net, 0.5)
 	net = tflearn.fully_connected(net, number_classes, activation='softmax')
 	net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
+	global model
 	model = tflearn.DNN(net)
 	batch=data.wave_batch_generator(batch_size=1000, source=data.Source.DIGIT_WAVES, target=data.Target.speaker,path=path)
 	X,Y=next(batch)
 	model.fit(X, Y, n_epoch=100, show_metric=True, snapshot_step=100)
-	model.save('vrecog.tflearn')
-
-def loadmodel():
-	global speakers, number_classes, model
-	speakers = data.get_speakers(path)
-	number_classes=len(speakers)
-	print("speakers",speakers)
-
-	# Classification
-	tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
-
-	net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
-	net = tflearn.fully_connected(net, 64)
-	net = tflearn.dropout(net, 0.5)
-	net = tflearn.fully_connected(net, number_classes, activation='softmax')
-	net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
-	model = tflearn.DNN(net)
-	model.load('vrecog.tflearn')
+	model.save('vrecog/vrecog.tflearn')
 
 def test(fname):
+	# speakers = data.get_speakers(path)
+	# number_classes=len(speakers)
+	# print("speakers",number_classes,speakers)
+	#
+	# # Classification
+	# tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
+	#
+	# net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
+	# net = tflearn.fully_connected(net, 64)
+	# net = tflearn.dropout(net, 0.5)
+	# net = tflearn.fully_connected(net, number_classes, activation='softmax')
+	# net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
+	# modelb = tflearn.DNN(net)
+	# modelb.load('vrecog/vrecog.tflearn')
 	result=data.load_wav_file(path+fname)
 	result=model.predict([result])
+	print(result)
 	result=data.one_hot_to_item(result,speakers)
-	print("predicted speaker for %s : result = %s "%(demo_file,result))
+	print("predicted speaker for %s : result = %s "%(fname,result))
 	return result
 
 if __name__ == '__main__':
@@ -71,6 +71,6 @@ if __name__ == '__main__':
 	if command == 'train':
 		train()
 	elif command == 'test':
-		loadmodel()
+		# loadmodel()
 		demo_file = "personname.wav.ig"
 		test(demo_file)
