@@ -41,23 +41,23 @@ class Stocks():
     def add_preference(self, stock):
         self.my_stocks.append(stock)
 
-    def new_company(self, company, ticker, time1, time2):
+    def new_company(self, company, ticker):
         self.comp_tick[company] = ticker
         self.tickers.append(ticker)
         pickle.dump(self.comp_tick, open('tick_and_comp.pickle', "wb") )
-        self.datacollection(time1, time2, ticker)
+        self.datacollection(tickers = ticker)
         self.moving_averages(ticker)
         self.dct(ticker)
         self.gradients(ticker)
 
-    def datacollection(self, start = '2016-08-04', end = '2017-08-04', tickers = None ): 
+    def datacollection(self, tickers = None ): 
         #strings in the form '2016-7-30'
-        self.first_date = start
-        self.last_date = end
+        self.first_date = '2016-08-04'
+        self.last_date = '2017-08-04'
         data_source = 'google'
         # We would like all available data from 01/01/2000 until 12/31/2016.
-        start_date = start
-        end_date = end
+        start_date = '2016-08-04'
+        end_date = '2017-08-04'
         # User pandas_reader.data.DataReader to load the desired data. As simple as that.
         panel_data = data.DataReader(tickers, data_source, start_date, end_date)
         # Getting just the adjusted closing prices. This will return a Pandas DataFrame
