@@ -22,19 +22,19 @@ class Database():
     def items(self):
         """ returns the database's dictionary objects """
         return self.dict
-    
+
     def get(self, key):
         """ gets from the database's dictionary the obj based on the key """
         return self.dict[key]
-    
+
     def update_user_image(self, key, val):
         """ takes the average of the olf descriptor vector and the new one to update """
         self.dict[key] = (self.dict[key] + val)/2
-        
+
     def update(self, key, val):
         """ adds a new val in the dictionary """
         self.dict[key] = val
-        
+
     def def_variation(self, var):
         """ defines the variation, whether it be a song or a footprint.
                 Parameters

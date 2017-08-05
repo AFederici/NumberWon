@@ -14,6 +14,21 @@ path='data/people/'
 number_classes=0
 speakers=None
 model=None
+speakers = data.get_speakers(path)
+number_classes=len(speakers)
+print("speakers",number_classes,speakers)
+
+# Classification
+tf.reset_default_graph()
+tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
+
+net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
+net = tflearn.fully_connected(net, 64)
+net = tflearn.dropout(net, 0.5)
+net = tflearn.fully_connected(net, number_classes, activation='softmax')
+net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
+model = tflearn.DNN(net)
+model.load('vrecog/vrecog.tflearn')
 
 def train():
 	"""Trains the neural network"""
@@ -45,23 +60,9 @@ def test(fname):
 	----------
 	fname : file name, wav format
 	"""
-	speakers = data.get_speakers(path)
-	number_classes=len(speakers)
-	print("speakers",number_classes,speakers)
 
-	# Classification
-	tf.reset_default_graph()
-	tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.5)
-
-	net = tflearn.input_data(shape=[None, 8192]) #Two wave chunks
-	net = tflearn.fully_connected(net, 64)
-	net = tflearn.dropout(net, 0.5)
-	net = tflearn.fully_connected(net, number_classes, activation='softmax')
-	net = tflearn.regression(net, optimizer='adam', loss='categorical_crossentropy')
-	modelb = tflearn.DNN(net)
-	modelb.load('vrecog/vrecog.tflearn')
 	result=data.load_wav_file(path+fname)
-	result=modelb.predict([result])
+	result=model.predict([result])
 	print(result)
 	result=data.one_hot_to_item(result,speakers)
 	print("predicted speaker for %s : result = %s "%(fname,result))

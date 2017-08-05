@@ -35,7 +35,7 @@ class FingerPrint:
         for index, freq_time in enumerate(peaks_insert):
             try:
                 time, freq = freq_time
-                dict_test = peaks_insert[index+1:index + 21]
+                dict_test = peaks_insert[index+1:index + 10]
                 for value in dict_test:
                     time2, freq2 = value
                     database.add_freq_time((freq, freq2, np.round(time2 - time,decimals=2)), (song_id, time))

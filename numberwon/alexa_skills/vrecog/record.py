@@ -63,9 +63,7 @@ def record():
     return the data as an array of signed shorts.
 
     Normalizes the audio, trims silence from the
-    start and end, and pads with 0.5 seconds of
-    blank sound to make sure VLC et al can play
-    it without getting chopped off.
+    start and end.
     """
     p = pyaudio.PyAudio()
     os.system('afplay /System/Library/Sounds/Glass.aiff')

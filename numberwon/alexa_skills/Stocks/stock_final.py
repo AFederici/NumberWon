@@ -25,15 +25,13 @@ class Stocks():
         self.last_date =  '2016-08-04'
         self.my_stocks = []
     def fill(self):
-        self.close = pickle.load( open('sp500.pickle', "rb"))
-        self.cos_trans = pickle.load( open('cos_trans.pickle', "rb"))
-        self.mov_avg = pickle.load( open('moving_averages.pickle', "rb"))
-        self.comp_tick = pickle.load( open('tick_and_comp.pickle', "rb"))
-        self.grad = pickle.load( open('grads.pickle', "rb"))
-        self.grad2 = pickle.load( open('2grads.pickle', "rb"))
-        self.tickers = pickle.load( open('selfticks.pickle', "rb"))
-        self.first_date = self.close['AAPL'].keys()[-1]
-        self.last_date = self.close['AAPL'].keys()[0]
+        self.close = pickle.load( open('Stocks/sp500.pickle', "rb"))
+        self.cos_trans = pickle.load( open('Stocks/cos_trans.pickle', "rb"))
+        self.mov_avg = pickle.load( open('Stocks/moving_averages.pickle', "rb"))
+        self.comp_tick = pickle.load( open('Stocks/tick_and_comp.pickle', "rb"))
+        self.grad = pickle.load( open('Stocks/grads.pickle', "rb"))
+        self.grad2 = pickle.load( open('Stocks/2grads.pickle', "rb"))
+        self.tickers = pickle.load( open('Stocks/selfticks.pickle', "rb"))
 
     def save(self):
         pickle.dump(self.close, open('sp500.pickle', "wb"))
