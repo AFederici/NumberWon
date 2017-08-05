@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #!/usr/local/bin/python
+# initial code from https://raw.githubusercontent.com/pannous/tensorflow-speech-recognition/master/speech_data.py
 """Utilities for downloading and providing data from openslr.org, libriSpeech, Pannous, Gutenberg, WMT, tokenizing, vocabularies."""
-# TODO! see https://github.com/pannous/caffe-speech-recognition for some data sources
+
 
 import os
 import re
@@ -152,7 +153,7 @@ def spectro_batch(batch_size=10):
 def speaker(filename):  # vom Dateinamen
 	# if not "_" in file:
 	#   return "Unknown"
-	return filename.split("_")[1]
+	return filename.split("_")[1].lower()
 
 def get_speakers(path=pcm_path):
 	# maybe_download(Source.DIGIT_SPECTROS)
@@ -186,76 +187,6 @@ def load_wav_file(name):
 	# print("%s loaded"%name)
 	return chunk
 
-
-def spectro_batch_generator(batch_size=10,width=64,source=Source.DIGIT_SPECTROS,target=Target.digits):
-	# maybe_download(Source.NUMBER_IMAGES , DATA_DIR)
-	# maybe_download(Source.SPOKEN_WORDS, DATA_DIR)
-	path=maybe_download(source, DATA_DIR)
-	path=path.replace("_spectros","")# HACK! remove!
-	height = width
-	batch = []
-	labels = []
-	speakers=get_speakers(path)
-	if target==Target.digits: num_classes=10
-	if target==Target.first_letter: num_classes=32
-	files = os.listdir(path)
-	# shuffle(files) # todo : split test_fraction batch here!
-	# files=files[0:int(len(files)*(1-test_fraction))]
-	print("Got %d source data files from %s"%(len(files),path))
-	while True:
-		# print("shuffling source data files")
-		shuffle(files)
-		for image_name in files:
-			if not "_" in image_name: continue # bad !?!
-			image = skimage.io.imread(path + "/" + image_name).astype(numpy.float32)
-			# image.resize(width,height) # lets see ...
-			data = image / 255.  # 0-1 for Better convergence
-			# data = data.reshape([width * height])  # tensorflow matmul needs flattened matrices wtf
-			batch.append(list(data))
-			# classe=(ord(image_name[0]) - 48)  # -> 0=0 .. A:65-48 ... 74 for 'z'
-			classe = (ord(image_name[0]) - 48) % 32# -> 0=0  17 for A, 10 for z ;)
-			labels.append(dense_to_one_hot(classe,num_classes))
-			if len(batch) >= batch_size:
-				yield batch, labels
-				batch = []  # Reset for next batch
-				labels = []
-
-def mfcc_batch_generator(batch_size=10, source=Source.DIGIT_WAVES, target=Target.digits):
-	maybe_download(source, DATA_DIR)
-	if target == Target.speaker: speakers = get_speakers()
-	batch_features = []
-	labels = []
-	files = os.listdir(path)
-	while True:
-		print("loaded batch of %d files" % len(files))
-		shuffle(files)
-		for file in files:
-			if not file.endswith(".wav"): continue
-			wave, sr = librosa.load(path+file, mono=True)
-			mfcc = librosa.feature.mfcc(wave, sr)
-			if target==Target.speaker: label=one_hot_from_item(speaker(file), speakers)
-			elif target==Target.digits:  label=dense_to_one_hot(int(file[0]),10)
-			elif target==Target.first_letter:  label=dense_to_one_hot((ord(file[0]) - 48) % 32,32)
-			elif target == Target.hotword: label = one_hot_word(file, pad_to=max_word_length)  #
-			elif target == Target.word: label=string_to_int_word(file, pad_to=max_word_length)
-				# label = file  # sparse_labels(file, pad_to=20)  # max_output_length
-			else: raise Exception("todo : labels for Target!")
-			labels.append(label)
-			# print(np.array(mfcc).shape)
-			mfcc=np.pad(mfcc,((0,0),(0,80-len(mfcc[0]))), mode='constant', constant_values=0)
-			batch_features.append(np.array(mfcc))
-			if len(batch_features) >= batch_size:
-				# if target == Target.word:  labels = sparse_labels(labels)
-				# labels=np.array(labels)
-				# print(np.array(batch_features).shape)
-				# yield np.array(batch_features), labels
-				# print(np.array(labels).shape) # why (64,) instead of (64, 15, 32)? OK IFF dim_1==const (20)
-				yield batch_features, labels  # basic_rnn_seq2seq inputs must be a sequence
-				batch_features = []  # Reset for next batch
-				labels = []
-
-
-# If you set dynamic_pad=True when calling tf.train.batch the returned batch will be automatically padded with 0s. Handy! A lower-level option is to use tf.PaddingFIFOQueue.
 # only apply to a subset of all images at one time
 def wave_batch_generator(batch_size=10,source=Source.DIGIT_WAVES,target=Target.digits,path='data/spoken_numbers_pcm/'): #speaker
 	maybe_download(source, DATA_DIR)
@@ -385,48 +316,6 @@ def one_hot_from_item(item, items):
 	i=items.index(item)
 	x[i]=1
 	return x
-
-
-def one_hot_word(word,pad_to=max_word_length):
-	vec=[]
-	for c in word:#.upper():
-		x = [0] * num_characters
-		x[(ord(c) - offset)%num_characters]=1
-		vec.append(x)
-	if pad_to:vec=pad(vec, pad_to, one_hot=True)
-	return vec
-
-def many_hot_to_word(word):
-	s=""
-	for c in word:
-		x=np.argmax(c)
-		s+=chr(x+offset)
-		# s += chr(x + 48) # numbers
-	return s
-
-
-def dense_to_one_hot(batch, batch_size, num_labels):
-	sparse_labels = tf.reshape(batch, [batch_size, 1])
-	indices = tf.reshape(tf.range(0, batch_size, 1), [batch_size, 1])
-	concatenated = tf.concat(axis=1, values=[indices, sparse_labels])
-	concat = tf.concat(axis=0, values=[[batch_size], [num_labels]])
-	output_shape = tf.reshape(concat, [2])
-	sparse_to_dense = tf.sparse_to_dense(concatenated, output_shape, 1.0, 0.0)
-	return tf.reshape(sparse_to_dense, [batch_size, num_labels])
-
-
-def dense_to_one_hot(batch, batch_size, num_labels):
-	sparse_labels = tf.reshape(batch, [batch_size, 1])
-	indices = tf.reshape(tf.range(0, batch_size, 1), [batch_size, 1])
-	concatenated = tf.concat(axis=1, values=[indices, sparse_labels])
-	concat = tf.concat(axis=0, values=[[batch_size], [num_labels]])
-	output_shape = tf.reshape(concat, [2])
-	sparse_to_dense = tf.sparse_to_dense(concatenated, output_shape, 1.0, 0.0)
-	return tf.reshape(sparse_to_dense, [batch_size, num_labels])
-
-def dense_to_one_hot(labels_dense, num_classes=10):
-	"""Convert class labels from scalars to one-hot vectors."""
-	return numpy.eye(num_classes)[labels_dense]
 
 def extract_labels(names_file,train, one_hot):
 	labels=[]

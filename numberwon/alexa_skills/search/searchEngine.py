@@ -48,11 +48,11 @@ class MySearchEngine():
     
     def upload_vd(self, file_name):
         """ saves the dictionary object
-                        Parameters
-                        ----------
-                        file_name : Str
-                            adds new articles/files to the search engine
-                            file_name should be given as a path name"""
+        Parameters
+        ----------
+        file_name : Str
+            adds new articles/files to the search engine
+            file_name should be given as a path name"""
         f = pickle.load( open(file_name, "rb"))
         for key, value in f.items():
             if key in self.raw_text:
