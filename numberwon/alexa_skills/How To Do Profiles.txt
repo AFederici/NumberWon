@@ -1,0 +1,24 @@
+IMPORT: 
+from profiles.Profiles.Profile import Profile
+from profiles.Profiles.UserDatabase import UserDatabase
+from face.FaceRec import Face_Recognition
+from face.database import Database
+
+BEFORE YOU START YOUR CODE:
+ud = UserDatabase("profiles/profiles_test_database.npy")
+
+IN:
+@ask.launch
+def start_skill():
+	if not "Current_User" in session.attributes:
+        	session.attributes["Current_User"] = None
+    	update_current_user()
+    	if session.attributes["Current_User"] is None:
+        	msg = "Hello. This runs the default skill.”
+        	return question(msg)
+    	else:
+        	msg = “Hello. Now you have your profiles! Continue on.”
+		return question(msg)
+
+TO GET PREFERENCES:
+preferences = ud.get_preferences_by_user(session.attributes["Current_User"], “stocks”)
