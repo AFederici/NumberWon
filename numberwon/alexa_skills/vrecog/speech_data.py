@@ -159,6 +159,7 @@ def get_speakers(path=pcm_path):
 	maybe_download(Source.DIGIT_WAVES)
 	files = os.listdir(path)
 	def nobad(name):
+		name = name.lower()
 		return "_" in name and not "." in name.split("_")[1] and not 'DS_Store' in name
 	speakers=list(set(map(speaker,filter(nobad,files))))
 	# print(len(speakers)," speakers: ",speakers)
