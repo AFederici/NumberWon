@@ -16,11 +16,6 @@ ask = Ask(app, '/')
 ud = UserDatabase("profiles/profiles_test_database.npy")
 
 from Stocks.stock_final import Stocks 
-#from profile_skills import update_current_user
-#import itertools
-#from profiles.Profiles.Profile import Profile
-#from profiles.Profiles.UserDatabase import UserDatabase
-
 s = Stocks()
 s.fill()
 

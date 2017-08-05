@@ -180,6 +180,7 @@ class Stocks():
             print(self.first_date)
             print2 = self.close[symbol].max()
             #the last this many days
+            dt.datetime.strptime(start, '%Y-%m-%d')
             print2days = (self.first_date - self.last_date).days
 
 
