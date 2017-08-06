@@ -55,14 +55,10 @@ def no_intent():
 
 @ask.intent("StockIntent")
 def get_stock(stocks):
-    if stocks == "my list" or stocks == "my stocks":
-        print('hi')
+    if stocks == "my stocks": #stocks == "my list" throws an error
         session.attributes['company_names'] = s.get_my_stocks()
-        print(session.attributes['company_names'])
         numbs = s.my_companies()
-        print(numbs)
-        comp_closes = list(zip(session.attributes['company_names'], numbs))
-        print(comp_closes)
+        comp_closes = zip(session.attributes['company_names'], numbs)
         msg = ""
         for a,b in comp_closes:
             msg += "{} closed at ${}. ".format(a,b[0])
@@ -71,7 +67,7 @@ def get_stock(stocks):
         numbs = s.search(stocks)
         session.attributes['company_names'] = stocks
         msg = "The recent close for {} was ${}. What else would you like to hear about? Ask for help if you want some ideas".format(session.attributes['company_names'] , numbs[0])
-        return question(msg)
+    return question(msg)
 
 @ask.intent("InformationIntent")
 def get_info(information):
