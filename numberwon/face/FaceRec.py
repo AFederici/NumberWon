@@ -3,11 +3,12 @@ from dlib_models import download_model, download_predictor, load_dlib_models
 download_model()
 download_predictor()
 from dlib_models import models
-import skimage.io as io
+#import skimage.io as io
 import numpy as np
 import warnings
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
+import cv2
 
 load_dlib_models()
 face_detect = models["face detect"]
@@ -105,11 +106,13 @@ class Face_Recognition:
             print("database not updated")
 
     def file_read(self, file_id):
+            
         """ reades a file on a computer
             Parameters
             ----------
             file_id : the filepath to read the file from """
-        img_array = io.imread(file_id)
+        img_array = cv2.imread('file_id',1)
+
         if (img_array.shape[2] == 4):
             img_array = img_array[:, :, :3]
         return img_array
