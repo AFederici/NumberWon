@@ -15,3 +15,14 @@ In the numberwon directory, you can install the database class, the Face_Recogni
 ```shell
 import Database, import Face_Recognition, import FingerPrint
 ```
+
+We will need to install OpenCV with the Python bindings so that we can access laptop cameras via our Python code (aka the camera import).  We will also need to install Dlib for the face detection
+
+### Windows Instructions (Python 3.{2-6})
+Requires: Anaconda + Python 3.{2-6}, numpy, python-opencv
+
+#### For Windows OS
+```shell
+conda install -c conda-forge opencv
+conda install -c conda-forge dlib
+```
